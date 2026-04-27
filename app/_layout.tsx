@@ -1,12 +1,12 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/components/useColorScheme';
+import { theme } from '@/constants/theme';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -46,13 +46,39 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  const navTheme = {
+    ...DarkTheme,
+    colors: {
+      ...DarkTheme.colors,
+      background: theme.colors.bg,
+      card: theme.colors.surface,
+      border: theme.colors.border,
+      text: theme.colors.textPrimary,
+      primary: theme.colors.neon,
+      notification: theme.colors.neonAlt,
+    },
+  };
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={navTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen
+          name="lesson/[lessonId]"
+          options={{
+            headerTitle: 'Lesson',
+            headerStyle: { backgroundColor: theme.colors.surface },
+            headerTintColor: theme.colors.textPrimary,
+          }}
+        />
+        <Stack.Screen
+          name="quiz/[quizId]"
+          options={{
+            headerTitle: 'Quiz',
+            headerStyle: { backgroundColor: theme.colors.surface },
+            headerTintColor: theme.colors.textPrimary,
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );
