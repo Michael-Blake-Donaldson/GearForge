@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from "react-native";
 
-import { theme } from '@/constants/theme';
+import { theme } from "@/constants/theme";
 
 type Props = {
   xp: number;
@@ -24,18 +24,18 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
     paddingHorizontal: 14,
     paddingVertical: 8,
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
     gap: 10,
   },
   xp: {
     color: theme.colors.neon,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   level: {
     color: theme.colors.textSecondary,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

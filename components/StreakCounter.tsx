@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from "react-native";
 
-import { theme } from '@/constants/theme';
+import { theme } from "@/constants/theme";
 
 type Props = {
   streak: number;
@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
     gap: 8,
   },
   icon: {
@@ -33,6 +33,6 @@ const styles = StyleSheet.create({
   value: {
     color: theme.colors.textPrimary,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

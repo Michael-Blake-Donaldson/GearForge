@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from "react-native";
 
-import { theme } from '@/constants/theme';
+import { theme } from "@/constants/theme";
 
 type Props = {
   label: string;
@@ -19,13 +19,13 @@ const styles = StyleSheet.create({
     borderRadius: theme.radii.pill,
     borderWidth: 1,
     borderColor: theme.colors.neonAlt,
-    backgroundColor: 'rgba(57,160,255,0.15)',
+    backgroundColor: "rgba(57,160,255,0.15)",
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
   text: {
     color: theme.colors.textPrimary,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

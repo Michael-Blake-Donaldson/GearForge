@@ -1,7 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { theme } from '@/constants/theme';
-import { Lesson } from '@/types/Lesson';
+import { theme } from "@/constants/theme";
+import { Lesson } from "@/types/Lesson";
 
 type Props = {
   lesson: Lesson;
@@ -10,13 +10,23 @@ type Props = {
   onPress: () => void;
 };
 
-export default function LessonCard({ lesson, isUnlocked, isCompleted, onPress }: Props) {
+export default function LessonCard({
+  lesson,
+  isUnlocked,
+  isCompleted,
+  onPress,
+}: Props) {
   return (
-    <Pressable style={[styles.card, !isUnlocked && styles.lockedCard]} onPress={onPress}>
+    <Pressable
+      style={[styles.card, !isUnlocked && styles.lockedCard]}
+      onPress={onPress}
+    >
       <View style={styles.header}>
         <Text style={styles.title}>{lesson.title}</Text>
-        <Text style={[styles.state, isCompleted ? styles.complete : styles.locked]}>
-          {isCompleted ? 'Completed' : isUnlocked ? 'Ready' : 'Locked'}
+        <Text
+          style={[styles.state, isCompleted ? styles.complete : styles.locked]}
+        >
+          {isCompleted ? "Completed" : isUnlocked ? "Ready" : "Locked"}
         </Text>
       </View>
       <Text style={styles.summary}>{lesson.shortExplanation}</Text>
@@ -38,20 +48,20 @@ const styles = StyleSheet.create({
     opacity: 0.55,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     gap: 8,
   },
   title: {
     color: theme.colors.textPrimary,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: "700",
     flex: 1,
   },
   state: {
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   complete: {
     color: theme.colors.success,
@@ -69,6 +79,6 @@ const styles = StyleSheet.create({
     color: theme.colors.neon,
     fontSize: 11,
     marginTop: 8,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });

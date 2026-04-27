@@ -1,9 +1,16 @@
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { useState } from 'react';
+import { useState } from "react";
+import {
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
 
-import Badge from '@/components/Badge';
-import { theme } from '@/constants/theme';
-import { useProgressStore } from '@/store/useProgressStore';
+import Badge from "@/components/Badge";
+import { theme } from "@/constants/theme";
+import { useProgressStore } from "@/store/useProgressStore";
 
 export default function ProfileScreen() {
   const username = useProgressStore((state) => state.username);
@@ -29,7 +36,10 @@ export default function ProfileScreen() {
           placeholderTextColor={theme.colors.textSecondary}
         />
 
-        <Pressable style={styles.saveButton} onPress={() => setUsername(draftName.trim() || 'GearSmith')}>
+        <Pressable
+          style={styles.saveButton}
+          onPress={() => setUsername(draftName.trim() || "GearSmith")}
+        >
           <Text style={styles.saveText}>Save Name</Text>
         </Pressable>
       </View>
@@ -49,7 +59,9 @@ export default function ProfileScreen() {
         <Text style={styles.badgesTitle}>Achievements</Text>
         <View style={styles.badgesWrap}>
           {badges.length === 0 ? (
-            <Text style={styles.empty}>Complete lessons to unlock achievements.</Text>
+            <Text style={styles.empty}>
+              Complete lessons to unlock achievements.
+            </Text>
           ) : (
             badges.map((badge) => <Badge key={badge} label={badge} />)
           )}
@@ -72,7 +84,7 @@ const styles = StyleSheet.create({
   title: {
     color: theme.colors.textPrimary,
     fontSize: 22,
-    fontWeight: '800',
+    fontWeight: "800",
   },
   card: {
     borderRadius: theme.radii.lg,
@@ -89,7 +101,7 @@ const styles = StyleSheet.create({
   value: {
     color: theme.colors.textPrimary,
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
     marginTop: 4,
   },
   input: {
@@ -105,23 +117,23 @@ const styles = StyleSheet.create({
   saveButton: {
     marginTop: 10,
     borderRadius: theme.radii.md,
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: theme.colors.neon,
     paddingVertical: 10,
   },
   saveText: {
-    color: '#07191b',
-    fontWeight: '800',
+    color: "#07191b",
+    fontWeight: "800",
   },
   badgesTitle: {
     color: theme.colors.textPrimary,
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 10,
   },
   badgesWrap: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 8,
   },
   empty: {

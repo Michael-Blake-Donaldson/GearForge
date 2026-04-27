@@ -1,14 +1,16 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { lessons } from '@/data/lessons';
-import { theme } from '@/constants/theme';
-import { useProgressStore } from '@/store/useProgressStore';
+import { theme } from "@/constants/theme";
+import { lessons } from "@/data/lessons";
+import { useProgressStore } from "@/store/useProgressStore";
 
 export default function LessonScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ lessonId: string }>();
-  const lessonId = Array.isArray(params.lessonId) ? params.lessonId[0] : params.lessonId;
+  const lessonId = Array.isArray(params.lessonId)
+    ? params.lessonId[0]
+    : params.lessonId;
 
   const lesson = lessons.find((item) => item.id === lessonId);
 
@@ -49,8 +51,11 @@ export default function LessonScreen() {
       <Pressable
         style={[styles.button, !unlocked && styles.disabledButton]}
         disabled={!unlocked}
-        onPress={() => router.push(`/quiz/${lesson.quizId}`)}>
-        <Text style={styles.buttonText}>{completed ? 'Retake Quiz' : 'Start Quiz'}</Text>
+        onPress={() => router.push(`/quiz/${lesson.quizId}`)}
+      >
+        <Text style={styles.buttonText}>
+          {completed ? "Retake Quiz" : "Start Quiz"}
+        </Text>
       </Pressable>
     </ScrollView>
   );
@@ -67,19 +72,19 @@ const styles = StyleSheet.create({
   },
   centered: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: theme.colors.bg,
   },
   notFound: {
     color: theme.colors.textPrimary,
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   title: {
     color: theme.colors.textPrimary,
     fontSize: 24,
-    fontWeight: '800',
+    fontWeight: "800",
   },
   summary: {
     color: theme.colors.textSecondary,
@@ -100,14 +105,14 @@ const styles = StyleSheet.create({
     borderRadius: theme.radii.lg,
     borderWidth: 1,
     borderColor: theme.colors.neon,
-    backgroundColor: 'rgba(29,211,176,0.12)',
+    backgroundColor: "rgba(29,211,176,0.12)",
     padding: 14,
     marginBottom: 18,
   },
   blockTitle: {
     color: theme.colors.textPrimary,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 6,
   },
   body: {
@@ -118,15 +123,15 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: theme.radii.md,
     backgroundColor: theme.colors.neon,
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: 12,
   },
   disabledButton: {
     opacity: 0.6,
   },
   buttonText: {
-    color: '#051b1d',
-    fontWeight: '800',
+    color: "#051b1d",
+    fontWeight: "800",
     fontSize: 14,
   },
 });

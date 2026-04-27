@@ -1,9 +1,9 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-import ProgressBar from '@/components/ProgressBar';
-import { regions } from '@/data/regions';
-import { theme } from '@/constants/theme';
-import { useProgressStore } from '@/store/useProgressStore';
+import ProgressBar from "@/components/ProgressBar";
+import { theme } from "@/constants/theme";
+import { regions } from "@/data/regions";
+import { useProgressStore } from "@/store/useProgressStore";
 
 export default function ProgressScreen() {
   const xp = useProgressStore((state) => state.xp);
@@ -55,7 +55,11 @@ export default function ProgressScreen() {
               <Text style={styles.masteryTitle}>{region.name}</Text>
               <Text style={styles.masteryPercent}>{mastery}%</Text>
             </View>
-            <ProgressBar value={mastery} max={100} accentColor={region.accentColor} />
+            <ProgressBar
+              value={mastery}
+              max={100}
+              accentColor={region.accentColor}
+            />
           </View>
         );
       })}
@@ -75,11 +79,11 @@ const styles = StyleSheet.create({
   title: {
     color: theme.colors.textPrimary,
     fontSize: 22,
-    fontWeight: '800',
+    fontWeight: "800",
     marginBottom: 12,
   },
   metricsRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
     marginBottom: 10,
   },
@@ -98,14 +102,14 @@ const styles = StyleSheet.create({
   metricValue: {
     color: theme.colors.textPrimary,
     fontSize: 20,
-    fontWeight: '800',
+    fontWeight: "800",
     marginTop: 6,
   },
   rankCard: {
     borderRadius: theme.radii.lg,
     borderWidth: 1,
     borderColor: theme.colors.neon,
-    backgroundColor: 'rgba(29,211,176,0.15)',
+    backgroundColor: "rgba(29,211,176,0.15)",
     padding: 14,
     marginTop: 6,
     marginBottom: 16,
@@ -117,13 +121,13 @@ const styles = StyleSheet.create({
   rankValue: {
     color: theme.colors.textPrimary,
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: "800",
     marginTop: 6,
   },
   sectionTitle: {
     color: theme.colors.textPrimary,
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 8,
   },
   masteryCard: {
@@ -135,20 +139,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   masteryHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 7,
   },
   masteryTitle: {
     color: theme.colors.textPrimary,
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: "700",
     flex: 1,
     marginRight: 6,
   },
   masteryPercent: {
     color: theme.colors.textSecondary,
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });

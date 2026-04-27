@@ -1,21 +1,21 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { DarkTheme, ThemeProvider } from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+import "react-native-reanimated";
 
-import { theme } from '@/constants/theme';
+import { theme } from "@/constants/theme";
 
 export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
+    // Catch any errors thrown by the Layout component.
+    ErrorBoundary
+} from "expo-router";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: "(tabs)",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -23,7 +23,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
 
@@ -66,7 +66,7 @@ function RootLayoutNav() {
         <Stack.Screen
           name="lesson/[lessonId]"
           options={{
-            headerTitle: 'Lesson',
+            headerTitle: "Lesson",
             headerStyle: { backgroundColor: theme.colors.surface },
             headerTintColor: theme.colors.textPrimary,
           }}
@@ -74,7 +74,7 @@ function RootLayoutNav() {
         <Stack.Screen
           name="quiz/[quizId]"
           options={{
-            headerTitle: 'Quiz',
+            headerTitle: "Quiz",
             headerStyle: { backgroundColor: theme.colors.surface },
             headerTintColor: theme.colors.textPrimary,
           }}

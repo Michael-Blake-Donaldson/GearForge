@@ -1,6 +1,6 @@
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
-import { theme } from '@/constants/theme';
+import { theme } from "@/constants/theme";
 
 type Props = {
   value: number;
@@ -9,27 +9,37 @@ type Props = {
   height?: number;
 };
 
-export default function ProgressBar({ value, max = 100, accentColor = theme.colors.neon, height = 8 }: Props) {
+export default function ProgressBar({
+  value,
+  max = 100,
+  accentColor = theme.colors.neon,
+  height = 8,
+}: Props) {
   const percent = Math.max(0, Math.min(100, Math.round((value / max) * 100)));
 
   return (
-    <View style={[styles.track, { height }]}> 
-      <View style={[styles.fill, { width: `${percent}%`, backgroundColor: accentColor }]} />
+    <View style={[styles.track, { height }]}>
+      <View
+        style={[
+          styles.fill,
+          { width: `${percent}%`, backgroundColor: accentColor },
+        ]}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   track: {
-    width: '100%',
+    width: "100%",
     backgroundColor: theme.colors.surfaceAlt,
     borderRadius: theme.radii.pill,
-    overflow: 'hidden',
+    overflow: "hidden",
     borderWidth: 1,
     borderColor: theme.colors.border,
   },
   fill: {
-    height: '100%',
+    height: "100%",
     borderRadius: theme.radii.pill,
   },
 });

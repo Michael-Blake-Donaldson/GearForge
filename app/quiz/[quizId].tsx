@@ -1,16 +1,18 @@
-import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useMemo, useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import QuizOption from '@/components/QuizOption';
-import { quizzesById } from '@/data/quizzes';
-import { theme } from '@/constants/theme';
-import { useProgressStore } from '@/store/useProgressStore';
+import QuizOption from "@/components/QuizOption";
+import { theme } from "@/constants/theme";
+import { quizzesById } from "@/data/quizzes";
+import { useProgressStore } from "@/store/useProgressStore";
 
 export default function QuizScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ quizId: string }>();
-  const quizId = Array.isArray(params.quizId) ? params.quizId[0] : params.quizId;
+  const quizId = Array.isArray(params.quizId)
+    ? params.quizId[0]
+    : params.quizId;
 
   const quiz = quizId ? quizzesById[quizId] : undefined;
   const submitQuizResult = useProgressStore((state) => state.submitQuizResult);
@@ -19,11 +21,18 @@ export default function QuizScreen() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
-  const [incorrectQuestionIds, setIncorrectQuestionIds] = useState<string[]>([]);
+  const [incorrectQuestionIds, setIncorrectQuestionIds] = useState<string[]>(
+    [],
+  );
   const [quizSubmitted, setQuizSubmitted] = useState(false);
 
-  const question = useMemo(() => quiz?.questions[currentIndex], [quiz, currentIndex]);
-  const progressPercent = quiz ? Math.round(((currentIndex + 1) / quiz.questions.length) * 100) : 0;
+  const question = useMemo(
+    () => quiz?.questions[currentIndex],
+    [quiz, currentIndex],
+  );
+  const progressPercent = quiz
+    ? Math.round(((currentIndex + 1) / quiz.questions.length) * 100)
+    : 0;
 
   if (!quiz || !question) {
     return (
@@ -60,7 +69,7 @@ export default function QuizScreen() {
         });
         setQuizSubmitted(true);
       }
-      router.replace('/(tabs)/progress');
+      router.replace("/(tabs)/progress");
       return;
     }
 
@@ -72,17 +81,24 @@ export default function QuizScreen() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.title}>{quiz.title}</Text>
-      <Text style={styles.progress}>Question {currentIndex + 1}/{quiz.questions.length} · {progressPercent}%</Text>
+      <Text style={styles.progress}>
+        Question {currentIndex + 1}/{quiz.questions.length} · {progressPercent}%
+      </Text>
 
       <View style={styles.card}>
         <Text style={styles.question}>{question.question}</Text>
 
         <View style={styles.optionsWrap}>
           {question.options.map((option, index) => {
-            let revealState: 'correct' | 'incorrect' | undefined;
+            let revealState: "correct" | "incorrect" | undefined;
             if (showFeedback) {
-              if (index === question.correctAnswerIndex) revealState = 'correct';
-              if (index === selectedIndex && index !== question.correctAnswerIndex) revealState = 'incorrect';
+              if (index === question.correctAnswerIndex)
+                revealState = "correct";
+              if (
+                index === selectedIndex &&
+                index !== question.correctAnswerIndex
+              )
+                revealState = "incorrect";
             }
 
             return (
@@ -97,17 +113,27 @@ export default function QuizScreen() {
           })}
         </View>
 
-        {showFeedback && <Text style={styles.explanation}>{question.explanation}</Text>}
+        {showFeedback && (
+          <Text style={styles.explanation}>{question.explanation}</Text>
+        )}
       </View>
 
       {!showFeedback ? (
-        <Pressable style={[styles.button, selectedIndex === null && styles.buttonDisabled]} onPress={onCheck}>
+        <Pressable
+          style={[
+            styles.button,
+            selectedIndex === null && styles.buttonDisabled,
+          ]}
+          onPress={onCheck}
+        >
           <Text style={styles.buttonText}>Check Answer</Text>
         </Pressable>
       ) : (
         <Pressable style={styles.button} onPress={onNext}>
           <Text style={styles.buttonText}>
-            {currentIndex === quiz.questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
+            {currentIndex === quiz.questions.length - 1
+              ? "Finish Quiz"
+              : "Next Question"}
           </Text>
         </Pressable>
       )}
@@ -127,18 +153,18 @@ const styles = StyleSheet.create({
   centered: {
     flex: 1,
     backgroundColor: theme.colors.bg,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   notFound: {
     color: theme.colors.textPrimary,
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   title: {
     color: theme.colors.textPrimary,
     fontSize: 21,
-    fontWeight: '800',
+    fontWeight: "800",
   },
   progress: {
     color: theme.colors.textSecondary,
@@ -157,7 +183,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textPrimary,
     fontSize: 17,
     lineHeight: 24,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 12,
   },
   optionsWrap: {
@@ -173,15 +199,15 @@ const styles = StyleSheet.create({
     marginTop: 14,
     borderRadius: theme.radii.md,
     paddingVertical: 12,
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: theme.colors.neon,
   },
   buttonDisabled: {
     opacity: 0.65,
   },
   buttonText: {
-    color: '#051a17',
-    fontWeight: '800',
+    color: "#051a17",
+    fontWeight: "800",
     fontSize: 14,
   },
 });

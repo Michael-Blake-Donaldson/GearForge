@@ -1,10 +1,10 @@
 export type Rank =
-  | 'Garage Rookie'
-  | 'Apprentice'
-  | 'Junior Technician'
-  | 'Certified Technician'
-  | 'Master Technician'
-  | 'Automotive Engineer';
+  | "Garage Rookie"
+  | "Apprentice"
+  | "Junior Technician"
+  | "Certified Technician"
+  | "Master Technician"
+  | "Automotive Engineer";
 
 export type QuizRecord = {
   quizId: string;

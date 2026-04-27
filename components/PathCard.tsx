@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import ProgressBar from '@/components/ProgressBar';
-import { theme } from '@/constants/theme';
-import { Region } from '@/types/Region';
+import ProgressBar from "@/components/ProgressBar";
+import { theme } from "@/constants/theme";
+import { Region } from "@/types/Region";
 
 type Props = {
   region: Region;
@@ -11,14 +11,26 @@ type Props = {
   onPress: () => void;
 };
 
-export default function PathCard({ region, masteryPercent, selected, onPress }: Props) {
+export default function PathCard({
+  region,
+  masteryPercent,
+  selected,
+  onPress,
+}: Props) {
   return (
-    <Pressable style={[styles.card, selected && styles.selected]} onPress={onPress}>
+    <Pressable
+      style={[styles.card, selected && styles.selected]}
+      onPress={onPress}
+    >
       <Text style={styles.title}>{region.name}</Text>
       <Text style={styles.description}>{region.description}</Text>
 
       <View style={styles.progressWrap}>
-        <ProgressBar value={masteryPercent} max={100} accentColor={region.accentColor} />
+        <ProgressBar
+          value={masteryPercent}
+          max={100}
+          accentColor={region.accentColor}
+        />
       </View>
 
       <Text style={styles.mastery}>{masteryPercent}% mastery</Text>
@@ -38,12 +50,12 @@ const styles = StyleSheet.create({
   },
   selected: {
     borderColor: theme.colors.neon,
-    backgroundColor: '#122038',
+    backgroundColor: "#122038",
   },
   title: {
     color: theme.colors.textPrimary,
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 6,
   },
   description: {
@@ -58,6 +70,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     color: theme.colors.textSecondary,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

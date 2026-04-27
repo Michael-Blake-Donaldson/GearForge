@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useMemo, useState } from "react";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
-import { encyclopediaEntries } from '@/data/encyclopedia';
-import { theme } from '@/constants/theme';
+import { theme } from "@/constants/theme";
+import { encyclopediaEntries } from "@/data/encyclopedia";
 
 export default function EncyclopediaScreen() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const entries = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -15,14 +15,16 @@ export default function EncyclopediaScreen() {
       (entry) =>
         entry.name.toLowerCase().includes(query) ||
         entry.category.toLowerCase().includes(query) ||
-        entry.description.toLowerCase().includes(query)
+        entry.description.toLowerCase().includes(query),
     );
   }, [search]);
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.title}>Reference Encyclopedia</Text>
-      <Text style={styles.subtitle}>Educational reference only. No diagnostics, no repair recommendations.</Text>
+      <Text style={styles.subtitle}>
+        Educational reference only. No diagnostics, no repair recommendations.
+      </Text>
 
       <TextInput
         style={styles.search}
@@ -43,7 +45,9 @@ export default function EncyclopediaScreen() {
 
           <Text style={styles.sectionHeader}>Key Facts</Text>
           {entry.keyFacts.map((fact) => (
-            <Text key={fact} style={styles.fact}>• {fact}</Text>
+            <Text key={fact} style={styles.fact}>
+              • {fact}
+            </Text>
           ))}
         </View>
       ))}
@@ -63,7 +67,7 @@ const styles = StyleSheet.create({
   title: {
     color: theme.colors.textPrimary,
     fontSize: 22,
-    fontWeight: '800',
+    fontWeight: "800",
   },
   subtitle: {
     color: theme.colors.textSecondary,
@@ -92,12 +96,12 @@ const styles = StyleSheet.create({
   name: {
     color: theme.colors.textPrimary,
     fontSize: 17,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   category: {
     color: theme.colors.neon,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: "700",
     marginTop: 4,
   },
   description: {
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     color: theme.colors.textPrimary,
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: "700",
     marginTop: 10,
     marginBottom: 3,
   },

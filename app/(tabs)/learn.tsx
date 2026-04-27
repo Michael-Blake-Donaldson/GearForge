@@ -1,17 +1,17 @@
-import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter } from "expo-router";
+import { useMemo, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-import LessonCard from '@/components/LessonCard';
-import PathCard from '@/components/PathCard';
-import StreakCounter from '@/components/StreakCounter';
-import UnitCard from '@/components/UnitCard';
-import XPDisplay from '@/components/XPDisplay';
-import { lessons } from '@/data/lessons';
-import { regions, starterRegionIds } from '@/data/regions';
-import { units } from '@/data/units';
-import { theme } from '@/constants/theme';
-import { useProgressStore } from '@/store/useProgressStore';
+import LessonCard from "@/components/LessonCard";
+import PathCard from "@/components/PathCard";
+import StreakCounter from "@/components/StreakCounter";
+import UnitCard from "@/components/UnitCard";
+import XPDisplay from "@/components/XPDisplay";
+import { theme } from "@/constants/theme";
+import { lessons } from "@/data/lessons";
+import { regions, starterRegionIds } from "@/data/regions";
+import { units } from "@/data/units";
+import { useProgressStore } from "@/store/useProgressStore";
 
 export default function LearnScreen() {
   const router = useRouter();
@@ -26,14 +26,22 @@ export default function LearnScreen() {
   const level = useProgressStore((state) => state.level);
   const streak = useProgressStore((state) => state.streak);
 
-  const selectedRegion = regions.find((region) => region.id === selectedRegionId) ?? regions[0];
+  const selectedRegion =
+    regions.find((region) => region.id === selectedRegionId) ?? regions[0];
   const regionUnits = useMemo(
-    () => units.filter((unit) => unit.regionId === selectedRegion.id).sort((a, b) => a.order - b.order),
-    [selectedRegion.id]
+    () =>
+      units
+        .filter((unit) => unit.regionId === selectedRegion.id)
+        .sort((a, b) => a.order - b.order),
+    [selectedRegion.id],
   );
 
   const toggleUnit = (unitId: string) => {
-    setExpandedUnitIds((prev) => (prev.includes(unitId) ? prev.filter((id) => id !== unitId) : [...prev, unitId]));
+    setExpandedUnitIds((prev) =>
+      prev.includes(unitId)
+        ? prev.filter((id) => id !== unitId)
+        : [...prev, unitId],
+    );
   };
 
   return (
@@ -44,7 +52,11 @@ export default function LearnScreen() {
       </View>
 
       <Text style={styles.sectionTitle}>Learning Paths</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.pathRow}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.pathRow}
+      >
         {regions.map((region) => (
           <PathCard
             key={region.id}
@@ -61,14 +73,19 @@ export default function LearnScreen() {
         <View style={styles.comingSoon}>
           <Text style={styles.comingSoonTitle}>Content Coming Soon</Text>
           <Text style={styles.comingSoonBody}>
-            This path is planned for a future module pack. Start with American, Japanese, or European tracks.
+            This path is planned for a future module pack. Start with American,
+            Japanese, or European tracks.
           </Text>
         </View>
       )}
 
       {regionUnits.map((unit) => {
-        const unitLessons = lessons.filter((lesson) => lesson.unitId === unit.id).sort((a, b) => a.order - b.order);
-        const completedInUnit = unitLessons.filter((lesson) => completedLessons.includes(lesson.id)).length;
+        const unitLessons = lessons
+          .filter((lesson) => lesson.unitId === unit.id)
+          .sort((a, b) => a.order - b.order);
+        const completedInUnit = unitLessons.filter((lesson) =>
+          completedLessons.includes(lesson.id),
+        ).length;
         const expanded = expandedUnitIds.includes(unit.id);
 
         return (
@@ -111,15 +128,15 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     gap: 8,
     marginBottom: 18,
   },
   sectionTitle: {
     color: theme.colors.textPrimary,
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: "800",
     marginBottom: 10,
   },
   pathRow: {
@@ -137,7 +154,7 @@ const styles = StyleSheet.create({
   comingSoonTitle: {
     color: theme.colors.textPrimary,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 6,
   },
   comingSoonBody: {
