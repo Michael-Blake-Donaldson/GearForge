@@ -9,9 +9,9 @@ import "react-native-reanimated";
 import { theme } from "@/constants/theme";
 import { useProgressStore } from "@/store/useProgressStore";
 import {
-  cancelAllNotifications,
-  requestPermissions,
-  scheduleDailyReminder,
+    cancelAllNotifications,
+    requestPermissions,
+    scheduleDailyReminder,
 } from "@/utils/notifications";
 
 export {

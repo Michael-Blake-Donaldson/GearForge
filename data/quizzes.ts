@@ -555,7 +555,8 @@ export const quizzes: Quiz[] = [
     {
       id: "am-q6-1",
       // Tests OBD-II mandate knowledge
-      question: "OBD-II diagnostic capability has been required on US vehicles since:",
+      question:
+        "OBD-II diagnostic capability has been required on US vehicles since:",
       options: ["1988", "1996", "2003", "2010"],
       correctAnswerIndex: 1,
       explanation:
@@ -839,8 +840,7 @@ export const quizzes: Quiz[] = [
     {
       id: "ko-q2-1",
       // Tests root cause understanding
-      question:
-        "The Theta II GDI engine failures were primarily linked to:",
+      question: "The Theta II GDI engine failures were primarily linked to:",
       options: [
         "Overuse of synthetic oil",
         "Metal debris contamination and oil supply starvation at connecting rod bearings",
@@ -887,8 +887,7 @@ export const quizzes: Quiz[] = [
     {
       id: "ko-q3-1",
       // Tests normal operating behavior
-      question:
-        "In normal driving conditions, HTRAC primarily operates as:",
+      question: "In normal driving conditions, HTRAC primarily operates as:",
       options: [
         "A 50/50 locked AWD system",
         "A front-wheel-drive system for efficiency, with rear torque available on demand",
@@ -902,8 +901,7 @@ export const quizzes: Quiz[] = [
     {
       id: "ko-q3-2",
       // Tests clutch pack mechanism
-      question:
-        "HTRAC transfers torque between axles using:",
+      question: "HTRAC transfers torque between axles using:",
       options: [
         "A viscous coupling fluid clutch",
         "A multi-plate wet clutch pack controlled by an electronic module",
@@ -1120,53 +1118,53 @@ export const quizzes: Quiz[] = [
     },
   ]),
 
-  makeQuiz("ev-q4", "ev-l4", "Regenerative Braking and Thermal Management Quiz", [
-    {
-      id: "ev-q4-1",
-      // Tests regen principle
-      question:
-        "During regenerative braking, the traction motor functions as:",
-      options: [
-        "A heat exchanger",
-        "A generator that converts kinetic energy back to electrical energy",
-        "A hydraulic pump",
-        "A friction pad backup system",
-      ],
-      correctAnswerIndex: 1,
-      explanation:
-        "When the motor is spun by vehicle momentum during deceleration, it acts as a generator — the electrical energy produced is returned to the battery.",
-    },
-    {
-      id: "ev-q4-2",
-      // Tests thermal management temperature window
-      question:
-        "EV battery thermal management aims to keep cells within what general temperature range for optimal performance and longevity?",
-      options: [
-        "0–10°C",
-        "20–40°C",
-        "60–80°C",
-        "Above 100°C",
-      ],
-      correctAnswerIndex: 1,
-      explanation:
-        "Below 20°C, lithium-ion cells lose charge acceptance and range; above 40°C sustained, degradation accelerates. The 20–40°C window balances performance and longevity.",
-    },
-    {
-      id: "ev-q4-3",
-      // Tests cold weather pre-conditioning
-      question:
-        "Battery pre-conditioning in cold weather is important because it:",
-      options: [
-        "Warms the cabin faster",
-        "Restores charge acceptance rate so the vehicle can accept regeneration and fast charging normally",
-        "Increases engine idle speed",
-        "Activates all-wheel drive",
-      ],
-      correctAnswerIndex: 1,
-      explanation:
-        "Cold lithium-ion cells have high internal resistance, which limits how fast they can accept current. Pre-heating restores charge acceptance before driving begins.",
-    },
-  ]),
+  makeQuiz(
+    "ev-q4",
+    "ev-l4",
+    "Regenerative Braking and Thermal Management Quiz",
+    [
+      {
+        id: "ev-q4-1",
+        // Tests regen principle
+        question:
+          "During regenerative braking, the traction motor functions as:",
+        options: [
+          "A heat exchanger",
+          "A generator that converts kinetic energy back to electrical energy",
+          "A hydraulic pump",
+          "A friction pad backup system",
+        ],
+        correctAnswerIndex: 1,
+        explanation:
+          "When the motor is spun by vehicle momentum during deceleration, it acts as a generator — the electrical energy produced is returned to the battery.",
+      },
+      {
+        id: "ev-q4-2",
+        // Tests thermal management temperature window
+        question:
+          "EV battery thermal management aims to keep cells within what general temperature range for optimal performance and longevity?",
+        options: ["0–10°C", "20–40°C", "60–80°C", "Above 100°C"],
+        correctAnswerIndex: 1,
+        explanation:
+          "Below 20°C, lithium-ion cells lose charge acceptance and range; above 40°C sustained, degradation accelerates. The 20–40°C window balances performance and longevity.",
+      },
+      {
+        id: "ev-q4-3",
+        // Tests cold weather pre-conditioning
+        question:
+          "Battery pre-conditioning in cold weather is important because it:",
+        options: [
+          "Warms the cabin faster",
+          "Restores charge acceptance rate so the vehicle can accept regeneration and fast charging normally",
+          "Increases engine idle speed",
+          "Activates all-wheel drive",
+        ],
+        correctAnswerIndex: 1,
+        explanation:
+          "Cold lithium-ion cells have high internal resistance, which limits how fast they can accept current. Pre-heating restores charge acceptance before driving begins.",
+      },
+    ],
+  ),
 
   // ── Diesel & Heavy-Duty Quizzes ───────────────────────────────────────────
 
@@ -1189,7 +1187,8 @@ export const quizzes: Quiz[] = [
     {
       id: "dh-q1-2",
       // Tests pilot injection benefit
-      question: "The purpose of a pilot injection event before the main injection is to:",
+      question:
+        "The purpose of a pilot injection event before the main injection is to:",
       options: [
         "Test injector electrical resistance",
         "Reduce combustion noise by initiating a small pre-ignition before the main charge arrives",
@@ -1203,7 +1202,8 @@ export const quizzes: Quiz[] = [
     {
       id: "dh-q1-3",
       // Tests multi-event injection benefit
-      question: "The ability to fire multiple injection events per combustion cycle primarily enables:",
+      question:
+        "The ability to fire multiple injection events per combustion cycle primarily enables:",
       options: [
         "Simplified injector design",
         "Simultaneous optimization of combustion noise, power, and emissions",
@@ -1235,8 +1235,7 @@ export const quizzes: Quiz[] = [
     {
       id: "dh-q2-2",
       // Tests exhaust brake function
-      question:
-        "When a VGT acts as an exhaust brake, it slows the vehicle by:",
+      question: "When a VGT acts as an exhaust brake, it slows the vehicle by:",
       options: [
         "Applying friction to the turbine shaft",
         "Closing vanes to restrict exhaust flow and create backpressure against the pistons",

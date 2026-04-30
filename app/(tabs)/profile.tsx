@@ -13,9 +13,9 @@ import Badge from "@/components/Badge";
 import { theme } from "@/constants/theme";
 import { useProgressStore, validateUsername } from "@/store/useProgressStore";
 import {
-  cancelAllNotifications,
-  requestPermissions,
-  scheduleDailyReminder,
+    cancelAllNotifications,
+    requestPermissions,
+    scheduleDailyReminder,
 } from "@/utils/notifications";
 import { useRouter } from "expo-router";
 
@@ -122,8 +122,8 @@ export default function ProfileScreen() {
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>🧊 Streak Freeze</Text>
         <Text style={styles.freezeBody}>
-          Streak freeze tokens protect your streak when you miss a day.
-          You earn one token every 7 consecutive days.
+          Streak freeze tokens protect your streak when you miss a day. You earn
+          one token every 7 consecutive days.
         </Text>
         {/* Token row — shows up to 5 ice-cube icons */}
         <View style={styles.tokenRow}>
@@ -144,7 +144,8 @@ export default function ProfileScreen() {
           )}
         </View>
         <Text style={styles.tokenCount}>
-          {streakFreezeTokens} freeze {streakFreezeTokens === 1 ? "token" : "tokens"} available
+          {streakFreezeTokens} freeze{" "}
+          {streakFreezeTokens === 1 ? "token" : "tokens"} available
         </Text>
 
         {/* Manual-use button — useful if streak is already broken */}
@@ -164,7 +165,11 @@ export default function ProfileScreen() {
                   text: "Use Token",
                   onPress: () => {
                     const used = useStreakFreeze();
-                    if (!used) Alert.alert("No tokens", "You have no freeze tokens left.");
+                    if (!used)
+                      Alert.alert(
+                        "No tokens",
+                        "You have no freeze tokens left.",
+                      );
                   },
                 },
               ],
@@ -178,7 +183,9 @@ export default function ProfileScreen() {
               streakFreezeTokens === 0 && styles.freezeButtonTextDisabled,
             ]}
           >
-            {streakFreezeTokens > 0 ? "Use a Freeze Token" : "No Tokens — Keep Streaking!"}
+            {streakFreezeTokens > 0
+              ? "Use a Freeze Token"
+              : "No Tokens — Keep Streaking!"}
           </Text>
         </Pressable>
       </View>
@@ -247,11 +254,7 @@ export default function ProfileScreen() {
                       notificationHour === h && styles.hourChipTextActive,
                     ]}
                   >
-                    {h < 12
-                      ? `${h}AM`
-                      : h === 12
-                        ? "12PM"
-                        : `${h - 12}PM`}
+                    {h < 12 ? `${h}AM` : h === 12 ? "12PM" : `${h - 12}PM`}
                   </Text>
                 </Pressable>
               ))}
@@ -302,9 +305,8 @@ export default function ProfileScreen() {
 
       {/* --- Achievement badges --------------------------------------------- */}
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>
-          Achievements ({badges.length})
-        </Text>        <View style={styles.badgesWrap}>
+        <Text style={styles.sectionTitle}>Achievements ({badges.length})</Text>{" "}
+        <View style={styles.badgesWrap}>
           {badges.length === 0 ? (
             <Text style={styles.empty}>
               Complete lessons to unlock achievements.
@@ -574,4 +576,3 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
 });
-

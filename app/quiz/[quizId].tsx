@@ -81,7 +81,7 @@ export default function QuizScreen() {
 
       // Route to lesson-complete celebration screen with result params.
       router.replace(
-        `/lesson-complete?lessonId=${quiz.lessonId}&xp=${xp}&correct=${correctCount}&total=${quiz.questions.length}`
+        `/lesson-complete?lessonId=${quiz.lessonId}&xp=${xp}&correct=${correctCount}&total=${quiz.questions.length}`,
       );
       return;
     }

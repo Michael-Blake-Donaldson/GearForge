@@ -55,8 +55,7 @@ export async function requestPermissions(): Promise<
   "granted" | "denied" | "undecided"
 > {
   // On iOS we must explicitly request; Android 13+ also needs a runtime prompt.
-  const { status: existingStatus } =
-    await Notifications.getPermissionsAsync();
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
 
   let finalStatus = existingStatus;
 

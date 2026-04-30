@@ -1,14 +1,14 @@
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
-  Dimensions,
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Dimensions,
+    FlatList,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 import { theme } from "@/constants/theme";
@@ -220,7 +220,9 @@ function RegionSlide({
                   {region.name}
                 </Text>
                 {active && (
-                  <Text style={[styles.checkmark, { color: region.accentColor }]}>
+                  <Text
+                    style={[styles.checkmark, { color: region.accentColor }]}
+                  >
                     ✓
                   </Text>
                 )}
@@ -250,8 +252,8 @@ function UsernameSlide({
       <Text style={styles.emoji}>👤</Text>
       <Text style={styles.slideTitle}>What Should We Call You?</Text>
       <Text style={styles.slideBody}>
-        Choose a username for your GearForge profile. 3–20 characters,
-        letters, numbers, underscores, and hyphens only.
+        Choose a username for your GearForge profile. 3–20 characters, letters,
+        numbers, underscores, and hyphens only.
       </Text>
 
       <TextInput

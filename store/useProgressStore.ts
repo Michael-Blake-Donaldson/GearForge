@@ -64,12 +64,36 @@ const todayKey = (): string => {
 //   Deterministic: every user gets the same quest on the same calendar day.
 // ---------------------------------------------------------------------------
 const QUEST_POOL = [
-  { id: "q-lessons-2", description: "Complete 2 lessons today", targetCount: 2 },
-  { id: "q-lessons-3", description: "Complete 3 lessons today", targetCount: 3 },
-  { id: "q-quiz-perfect", description: "Score 100% on any quiz", targetCount: 1 },
-  { id: "q-weak-review", description: "Review 1 weak topic in Practice", targetCount: 1 },
-  { id: "q-encyclopedia", description: "Look up 2 encyclopedia entries", targetCount: 2 },
-  { id: "q-streak", description: "Keep your streak alive today", targetCount: 1 },
+  {
+    id: "q-lessons-2",
+    description: "Complete 2 lessons today",
+    targetCount: 2,
+  },
+  {
+    id: "q-lessons-3",
+    description: "Complete 3 lessons today",
+    targetCount: 3,
+  },
+  {
+    id: "q-quiz-perfect",
+    description: "Score 100% on any quiz",
+    targetCount: 1,
+  },
+  {
+    id: "q-weak-review",
+    description: "Review 1 weak topic in Practice",
+    targetCount: 1,
+  },
+  {
+    id: "q-encyclopedia",
+    description: "Look up 2 encyclopedia entries",
+    targetCount: 2,
+  },
+  {
+    id: "q-streak",
+    description: "Keep your streak alive today",
+    targetCount: 1,
+  },
 ];
 
 const generateDailyQuest = (dateKey: string): DailyQuest => {
@@ -461,7 +485,9 @@ export const useProgressStore = create<ProgressState>()(
         // Recalculate fully-completed units
         const completedUnits = units
           .filter((u) =>
-            u.lessonIds.every((id) => nextProgress.completedLessons.includes(id)),
+            u.lessonIds.every((id) =>
+              nextProgress.completedLessons.includes(id),
+            ),
           )
           .map((u) => u.id);
 
@@ -514,7 +540,13 @@ export const useProgressStore = create<ProgressState>()(
         set({
           quizHistory: [
             ...snapshot.quizHistory,
-            { quizId, lessonId, correct, total, answeredAt: new Date().toISOString() },
+            {
+              quizId,
+              lessonId,
+              correct,
+              total,
+              answeredAt: new Date().toISOString(),
+            },
           ],
           incorrectQuestionIds: cleaned,
         });

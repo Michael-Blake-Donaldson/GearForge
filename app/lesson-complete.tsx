@@ -1,7 +1,13 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
-import { Animated, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    Animated,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 
 import { theme } from "@/constants/theme";
 import { lessons } from "@/data/lessons";
@@ -18,7 +24,8 @@ function getHeadline(accuracy: number): string {
 
 /** Return a short descriptive sub-message. */
 function getMessage(accuracy: number): string {
-  if (accuracy === 1) return "You answered every question correctly. Impressive!";
+  if (accuracy === 1)
+    return "You answered every question correctly. Impressive!";
   if (accuracy >= 0.8) return "You're getting the hang of it. Keep building!";
   if (accuracy >= 0.5) return "Review the weak areas and retry when ready.";
   return "Don't worry — every expert started somewhere.";
@@ -48,7 +55,9 @@ export default function LessonCompleteScreen() {
   // Look up next lesson in the same unit so we can offer a "Next Lesson" button
   const currentLesson = lessons.find((l) => l.id === lessonId);
   const nextLesson = lessons.find(
-    (l) => l.unitId === currentLesson?.unitId && l.order === (currentLesson?.order ?? 0) + 1
+    (l) =>
+      l.unitId === currentLesson?.unitId &&
+      l.order === (currentLesson?.order ?? 0) + 1,
   );
 
   // ── Entrance animations ─────────────────────────────────────────────────
@@ -84,7 +93,9 @@ export default function LessonCompleteScreen() {
   return (
     <View style={styles.screen}>
       {/* Trophy icon */}
-      <Animated.View style={[styles.iconWrap, { transform: [{ scale: iconScale }] }]}>
+      <Animated.View
+        style={[styles.iconWrap, { transform: [{ scale: iconScale }] }]}
+      >
         <MaterialCommunityIcons
           name="trophy"
           size={72}
@@ -102,7 +113,10 @@ export default function LessonCompleteScreen() {
 
       {/* Quiz result stats */}
       <Animated.View
-        style={[styles.statsRow, { transform: [{ translateY: statsTranslate }] }]}
+        style={[
+          styles.statsRow,
+          { transform: [{ translateY: statsTranslate }] },
+        ]}
       >
         <StatBox label="Correct" value={`${correct}/${total}`} />
         <StatBox label="Accuracy" value={`${Math.round(accuracy * 100)}%`} />

@@ -29,10 +29,10 @@ function scoreToQuality(correct: number, total: number): number {
   if (total === 0) return 0;
   const ratio = correct / total;
   if (ratio >= 0.95) return 5;
-  if (ratio >= 0.80) return 4;
-  if (ratio >= 0.60) return 3;
-  if (ratio >= 0.40) return 2;
-  if (ratio >= 0.20) return 1;
+  if (ratio >= 0.8) return 4;
+  if (ratio >= 0.6) return 3;
+  if (ratio >= 0.4) return 2;
+  if (ratio >= 0.2) return 1;
   return 0;
 }
 
@@ -58,7 +58,10 @@ function computeNextInterval(records: QuizRecord[]): number {
 }
 
 /** Return true when a quiz is currently due for review. */
-function isDue(quizId: string, historyByQuiz: Map<string, QuizRecord[]>): boolean {
+function isDue(
+  quizId: string,
+  historyByQuiz: Map<string, QuizRecord[]>,
+): boolean {
   const records = historyByQuiz.get(quizId);
   if (!records || records.length === 0) return false; // never attempted
 
@@ -239,7 +242,9 @@ export default function PracticeScreen() {
               onPress={() => setRegionId(region.id)}
             >
               <Text style={styles.filterText}>
-                {region.name.replace(" Vehicles", "").replace(" and Hybrid", "")}
+                {region.name
+                  .replace(" Vehicles", "")
+                  .replace(" and Hybrid", "")}
               </Text>
             </Pressable>
           ))}

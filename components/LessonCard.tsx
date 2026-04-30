@@ -19,7 +19,11 @@ const LessonCard = memo(function LessonCard({
   isCompleted,
   onPress,
 }: Props) {
-  const stateLabel = isCompleted ? "Completed" : isUnlocked ? "Ready" : "Locked";
+  const stateLabel = isCompleted
+    ? "Completed"
+    : isUnlocked
+      ? "Ready"
+      : "Locked";
 
   return (
     <Pressable

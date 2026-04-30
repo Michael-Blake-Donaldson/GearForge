@@ -36,70 +36,68 @@ export default function PrivacyScreen() {
       {/* ── Section 1 ───────────────────────────────────────────────────── */}
       <Section title="1. Overview">
         GearForge ("the App") is an offline automotive-education application.
-        Your privacy is important to us.  This policy explains what data — if
-        any — the App processes and how it is used.
+        Your privacy is important to us. This policy explains what data — if any
+        — the App processes and how it is used.
       </Section>
 
       {/* ── Section 2 ───────────────────────────────────────────────────── */}
       <Section title="2. Data we collect">
         GearForge does NOT collect, transmit, or store any personal data on
         external servers.{"\n\n"}
-        All user progress (XP, streaks, completed lessons, badges, username)
-        is stored exclusively on your device using Apple's on-device storage
-        APIs.  This data never leaves your device and is not shared with anyone.
+        All user progress (XP, streaks, completed lessons, badges, username) is
+        stored exclusively on your device using Apple's on-device storage APIs.
+        This data never leaves your device and is not shared with anyone.
       </Section>
 
       {/* ── Section 3 ───────────────────────────────────────────────────── */}
       <Section title="3. Notifications">
-        If you grant notification permission, GearForge schedules local
-        reminder notifications using Apple Push Notification service (APNs).
-        These are local notifications generated on your device — no data is
-        sent to GearForge servers.{"\n\n"}
-        You may disable notifications at any time from:{"\n"}
-        • The GearForge Profile tab → Notifications → Turn Off Reminders{"\n"}
-        • Your device Settings → Notifications → GearForge
+        If you grant notification permission, GearForge schedules local reminder
+        notifications using Apple Push Notification service (APNs). These are
+        local notifications generated on your device — no data is sent to
+        GearForge servers.{"\n\n"}
+        You may disable notifications at any time from:{"\n"}• The GearForge
+        Profile tab → Notifications → Turn Off Reminders{"\n"}• Your device
+        Settings → Notifications → GearForge
       </Section>
 
       {/* ── Section 4 ───────────────────────────────────────────────────── */}
       <Section title="4. Third-party services">
         GearForge uses the following open-source frameworks, none of which
-        collect personal data:{"\n\n"}
-        • Expo SDK — app runtime (expo.dev){"\n"}
-        • React Native — UI framework (reactnative.dev){"\n"}
-        • Zustand — local state management{"\n"}
-        • AsyncStorage — on-device persistence{"\n\n"}
+        collect personal data:{"\n\n"}• Expo SDK — app runtime (expo.dev){"\n"}•
+        React Native — UI framework (reactnative.dev){"\n"}• Zustand — local
+        state management{"\n"}• AsyncStorage — on-device persistence{"\n\n"}
         None of these services receive your personal data from GearForge.
       </Section>
 
       {/* ── Section 5 ───────────────────────────────────────────────────── */}
       <Section title="5. Analytics and advertising">
         GearForge contains NO analytics SDKs, NO advertising SDKs, and does NOT
-        use advertising identifiers (IDFA/GAID).  No tracking occurs.
+        use advertising identifiers (IDFA/GAID). No tracking occurs.
       </Section>
 
       {/* ── Section 6 ───────────────────────────────────────────────────── */}
       <Section title="6. Children's privacy">
         GearForge does not knowingly collect data from children under 13.
-        Because we collect no personal data at all, the App is safe for all
-        age groups.
+        Because we collect no personal data at all, the App is safe for all age
+        groups.
       </Section>
 
       {/* ── Section 7 ───────────────────────────────────────────────────── */}
       <Section title="7. Data deletion">
-        To delete all app data, simply uninstall GearForge from your device.
-        All locally-stored progress data is removed at uninstall time.
+        To delete all app data, simply uninstall GearForge from your device. All
+        locally-stored progress data is removed at uninstall time.
       </Section>
 
       {/* ── Section 8 ───────────────────────────────────────────────────── */}
       <Section title="8. Changes to this policy">
-        We may update this policy as new features are added.  Significant
-        changes will be communicated via an in-app notice.  Continued use of
-        the App constitutes acceptance of the updated policy.
+        We may update this policy as new features are added. Significant changes
+        will be communicated via an in-app notice. Continued use of the App
+        constitutes acceptance of the updated policy.
       </Section>
 
       {/* ── Section 9 ───────────────────────────────────────────────────── */}
       <Section title="9. Contact">
-        Questions about this policy?  Contact us at:{"\n"}
+        Questions about this policy? Contact us at:{"\n"}
         privacy@gearforge.app
       </Section>
 
