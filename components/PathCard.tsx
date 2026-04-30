@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import ProgressBar from "@/components/ProgressBar";
@@ -11,7 +12,9 @@ type Props = {
   onPress: () => void;
 };
 
-export default function PathCard({
+// React.memo prevents the entire PathCard row from re-rendering when only the
+// selected region or one region's mastery changes.
+const PathCard = memo(function PathCard({
   region,
   masteryPercent,
   selected,
@@ -21,6 +24,11 @@ export default function PathCard({
     <Pressable
       style={[styles.card, selected && styles.selected]}
       onPress={onPress}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={`${region.name}, ${masteryPercent}% mastery`}
+      accessibilityState={{ selected }}
+      accessibilityHint="Tap to select this learning path"
     >
       <Text style={styles.title}>{region.name}</Text>
       <Text style={styles.description}>{region.description}</Text>
@@ -36,7 +44,9 @@ export default function PathCard({
       <Text style={styles.mastery}>{masteryPercent}% mastery</Text>
     </Pressable>
   );
-}
+});
+
+export default PathCard;
 
 const styles = StyleSheet.create({
   card: {

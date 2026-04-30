@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import ProgressBar from "@/components/ProgressBar";
@@ -12,7 +13,8 @@ type Props = {
   onPress: () => void;
 };
 
-export default function UnitCard({
+// React.memo prevents re-renders when unrelated store fields change.
+const UnitCard = memo(function UnitCard({
   unit,
   completed,
   total,
@@ -20,11 +22,17 @@ export default function UnitCard({
   onPress,
 }: Props) {
   const progress = total === 0 ? 0 : Math.round((completed / total) * 100);
+  const expandLabel = isUnlocked ? "Tap to expand or collapse" : "Locked";
 
   return (
     <Pressable
       style={[styles.card, !isUnlocked && styles.lockedCard]}
       onPress={onPress}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={`${unit.title}, ${completed} of ${total} lessons completed`}
+      accessibilityHint={expandLabel}
+      accessibilityState={{ disabled: !isUnlocked }}
     >
       <View style={styles.header}>
         <Text style={styles.title}>{unit.title}</Text>
@@ -40,7 +48,9 @@ export default function UnitCard({
       </Text>
     </Pressable>
   );
-}
+});
+
+export default UnitCard;
 
 const styles = StyleSheet.create({
   card: {

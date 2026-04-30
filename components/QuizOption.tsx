@@ -18,6 +18,13 @@ export default function QuizOption({
   const isCorrect = revealState === "correct";
   const isIncorrect = revealState === "incorrect";
 
+  // Build a meaningful accessibility hint so screen-reader users know the
+  // outcome of their selection when feedback is revealed.
+  let accessibilityState: "selected" | "correct" | "incorrect" | undefined;
+  if (isCorrect) accessibilityState = "correct";
+  else if (isIncorrect) accessibilityState = "incorrect";
+  else if (selected) accessibilityState = "selected";
+
   return (
     <Pressable
       style={[
@@ -28,6 +35,17 @@ export default function QuizOption({
       ]}
       onPress={onPress}
       disabled={Boolean(revealState)}
+      accessible
+      accessibilityRole="radio"
+      accessibilityLabel={text}
+      accessibilityHint={
+        revealState
+          ? isCorrect
+            ? "Correct answer"
+            : "Incorrect answer"
+          : "Tap to select this answer"
+      }
+      accessibilityState={{ selected: selected && !revealState }}
     >
       <Text style={styles.text}>{text}</Text>
     </Pressable>

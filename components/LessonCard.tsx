@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { theme } from "@/constants/theme";
@@ -10,30 +11,38 @@ type Props = {
   onPress: () => void;
 };
 
-export default function LessonCard({
+// Wrapped in React.memo so the Learn tab list does not re-render every card
+// when a single lesson's state changes.
+const LessonCard = memo(function LessonCard({
   lesson,
   isUnlocked,
   isCompleted,
   onPress,
 }: Props) {
+  const stateLabel = isCompleted ? "Completed" : isUnlocked ? "Ready" : "Locked";
+
   return (
     <Pressable
       style={[styles.card, !isUnlocked && styles.lockedCard]}
       onPress={onPress}
+      accessible
+      accessibilityRole="button"
+      accessibilityLabel={`${lesson.title} — ${stateLabel}, ${lesson.xpReward} XP`}
+      accessibilityState={{ disabled: !isUnlocked }}
     >
       <View style={styles.header}>
         <Text style={styles.title}>{lesson.title}</Text>
         <Text
           style={[styles.state, isCompleted ? styles.complete : styles.locked]}
         >
-          {isCompleted ? "Completed" : isUnlocked ? "Ready" : "Locked"}
+          {stateLabel}
         </Text>
       </View>
       <Text style={styles.summary}>{lesson.shortExplanation}</Text>
       <Text style={styles.meta}>{lesson.xpReward} XP base reward</Text>
     </Pressable>
   );
-}
+});
 
 const styles = StyleSheet.create({
   card: {
@@ -82,3 +91,5 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
+
+export default LessonCard;

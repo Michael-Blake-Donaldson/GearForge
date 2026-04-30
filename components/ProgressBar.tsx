@@ -1,4 +1,5 @@
-import { StyleSheet, View } from "react-native";
+import { useEffect, useRef } from "react";
+import { Animated, StyleSheet, View } from "react-native";
 
 import { theme } from "@/constants/theme";
 
@@ -17,12 +18,37 @@ export default function ProgressBar({
 }: Props) {
   const percent = Math.max(0, Math.min(100, Math.round((value / max) * 100)));
 
+  // Animated value drives the fill width (0 → percent on mount/change)
+  const animatedWidth = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    // Spring animation gives a satisfying bounce-in effect
+    Animated.spring(animatedWidth, {
+      toValue: percent,
+      friction: 8,
+      tension: 60,
+      useNativeDriver: false, // 'width' is a layout property, can't use native driver
+    }).start();
+  }, [percent]);
+
+  // Interpolate 0-100 to "0%"-"100%" string for the width style
+  const widthInterpolated = animatedWidth.interpolate({
+    inputRange: [0, 100],
+    outputRange: ["0%", "100%"],
+    extrapolate: "clamp",
+  });
+
   return (
-    <View style={[styles.track, { height }]}>
-      <View
+    <View
+      style={[styles.track, { height }]}
+      accessible
+      accessibilityRole="progressbar"
+      accessibilityValue={{ min: 0, max: 100, now: percent }}
+    >
+      <Animated.View
         style={[
           styles.fill,
-          { width: `${percent}%`, backgroundColor: accentColor },
+          { width: widthInterpolated, backgroundColor: accentColor },
         ]}
       />
     </View>
