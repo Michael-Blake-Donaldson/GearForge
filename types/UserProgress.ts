@@ -52,4 +52,10 @@ export type UserProgress = {
   notificationPermission: "undecided" | "granted" | "denied";
   /** User-preferred local hour (0-23) for streak reminder notification. */
   notificationHour: number;
+  /**
+   * Number of times the app has been launched (cold-start).
+   * Used to gate the notification permission prompt until the user's second
+   * session so we don't ask on the very first open.
+   */
+  launchCount: number;
 };

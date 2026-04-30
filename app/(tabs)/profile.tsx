@@ -12,6 +12,11 @@ import {
 import Badge from "@/components/Badge";
 import { theme } from "@/constants/theme";
 import { useProgressStore, validateUsername } from "@/store/useProgressStore";
+import {
+  cancelAllNotifications,
+  requestPermissions,
+  scheduleDailyReminder,
+} from "@/utils/notifications";
 
 export default function ProfileScreen() {
   const username = useProgressStore((state) => state.username);
@@ -23,6 +28,16 @@ export default function ProfileScreen() {
   const badges = useProgressStore((state) => state.badges);
   const setUsername = useProgressStore((state) => state.setUsername);
   const useStreakFreeze = useProgressStore((state) => state.useStreakFreeze);
+
+  // Notification preferences
+  const notificationPermission = useProgressStore(
+    (s) => s.notificationPermission,
+  );
+  const notificationHour = useProgressStore((s) => s.notificationHour);
+  const setNotificationPermission = useProgressStore(
+    (s) => s.setNotificationPermission,
+  );
+  const setNotificationHour = useProgressStore((s) => s.setNotificationHour);
 
   const [draftName, setDraftName] = useState(username);
   // Validation error message shown below the input field
@@ -166,12 +181,128 @@ export default function ProfileScreen() {
         </Pressable>
       </View>
 
+      {/* --- Notifications card --------------------------------------------- */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>🔔 Notifications</Text>
+
+        {/* Permission status row */}
+        <View style={styles.notifRow}>
+          <Text style={styles.notifLabel}>Daily reminder</Text>
+          <Text
+            style={[
+              styles.notifStatus,
+              notificationPermission === "granted"
+                ? styles.notifGranted
+                : notificationPermission === "denied"
+                  ? styles.notifDenied
+                  : styles.notifUndecided,
+            ]}
+          >
+            {notificationPermission === "granted"
+              ? "On"
+              : notificationPermission === "denied"
+                ? "Off"
+                : "Not set"}
+          </Text>
+        </View>
+
+        {/* Hour picker — preset buttons for common reminder times */}
+        {notificationPermission === "granted" && (
+          <View>
+            <Text style={styles.notifHourLabel}>
+              Reminder time:{" "}
+              <Text style={styles.notifHourValue}>
+                {notificationHour === 0
+                  ? "12:00 AM"
+                  : notificationHour < 12
+                    ? `${notificationHour}:00 AM`
+                    : notificationHour === 12
+                      ? "12:00 PM"
+                      : `${notificationHour - 12}:00 PM`}
+              </Text>
+            </Text>
+            {/* Quick-select row: common times */}
+            <View style={styles.hourRow}>
+              {[8, 12, 18, 20, 22].map((h) => (
+                <Pressable
+                  key={h}
+                  style={[
+                    styles.hourChip,
+                    notificationHour === h && styles.hourChipActive,
+                  ]}
+                  onPress={async () => {
+                    setNotificationHour(h);
+                    await scheduleDailyReminder(h, streak);
+                  }}
+                  accessible
+                  accessibilityRole="button"
+                  accessibilityLabel={`Set reminder to ${h < 12 ? h + " AM" : h === 12 ? "12 PM" : h - 12 + " PM"}`}
+                  accessibilityState={{ selected: notificationHour === h }}
+                >
+                  <Text
+                    style={[
+                      styles.hourChipText,
+                      notificationHour === h && styles.hourChipTextActive,
+                    ]}
+                  >
+                    {h < 12
+                      ? `${h}AM`
+                      : h === 12
+                        ? "12PM"
+                        : `${h - 12}PM`}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* Enable / disable button */}
+        <Pressable
+          style={[
+            styles.notifButton,
+            notificationPermission === "granted" && styles.notifButtonOff,
+          ]}
+          onPress={async () => {
+            if (notificationPermission === "granted") {
+              // User wants to turn off — cancel all and update store
+              await cancelAllNotifications();
+              setNotificationPermission("denied");
+            } else {
+              // Request or re-request permission
+              const result = await requestPermissions();
+              setNotificationPermission(result);
+              if (result === "granted") {
+                await scheduleDailyReminder(notificationHour, streak);
+              } else if (result === "denied") {
+                Alert.alert(
+                  "Permission denied",
+                  "You can re-enable notifications from your device Settings → GearForge.",
+                );
+              }
+            }
+          }}
+          accessible
+          accessibilityRole="button"
+          accessibilityLabel={
+            notificationPermission === "granted"
+              ? "Turn off notifications"
+              : "Turn on notifications"
+          }
+        >
+          <Text style={styles.notifButtonText}>
+            {notificationPermission === "granted"
+              ? "Turn Off Reminders"
+              : "Enable Reminders"}
+          </Text>
+        </Pressable>
+      </View>
+
       {/* --- Achievement badges --------------------------------------------- */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>
           Achievements ({badges.length})
-        </Text>
-        <View style={styles.badgesWrap}>
+        </Text>        <View style={styles.badgesWrap}>
           {badges.length === 0 ? (
             <Text style={styles.empty}>
               Complete lessons to unlock achievements.
@@ -338,6 +469,78 @@ const styles = StyleSheet.create({
   },
   freezeButtonTextDisabled: {
     color: theme.colors.textSecondary,
+  },
+  // Notification card
+  notifRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  notifLabel: {
+    color: theme.colors.textPrimary,
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  notifStatus: {
+    fontSize: 13,
+    fontWeight: "700",
+  },
+  notifGranted: { color: theme.colors.success },
+  notifDenied: { color: theme.colors.danger },
+  notifUndecided: { color: theme.colors.warning },
+  notifHourLabel: {
+    color: theme.colors.textSecondary,
+    fontSize: 13,
+    marginBottom: 8,
+  },
+  notifHourValue: {
+    color: theme.colors.neon,
+    fontWeight: "700",
+  },
+  hourRow: {
+    flexDirection: "row",
+    gap: 8,
+    flexWrap: "wrap",
+    marginBottom: 12,
+  },
+  hourChip: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: theme.radii.pill,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceAlt,
+  },
+  hourChipActive: {
+    borderColor: theme.colors.neon,
+    backgroundColor: theme.colors.neon + "22",
+  },
+  hourChipText: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  hourChipTextActive: {
+    color: theme.colors.neon,
+  },
+  notifButton: {
+    borderRadius: theme.radii.md,
+    borderWidth: 1,
+    borderColor: theme.colors.neon,
+    backgroundColor: theme.colors.neon + "22",
+    paddingVertical: 10,
+    alignItems: "center",
+    marginTop: 4,
+  },
+  notifButtonOff: {
+    borderColor: theme.colors.danger,
+    backgroundColor: theme.colors.danger + "18",
+  },
+  notifButtonText: {
+    color: theme.colors.neon,
+    fontWeight: "700",
+    fontSize: 14,
   },
 });
 

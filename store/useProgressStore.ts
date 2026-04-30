@@ -224,6 +224,7 @@ type ProgressState = UserProgress & {
     status: "undecided" | "granted" | "denied",
   ) => void;
   setNotificationHour: (hour: number) => void;
+  incrementLaunchCount: () => void;
   useStreakFreeze: () => boolean;
   resetProgress: () => void;
 };
@@ -256,6 +257,7 @@ const initialState: UserProgress = {
   preferredRegionId: null,
   notificationPermission: "undecided",
   notificationHour: 20, // default 8 PM reminder
+  launchCount: 0,
 };
 
 // ---------------------------------------------------------------------------
@@ -375,6 +377,14 @@ export const useProgressStore = create<ProgressState>()(
         set({ notificationPermission: status }),
 
       setNotificationHour: (hour: number) => set({ notificationHour: hour }),
+
+      /**
+       * Increment the app launch counter by 1.
+       * Called once each time the root layout mounts (i.e., cold app start).
+       * Used to gate the notification permission prompt until session 2+.
+       */
+      incrementLaunchCount: () =>
+        set((s) => ({ launchCount: s.launchCount + 1 })),
 
       /**
        * Spend one streak-freeze token.
@@ -535,7 +545,13 @@ export const useProgressStore = create<ProgressState>()(
             preferredRegionId: null,
             notificationPermission: "undecided" as const,
             notificationHour: 20,
+            launchCount: 0,
           };
+        }
+        // Patch any persisted state missing launchCount (added in Phase 6)
+        const p = persisted as Partial<UserProgress>;
+        if (p.launchCount === undefined) {
+          return { ...p, launchCount: 0 } as UserProgress;
         }
         return persisted as UserProgress;
       },

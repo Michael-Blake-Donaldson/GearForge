@@ -8,6 +8,11 @@ import "react-native-reanimated";
 
 import { theme } from "@/constants/theme";
 import { useProgressStore } from "@/store/useProgressStore";
+import {
+  cancelAllNotifications,
+  requestPermissions,
+  scheduleDailyReminder,
+} from "@/utils/notifications";
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -64,6 +69,50 @@ function RootLayoutNav() {
   // If the user has never completed onboarding, redirect them there before
   // showing the main tab navigator.
   const hasOnboarded = useProgressStore((s) => s.hasOnboarded);
+
+  // Notification-related store fields and actions
+  const notificationPermission = useProgressStore(
+    (s) => s.notificationPermission,
+  );
+  const notificationHour = useProgressStore((s) => s.notificationHour);
+  const streak = useProgressStore((s) => s.streak);
+  const launchCount = useProgressStore((s) => s.launchCount);
+  const incrementLaunchCount = useProgressStore((s) => s.incrementLaunchCount);
+  const setNotificationPermission = useProgressStore(
+    (s) => s.setNotificationPermission,
+  );
+
+  useEffect(() => {
+    // Increment cold-start counter once on every app launch.
+    incrementLaunchCount();
+  }, []);
+
+  useEffect(() => {
+    // Only run after the initial incrementLaunchCount has resolved (launchCount >= 1)
+    // and only if onboarding is complete.
+    if (!hasOnboarded || launchCount < 1) return;
+
+    (async () => {
+      if (notificationPermission === "undecided" && launchCount >= 2) {
+        // Day-2+ prompt: ask for notification permission without being pushy
+        // on the very first launch.
+        const result = await requestPermissions();
+        setNotificationPermission(result);
+
+        if (result === "granted") {
+          // Schedule the daily reminder immediately after granting.
+          await scheduleDailyReminder(notificationHour, streak);
+        }
+      } else if (notificationPermission === "granted") {
+        // Permission already granted — refresh the scheduled notification in
+        // case the hour or streak count has changed since the last launch.
+        await scheduleDailyReminder(notificationHour, streak);
+      } else if (notificationPermission === "denied") {
+        // User has revoked permission — cancel any orphaned notifications.
+        await cancelAllNotifications();
+      }
+    })();
+  }, [hasOnboarded, launchCount, notificationPermission]);
 
   return (
     <ThemeProvider value={navTheme}>
