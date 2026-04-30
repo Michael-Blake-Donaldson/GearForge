@@ -17,8 +17,10 @@ import {
   requestPermissions,
   scheduleDailyReminder,
 } from "@/utils/notifications";
+import { useRouter } from "expo-router";
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const username = useProgressStore((state) => state.username);
   const xp = useProgressStore((state) => state.xp);
   const level = useProgressStore((state) => state.level);
@@ -312,6 +314,19 @@ export default function ProfileScreen() {
           )}
         </View>
       </View>
+
+      {/* --- App info / privacy footer --------------------------------------- */}
+      <View style={styles.appFooter}>
+        <Text style={styles.appVersion}>GearForge v1.0.0</Text>
+        <Pressable
+          onPress={() => router.push("/privacy")}
+          accessible
+          accessibilityRole="link"
+          accessibilityLabel="View Privacy Policy"
+        >
+          <Text style={styles.privacyLink}>Privacy Policy</Text>
+        </Pressable>
+      </View>
     </ScrollView>
   );
 }
@@ -541,6 +556,22 @@ const styles = StyleSheet.create({
     color: theme.colors.neon,
     fontWeight: "700",
     fontSize: 14,
+  },
+  // App footer
+  appFooter: {
+    alignItems: "center",
+    paddingTop: 8,
+    gap: 6,
+  },
+  appVersion: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+  },
+  privacyLink: {
+    color: theme.colors.neonAlt,
+    fontSize: 12,
+    fontWeight: "600",
+    textDecorationLine: "underline",
   },
 });
 

@@ -149,6 +149,14 @@ function RootLayoutNav() {
             headerTintColor: theme.colors.textPrimary,
           }}
         />
+        <Stack.Screen
+          name="privacy"
+          options={{
+            headerTitle: "Privacy Policy",
+            headerStyle: { backgroundColor: theme.colors.surface },
+            headerTintColor: theme.colors.textPrimary,
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );

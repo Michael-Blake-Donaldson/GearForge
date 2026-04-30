@@ -1,0 +1,115 @@
+{
+  /*
+   * eas.json — EAS Build & Submit configuration
+   *
+   * ─── Quick start ─────────────────────────────────────────────────────────
+   *
+   *  1. Install EAS CLI globally (once):
+   *       npm install -g eas-cli
+   *
+   *  2. Log in to your Expo account:
+   *       eas login
+   *
+   *  3. Link this project to your Expo account (first time only):
+   *       eas init
+   *
+   * ─── Build profiles ──────────────────────────────────────────────────────
+   *
+   *  development  — local dev client build for physical device testing
+   *                 eas build --profile development --platform ios
+   *
+   *  preview      — ad-hoc TestFlight-ready IPA (or APK) for internal testers
+   *                 eas build --profile preview --platform ios
+   *
+   *  production   — App Store / Play Store submission build
+   *                 eas build --profile production --platform ios
+   *                 eas submit --profile production --platform ios
+   *
+   * ─── App Store submission ────────────────────────────────────────────────
+   *
+   *  After a successful production build, submit directly to App Store Connect:
+   *    eas submit --platform ios --latest
+   *
+   *  First submission checklist:
+   *    ✓ Create app record in App Store Connect (appstoreconnect.apple.com)
+   *    ✓ Set bundle ID: com.gearforge.app
+   *    ✓ Upload screenshots (6.7", 6.5", 5.5" required; 12.9" iPad optional)
+   *    ✓ Fill in app description, keywords, support URL
+   *    ✓ Set Privacy Policy URL: https://gearforge.app/privacy
+   *    ✓ Select age rating (4+) — GearForge contains no objectionable content
+   *    ✓ Enable "Made for Kids" = No
+   *
+   * ─── TestFlight checklist ────────────────────────────────────────────────
+   *
+   *    ✓ eas build --profile preview --platform ios
+   *    ✓ Wait for build email from Expo (~10-15 min)
+   *    ✓ Download .ipa from expo.dev/accounts/{account}/projects/gearforge
+   *    ✓ Upload to TestFlight via Transporter or eas submit
+   *    ✓ Invite testers by email from App Store Connect → TestFlight
+   *
+   * ─── Incrementing build number ───────────────────────────────────────────
+   *
+   *  EAS can auto-increment the iOS buildNumber for each build:
+   *    Add "autoIncrement": true under ios in the production profile.
+   *
+   * ─────────────────────────────────────────────────────────────────────────
+   */
+  "cli": {
+    "version": ">= 12.0.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      /*
+       * Development build: includes expo-dev-client so you can use the full
+       * Expo development menu on a physical device.
+       * Use this for day-to-day development when running `npx expo start --dev-client`.
+       */
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": false
+      }
+    },
+    "preview": {
+      /*
+       * Preview build: production JS bundle, internal distribution.
+       * Great for sharing with stakeholders / beta testers before App Store.
+       * Distributes via ad-hoc provisioning (add device UDIDs in Apple Developer).
+       */
+      "distribution": "internal",
+      "ios": {
+        "buildConfiguration": "Release"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      /*
+       * Production build: submitted to App Store / Play Store.
+       * EAS will create and manage provisioning profiles and certificates.
+       */
+      "ios": {
+        "buildConfiguration": "Release",
+        "autoIncrement": "buildNumber"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      /*
+       * EAS Submit reads credentials from environment variables or prompts
+       * interactively.  Set EXPO_APPLE_APP_SPECIFIC_PASSWORD for non-interactive CI.
+       *
+       * Run: eas submit --platform ios --latest
+       */
+      "ios": {
+        "ascAppId": "YOUR_APP_STORE_CONNECT_APP_ID"
+      }
+    }
+  }
+}
