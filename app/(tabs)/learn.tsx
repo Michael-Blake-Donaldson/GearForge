@@ -1,11 +1,9 @@
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import LessonCard from "@/components/LessonCard";
 import PathCard from "@/components/PathCard";
 import StreakCounter from "@/components/StreakCounter";
-import UnitCard from "@/components/UnitCard";
 import XPDisplay from "@/components/XPDisplay";
 import { theme } from "@/constants/theme";
 import { lessons } from "@/data/lessons";
@@ -14,15 +12,31 @@ import { units } from "@/data/units";
 import { useProgressStore } from "@/store/useProgressStore";
 import { DailyQuest } from "@/types/UserProgress";
 
+type RoadmapNode = {
+  id: string;
+  label: string;
+  type: "lesson" | "challenge" | "final";
+  unlocked: boolean;
+  completed: boolean;
+  onPress: () => void;
+};
+
 export default function LearnScreen() {
   const router = useRouter();
-  const [selectedRegionId, setSelectedRegionId] = useState(starterRegionIds[0]);
-  const [expandedUnitIds, setExpandedUnitIds] = useState<string[]>([]);
+  const preferredRegionId = useProgressStore(
+    (state) => state.preferredRegionId,
+  );
+  const [selectedRegionId, setSelectedRegionId] = useState(
+    preferredRegionId ?? starterRegionIds[0],
+  );
 
   const completedLessons = useProgressStore((state) => state.completedLessons);
   const isUnitUnlocked = useProgressStore((state) => state.isUnitUnlocked);
   const isLessonUnlocked = useProgressStore((state) => state.isLessonUnlocked);
   const getRegionMastery = useProgressStore((state) => state.getRegionMastery);
+  const mechanicPlacementTier = useProgressStore(
+    (state) => state.mechanicPlacementTier,
+  );
   const xp = useProgressStore((state) => state.xp);
   const level = useProgressStore((state) => state.level);
   const streak = useProgressStore((state) => state.streak);
@@ -39,14 +53,6 @@ export default function LearnScreen() {
     [selectedRegion.id],
   );
 
-  const toggleUnit = (unitId: string) => {
-    setExpandedUnitIds((prev) =>
-      prev.includes(unitId)
-        ? prev.filter((id) => id !== unitId)
-        : [...prev, unitId],
-    );
-  };
-
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.headerRow}>
@@ -56,6 +62,21 @@ export default function LearnScreen() {
 
       {/* Daily Quest card — only shown when a quest exists for today */}
       {dailyQuest && <DailyQuestCard quest={dailyQuest} />}
+
+      <View style={styles.placementCard}>
+        <Text style={styles.placementLabel}>Mechanic Placement</Text>
+        <Text style={styles.placementValue}>
+          {mechanicPlacementTier === "pro"
+            ? "Pro Track"
+            : mechanicPlacementTier === "builder"
+              ? "Builder Track"
+              : "Rookie Track"}
+        </Text>
+        <Text style={styles.placementBody}>
+          Your roadmap now alternates mini lessons, checkpoint challenges, and a
+          final quiz so progression feels guided, not intimidating.
+        </Text>
+      </View>
 
       <Text style={styles.sectionTitle}>Learning Paths</Text>
       <ScrollView
@@ -74,7 +95,7 @@ export default function LearnScreen() {
         ))}
       </ScrollView>
 
-      <Text style={styles.sectionTitle}>{selectedRegion.name} Units</Text>
+      <Text style={styles.sectionTitle}>{selectedRegion.name} Roadmap</Text>
       {regionUnits.length === 0 && (
         <View style={styles.comingSoon}>
           <Text style={styles.comingSoonTitle}>Content Coming Soon</Text>
@@ -89,34 +110,116 @@ export default function LearnScreen() {
         const unitLessons = lessons
           .filter((lesson) => lesson.unitId === unit.id)
           .sort((a, b) => a.order - b.order);
-        const completedInUnit = unitLessons.filter((lesson) =>
-          completedLessons.includes(lesson.id),
-        ).length;
-        const expanded = expandedUnitIds.includes(unit.id);
+        const allLessonsDone =
+          unitLessons.length > 0 &&
+          unitLessons.every((lesson) => completedLessons.includes(lesson.id));
+
+        const roadmapNodes: RoadmapNode[] = unitLessons.flatMap((lesson) => {
+          const unlocked = isLessonUnlocked(lesson.id);
+          const completed = completedLessons.includes(lesson.id);
+
+          return [
+            {
+              id: `${lesson.id}-micro-1`,
+              label: `Mini Lesson: ${lesson.title}`,
+              type: "lesson" as const,
+              unlocked,
+              completed,
+              onPress: () => router.push(`/lesson/${lesson.id}`),
+            },
+            {
+              id: `${lesson.id}-challenge`,
+              label: "Checkpoint Challenge",
+              type: "challenge" as const,
+              unlocked,
+              completed,
+              onPress: () =>
+                router.push(`/lesson/${lesson.id}?startStep=checkpoint`),
+            },
+          ];
+        });
+
+        const finalLesson = unitLessons[unitLessons.length - 1];
+        if (finalLesson) {
+          roadmapNodes.push({
+            id: `${unit.id}-final`,
+            label: "Unit Final Quiz",
+            type: "final" as const,
+            unlocked: allLessonsDone,
+            completed: allLessonsDone,
+            onPress: () => router.push(`/quiz/${finalLesson.quizId}`),
+          });
+        }
 
         return (
-          <View key={unit.id}>
-            <UnitCard
-              unit={unit}
-              completed={completedInUnit}
-              total={unitLessons.length}
-              isUnlocked={isUnitUnlocked(unit.id)}
-              onPress={() => toggleUnit(unit.id)}
-            />
+          <View
+            key={unit.id}
+            style={[
+              styles.unitRoadmap,
+              !isUnitUnlocked(unit.id) && styles.lockedUnit,
+            ]}
+          >
+            <View style={styles.unitHeaderRow}>
+              <Text style={styles.unitTitle}>{unit.title}</Text>
+              <Text style={styles.unitProgressLabel}>
+                {
+                  unitLessons.filter((lesson) =>
+                    completedLessons.includes(lesson.id),
+                  ).length
+                }
+                /{unitLessons.length}
+              </Text>
+            </View>
+            <Text style={styles.unitDescription}>{unit.description}</Text>
 
-            {expanded &&
-              unitLessons.map((lesson) => (
-                <LessonCard
-                  key={lesson.id}
-                  lesson={lesson}
-                  isCompleted={completedLessons.includes(lesson.id)}
-                  isUnlocked={isLessonUnlocked(lesson.id)}
-                  onPress={() => {
-                    if (!isLessonUnlocked(lesson.id)) return;
-                    router.push(`/lesson/${lesson.id}`);
-                  }}
-                />
-              ))}
+            <View style={styles.pathColumn}>
+              {roadmapNodes.map((node, index) => {
+                const staggerLeft = index % 2 === 0;
+                return (
+                  <View key={node.id} style={styles.nodeWrap}>
+                    <View
+                      style={[
+                        styles.connector,
+                        index === roadmapNodes.length - 1 &&
+                          styles.connectorHidden,
+                      ]}
+                    />
+                    <Pressable
+                      onPress={() => {
+                        if (!node.unlocked) return;
+                        node.onPress();
+                      }}
+                      style={[
+                        styles.roadNode,
+                        staggerLeft ? styles.nodeLeft : styles.nodeRight,
+                        node.type === "challenge" && styles.challengeNode,
+                        node.type === "final" && styles.finalNode,
+                        node.completed && styles.completedNode,
+                        !node.unlocked && styles.lockedNode,
+                      ]}
+                    >
+                      <Text style={styles.nodeEmoji}>
+                        {node.type === "lesson"
+                          ? "📘"
+                          : node.type === "challenge"
+                            ? "🛠️"
+                            : "🏁"}
+                      </Text>
+                      <View style={styles.nodeTextWrap}>
+                        <Text style={styles.nodeTitle}>{node.label}</Text>
+                        <Text style={styles.nodeSubtitle}>
+                          {node.completed
+                            ? "Completed"
+                            : node.unlocked
+                              ? "Tap to continue"
+                              : "Locked"}
+                        </Text>
+                      </View>
+                    </Pressable>
+                  </View>
+                );
+              })}
+            </View>
           </View>
         );
       })}
@@ -231,6 +334,33 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     marginBottom: 10,
   },
+  placementCard: {
+    borderRadius: theme.radii.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.neon + "66",
+    backgroundColor: theme.colors.surface,
+    padding: 14,
+    marginBottom: 14,
+  },
+  placementLabel: {
+    color: theme.colors.neon,
+    fontSize: 11,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+  },
+  placementValue: {
+    color: theme.colors.textPrimary,
+    fontSize: 18,
+    fontWeight: "900",
+    marginTop: 4,
+  },
+  placementBody: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 6,
+  },
   pathRow: {
     paddingBottom: 10,
     marginBottom: 18,
@@ -253,5 +383,110 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontSize: 12,
     lineHeight: 18,
+  },
+  unitRoadmap: {
+    borderRadius: theme.radii.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surface,
+    padding: 14,
+    marginBottom: 14,
+  },
+  lockedUnit: {
+    opacity: 0.55,
+  },
+  unitHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 8,
+  },
+  unitTitle: {
+    color: theme.colors.textPrimary,
+    fontSize: 15,
+    fontWeight: "800",
+    flex: 1,
+  },
+  unitProgressLabel: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    fontWeight: "800",
+  },
+  unitDescription: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 4,
+    marginBottom: 12,
+  },
+  pathColumn: {
+    gap: 8,
+  },
+  nodeWrap: {
+    position: "relative",
+    minHeight: 72,
+  },
+  connector: {
+    position: "absolute",
+    left: "50%",
+    marginLeft: -1,
+    top: 40,
+    width: 2,
+    height: 42,
+    backgroundColor: theme.colors.border,
+  },
+  connectorHidden: {
+    display: "none",
+  },
+  roadNode: {
+    width: "78%",
+    minHeight: 60,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceAlt,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    gap: 9,
+  },
+  nodeLeft: {
+    alignSelf: "flex-start",
+  },
+  nodeRight: {
+    alignSelf: "flex-end",
+  },
+  challengeNode: {
+    borderColor: theme.colors.warning + "88",
+    backgroundColor: "rgba(255,209,102,0.12)",
+  },
+  finalNode: {
+    borderColor: theme.colors.neon + "99",
+    backgroundColor: "rgba(29,211,176,0.15)",
+  },
+  completedNode: {
+    borderColor: theme.colors.success + "99",
+    backgroundColor: "rgba(45,225,165,0.13)",
+  },
+  lockedNode: {
+    opacity: 0.45,
+  },
+  nodeEmoji: {
+    fontSize: 20,
+  },
+  nodeTextWrap: {
+    flex: 1,
+  },
+  nodeTitle: {
+    color: theme.colors.textPrimary,
+    fontSize: 13,
+    fontWeight: "800",
+    lineHeight: 18,
+  },
+  nodeSubtitle: {
+    color: theme.colors.textSecondary,
+    fontSize: 11,
+    fontWeight: "700",
+    marginTop: 2,
   },
 });

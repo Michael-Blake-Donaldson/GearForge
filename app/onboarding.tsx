@@ -62,7 +62,7 @@ export default function OnboardingScreen() {
     setNameError(null);
     // Persist onboarding state and navigate to main app
     completeOnboarding(username.trim(), selectedRegion);
-    router.replace("/(tabs)/learn");
+    router.replace("/mechanic-test");
   };
 
   // ── Slide renderers ────────────────────────────────────────────────────────

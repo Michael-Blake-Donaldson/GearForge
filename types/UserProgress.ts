@@ -58,4 +58,11 @@ export type UserProgress = {
    * session so we don't ask on the very first open.
    */
   launchCount: number;
+  /** True after the one-time onboarding placement test is submitted. */
+  hasTakenMechanicTest: boolean;
+  /**
+   * Placement result from the mechanic test.
+   * Used to personalize copy and initial unlock pacing.
+   */
+  mechanicPlacementTier: "rookie" | "builder" | "pro" | null;
 };

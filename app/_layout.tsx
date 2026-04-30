@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Redirect, Stack } from "expo-router";
+import { Redirect, Stack, usePathname } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -52,6 +52,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const pathname = usePathname();
   const navTheme = {
     ...DarkTheme,
     colors: {
@@ -69,6 +70,7 @@ function RootLayoutNav() {
   // If the user has never completed onboarding, redirect them there before
   // showing the main tab navigator.
   const hasOnboarded = useProgressStore((s) => s.hasOnboarded);
+  const hasTakenMechanicTest = useProgressStore((s) => s.hasTakenMechanicTest);
 
   // Notification-related store fields and actions
   const notificationPermission = useProgressStore(
@@ -118,12 +120,24 @@ function RootLayoutNav() {
     <ThemeProvider value={navTheme}>
       {/* Redirect to onboarding on first launch */}
       {!hasOnboarded && <Redirect href="/onboarding" />}
+      {hasOnboarded &&
+        !hasTakenMechanicTest &&
+        pathname !== "/mechanic-test" && <Redirect href="/mechanic-test" />}
 
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="onboarding"
           options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="mechanic-test"
+          options={{
+            headerTitle: "Mechanic Placement Test",
+            headerStyle: { backgroundColor: theme.colors.surface },
+            headerTintColor: theme.colors.textPrimary,
+            gestureEnabled: false,
+          }}
         />
         <Stack.Screen
           name="lesson-complete"

@@ -249,6 +249,7 @@ type ProgressState = UserProgress & {
   ) => void;
   setNotificationHour: (hour: number) => void;
   incrementLaunchCount: () => void;
+  completeMechanicTest: (scorePercent: number) => void;
   useStreakFreeze: () => boolean;
   resetProgress: () => void;
 };
@@ -282,6 +283,8 @@ const initialState: UserProgress = {
   notificationPermission: "undecided",
   notificationHour: 20, // default 8 PM reminder
   launchCount: 0,
+  hasTakenMechanicTest: false,
+  mechanicPlacementTier: null,
 };
 
 // ---------------------------------------------------------------------------
@@ -409,6 +412,49 @@ export const useProgressStore = create<ProgressState>()(
        */
       incrementLaunchCount: () =>
         set((s) => ({ launchCount: s.launchCount + 1 })),
+
+      /**
+       * Finalize the one-time mechanic placement test.
+       * Higher scores unlock additional second units to reduce beginner grind
+       * for experienced users.
+       */
+      completeMechanicTest: (scorePercent: number) => {
+        const snapshot = get();
+        const preferredRegionId =
+          snapshot.preferredRegionId ?? regions[0]?.id ?? "american";
+
+        const placementTier: UserProgress["mechanicPlacementTier"] =
+          scorePercent >= 80
+            ? "pro"
+            : scorePercent >= 55
+              ? "builder"
+              : "rookie";
+
+        let unlockedUnitIds = [...snapshot.unlockedUnitIds];
+
+        if (placementTier === "builder") {
+          const secondPreferred = units.find(
+            (u) => u.regionId === preferredRegionId && u.order === 2,
+          )?.id;
+          if (secondPreferred && !unlockedUnitIds.includes(secondPreferred)) {
+            unlockedUnitIds.push(secondPreferred);
+          }
+        }
+
+        if (placementTier === "pro") {
+          const secondUnits = units
+            .filter((u) => u.order === 2)
+            .map((u) => u.id)
+            .filter((id) => !unlockedUnitIds.includes(id));
+          unlockedUnitIds = [...unlockedUnitIds, ...secondUnits];
+        }
+
+        set({
+          hasTakenMechanicTest: true,
+          mechanicPlacementTier: placementTier,
+          unlockedUnitIds,
+        });
+      },
 
       /**
        * Spend one streak-freeze token.
@@ -564,8 +610,8 @@ export const useProgressStore = create<ProgressState>()(
     {
       name: "gearforge-progress-v2",
       storage: createJSONStorage(() => safeStorage),
-      version: 2,
-      // Migrate from v1 (original) → v2 (new fields)
+      version: 3,
+      // Migrate from older versions to current schema
       migrate: (persisted, version) => {
         if (version < 2) {
           return {
@@ -578,14 +624,18 @@ export const useProgressStore = create<ProgressState>()(
             notificationPermission: "undecided" as const,
             notificationHour: 20,
             launchCount: 0,
+            hasTakenMechanicTest: false,
+            mechanicPlacementTier: null,
           };
         }
-        // Patch any persisted state missing launchCount (added in Phase 6)
+        // Patch any persisted state missing fields added in later phases
         const p = persisted as Partial<UserProgress>;
-        if (p.launchCount === undefined) {
-          return { ...p, launchCount: 0 } as UserProgress;
-        }
-        return persisted as UserProgress;
+        return {
+          ...p,
+          launchCount: p.launchCount ?? 0,
+          hasTakenMechanicTest: p.hasTakenMechanicTest ?? false,
+          mechanicPlacementTier: p.mechanicPlacementTier ?? null,
+        } as UserProgress;
       },
     },
   ),
