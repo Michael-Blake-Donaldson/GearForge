@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+    Alert,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -21,6 +22,7 @@ export default function ProfileScreen() {
   const getRank = useProgressStore((state) => state.getRank);
   const badges = useProgressStore((state) => state.badges);
   const setUsername = useProgressStore((state) => state.setUsername);
+  const useStreakFreeze = useProgressStore((state) => state.useStreakFreeze);
 
   const [draftName, setDraftName] = useState(username);
   // Validation error message shown below the input field
@@ -97,6 +99,71 @@ export default function ProfileScreen() {
         </View>
         <Text style={styles.rankLabel}>Rank</Text>
         <Text style={styles.rankValue}>{getRank()}</Text>
+      </View>
+
+      {/* --- Streak Freeze card ---------------------------------------------- */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>🧊 Streak Freeze</Text>
+        <Text style={styles.freezeBody}>
+          Streak freeze tokens protect your streak when you miss a day.
+          You earn one token every 7 consecutive days.
+        </Text>
+        {/* Token row — shows up to 5 ice-cube icons */}
+        <View style={styles.tokenRow}>
+          {Array.from({ length: Math.max(streakFreezeTokens, 1) }).map(
+            (_, i) => (
+              <View
+                key={i}
+                style={[
+                  styles.tokenIcon,
+                  i >= streakFreezeTokens && styles.tokenIconEmpty,
+                ]}
+              >
+                <Text style={styles.tokenEmoji}>
+                  {i < streakFreezeTokens ? "🧊" : "⬜"}
+                </Text>
+              </View>
+            ),
+          )}
+        </View>
+        <Text style={styles.tokenCount}>
+          {streakFreezeTokens} freeze {streakFreezeTokens === 1 ? "token" : "tokens"} available
+        </Text>
+
+        {/* Manual-use button — useful if streak is already broken */}
+        <Pressable
+          style={[
+            styles.freezeButton,
+            streakFreezeTokens === 0 && styles.freezeButtonDisabled,
+          ]}
+          onPress={() => {
+            if (streakFreezeTokens === 0) return;
+            Alert.alert(
+              "Use Streak Freeze?",
+              "Spend 1 token to protect your current streak. Tokens are spent automatically when you miss a day.",
+              [
+                { text: "Cancel", style: "cancel" },
+                {
+                  text: "Use Token",
+                  onPress: () => {
+                    const used = useStreakFreeze();
+                    if (!used) Alert.alert("No tokens", "You have no freeze tokens left.");
+                  },
+                },
+              ],
+            );
+          }}
+          disabled={streakFreezeTokens === 0}
+        >
+          <Text
+            style={[
+              styles.freezeButtonText,
+              streakFreezeTokens === 0 && styles.freezeButtonTextDisabled,
+            ]}
+          >
+            {streakFreezeTokens > 0 ? "Use a Freeze Token" : "No Tokens — Keep Streaking!"}
+          </Text>
+        </Pressable>
       </View>
 
       {/* --- Achievement badges --------------------------------------------- */}
@@ -218,6 +285,59 @@ const styles = StyleSheet.create({
   empty: {
     color: theme.colors.textSecondary,
     fontSize: 12,
+  },
+  freezeBody: {
+    color: theme.colors.textSecondary,
+    fontSize: 13,
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  tokenRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 8,
+    flexWrap: "wrap",
+  },
+  tokenIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: theme.colors.surfaceAlt,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tokenIconEmpty: {
+    opacity: 0.35,
+  },
+  tokenEmoji: {
+    fontSize: 20,
+  },
+  tokenCount: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    marginBottom: 12,
+  },
+  freezeButton: {
+    borderRadius: theme.radii.md,
+    borderWidth: 1,
+    borderColor: theme.colors.neonAlt,
+    backgroundColor: theme.colors.neonAlt + "22",
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+  freezeButtonDisabled: {
+    borderColor: theme.colors.border,
+    backgroundColor: "transparent",
+  },
+  freezeButtonText: {
+    color: theme.colors.neonAlt,
+    fontWeight: "700",
+    fontSize: 14,
+  },
+  freezeButtonTextDisabled: {
+    color: theme.colors.textSecondary,
   },
 });
 
