@@ -1,12 +1,13 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { theme } from "@/constants/theme";
+import { useProgressStore } from "@/store/useProgressStore";
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -59,10 +60,30 @@ function RootLayoutNav() {
     },
   };
 
+  // Read onboarding flag from persisted store.
+  // If the user has never completed onboarding, redirect them there before
+  // showing the main tab navigator.
+  const hasOnboarded = useProgressStore((s) => s.hasOnboarded);
+
   return (
     <ThemeProvider value={navTheme}>
+      {/* Redirect to onboarding on first launch */}
+      {!hasOnboarded && <Redirect href="/onboarding" />}
+
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="onboarding"
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="lesson-complete"
+          options={{
+            headerShown: false,
+            // Prevent swipe-back so users intentionally choose their next action
+            gestureEnabled: false,
+          }}
+        />
         <Stack.Screen
           name="lesson/[lessonId]"
           options={{

@@ -1,9 +1,11 @@
+import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import QuizOption from "@/components/QuizOption";
 import { theme } from "@/constants/theme";
+import { lessons } from "@/data/lessons";
 import { quizzesById } from "@/data/quizzes";
 import { useProgressStore } from "@/store/useProgressStore";
 
@@ -48,8 +50,12 @@ export default function QuizScreen() {
     const isCorrect = selectedIndex === question.correctAnswerIndex;
     if (isCorrect) {
       setCorrectCount((prev) => prev + 1);
+      // Light haptic tap for correct answer
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } else {
       setIncorrectQuestionIds((prev) => [...prev, question.id]);
+      // Error haptic for wrong answer
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     }
     setShowFeedback(true);
   };
@@ -69,7 +75,14 @@ export default function QuizScreen() {
         });
         setQuizSubmitted(true);
       }
-      router.replace("/(tabs)/progress");
+      // Look up lesson xpReward to pass to the celebration screen.
+      const lesson = lessons.find((l) => l.id === quiz.lessonId);
+      const xp = lesson?.xpReward ?? 0;
+
+      // Route to lesson-complete celebration screen with result params.
+      router.replace(
+        `/lesson-complete?lessonId=${quiz.lessonId}&xp=${xp}&correct=${correctCount}&total=${quiz.questions.length}`
+      );
       return;
     }
 
@@ -107,7 +120,13 @@ export default function QuizScreen() {
                 text={option}
                 selected={selectedIndex === index}
                 revealState={revealState}
-                onPress={() => setSelectedIndex(index)}
+                onPress={() => {
+                  if (!showFeedback) {
+                    // Light selection tap — only before answer is revealed
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }
+                  setSelectedIndex(index);
+                }}
               />
             );
           })}
