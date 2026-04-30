@@ -501,6 +501,861 @@ export const quizzes: Quiz[] = [
         "Safety and powertrain modules exchange real-time information over CAN.",
     },
   ]),
+
+  // ── American Unit 3 Quizzes ───────────────────────────────────────────────
+
+  makeQuiz("am-q5", "am-l5", "Supercharger vs Turbocharger Quiz", [
+    {
+      id: "am-q5-1",
+      // Tests understanding of positive-displacement supercharger traits
+      question:
+        "Which type of supercharger provides the most immediate low-RPM boost with the least lag?",
+      options: [
+        "Centrifugal supercharger",
+        "Roots or twin-screw positive-displacement supercharger",
+        "Exhaust-driven turbocharger",
+        "Variable geometry turbine",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Positive-displacement (Roots/twin-screw) superchargers are mechanically driven and deliver boost from idle, producing near-instant torque with no exhaust lag.",
+    },
+    {
+      id: "am-q5-2",
+      // Tests understanding of turbocharger energy source
+      question: "What energy source drives a turbocharger's compressor wheel?",
+      options: [
+        "Engine crankshaft via a belt",
+        "An electric motor",
+        "Exhaust gas energy spinning the turbine",
+        "Intake vacuum pressure",
+      ],
+      correctAnswerIndex: 2,
+      explanation:
+        "Turbochargers harvest exhaust energy — the turbine spins from hot exhaust gas flow, which drives the compressor on the same shaft.",
+    },
+    {
+      id: "am-q5-3",
+      // Tests power curve knowledge
+      question:
+        "A centrifugal supercharger delivers boost that increases with:",
+      options: [
+        "Engine coolant temperature",
+        "RPM, producing more power at the top of the rev range",
+        "Fuel pressure only",
+        "Ambient humidity",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Centrifugal superchargers spin faster as RPM rises, so boost and power build toward the top of the RPM range rather than at low speed.",
+    },
+  ]),
+
+  makeQuiz("am-q6", "am-l6", "OBD-II Diagnostics Quiz", [
+    {
+      id: "am-q6-1",
+      // Tests OBD-II mandate knowledge
+      question: "OBD-II diagnostic capability has been required on US vehicles since:",
+      options: ["1988", "1996", "2003", "2010"],
+      correctAnswerIndex: 1,
+      explanation:
+        "The US EPA mandated OBD-II compliance starting with model year 1996 vehicles.",
+    },
+    {
+      id: "am-q6-2",
+      // Tests readiness monitor purpose
+      question: "What does an OBD-II readiness monitor confirm?",
+      options: [
+        "That the oil is at the correct level",
+        "That a specific system self-test has completed and passed",
+        "That the tire pressure is within range",
+        "That the transmission fluid was recently changed",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Readiness monitors are self-test routines the ECU runs to verify emission-related systems are functioning correctly.",
+    },
+    {
+      id: "am-q6-3",
+      // Tests consequence of incomplete monitors at inspection
+      question:
+        "A recently reset ECU will often fail an emissions inspection because:",
+      options: [
+        "The engine will not start after a reset",
+        "The monitors have not yet completed their self-test cycles",
+        "The VIN is erased during reset",
+        "Fuel trims must be re-calibrated by a dealer",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "After an ECU reset, monitors are marked incomplete. Inspectors check monitor status, and incomplete monitors indicate the system has not proven itself functional.",
+    },
+  ]),
+
+  // ── Japanese Unit 3 Quizzes ───────────────────────────────────────────────
+
+  makeQuiz("jp-q5", "jp-l5", "Symmetrical AWD and Torque Vectoring Quiz", [
+    {
+      id: "jp-q5-1",
+      // Tests understanding of symmetrical AWD benefit
+      question:
+        "What is a primary handling benefit of symmetrical AWD with equal-length driveshafts?",
+      options: [
+        "Higher top speed on dry pavement",
+        "Reduced torque steer and improved traction balance side-to-side",
+        "Lower center of gravity",
+        "Elimination of all understeer in all conditions",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Equal-length driveshafts mean equal torque forces act on both front wheels, eliminating the pull-to-one-side torque steer common in asymmetric layouts.",
+    },
+    {
+      id: "jp-q5-2",
+      // Tests vectoring mechanism knowledge
+      question: "Torque vectoring improves cornering by:",
+      options: [
+        "Increasing total engine output",
+        "Sending more torque to the outside wheel to assist yaw rotation",
+        "Locking all four wheels during turns",
+        "Cutting power to all wheels equally",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Directing torque to the outside rear wheel creates a yaw moment that rotates the vehicle into the corner more naturally, reducing understeer.",
+    },
+    {
+      id: "jp-q5-3",
+      // Tests method distinction
+      question:
+        "Which of these is an example of mechanical (passive) torque vectoring?",
+      options: [
+        "Brake-based electronic yaw control",
+        "A helical limited-slip differential",
+        "Active rear-axle steering",
+        "Electronic throttle mapping",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "A helical LSD uses gear geometry to passively bias torque toward the wheel with more grip — no electronic actuation required.",
+    },
+  ]),
+
+  makeQuiz("jp-q6", "jp-l6", "Pre-Collision Systems and Sensor Fusion Quiz", [
+    {
+      id: "jp-q6-1",
+      // Tests radar advantage knowledge
+      question:
+        "Why is radar preferred over cameras for long-range object detection in pre-collision systems?",
+      options: [
+        "Radar is cheaper to manufacture",
+        "Radar is more tolerant of rain, fog, and low light than cameras",
+        "Radar can read road signs directly",
+        "Radar has higher resolution for lane markings",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Radar uses radio waves that penetrate rain, fog, and darkness, making it reliable in adverse weather where cameras struggle.",
+    },
+    {
+      id: "jp-q6-2",
+      // Tests sensor fusion concept
+      question: "Sensor fusion in a pre-collision system means:",
+      options: [
+        "Using only one sensor type to reduce cost",
+        "Combining data from radar, cameras, and sometimes lidar to build a more accurate environmental model",
+        "Fusing the radar and camera into a single physical unit",
+        "Using GPS map data instead of real-time sensors",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Sensor fusion merges complementary data sources so the system is more confident and accurate than any single sensor could be alone.",
+    },
+    {
+      id: "jp-q6-3",
+      // Tests system action sequence
+      question:
+        "In a pre-collision sequence, what typically happens before the friction brakes fully engage?",
+      options: [
+        "The transmission downshifts immediately",
+        "The system does nothing until driver input",
+        "Throttle is reduced and brakes are pre-charged to reduce response time",
+        "The parking brake is applied",
+      ],
+      correctAnswerIndex: 2,
+      explanation:
+        "Systems pre-charge the brake lines and close the throttle before full braking — this reduces the time between detection and full braking force.",
+    },
+  ]),
+
+  // ── European Unit 3 Quizzes ───────────────────────────────────────────────
+
+  makeQuiz("eu-q5", "eu-l5", "Adaptive Damping Quiz", [
+    {
+      id: "eu-q5-1",
+      // Tests adjustment speed knowledge
+      question:
+        "How quickly can electronically controlled dampers adjust their stiffness?",
+      options: [
+        "Over several seconds as the vehicle settles",
+        "Within milliseconds, faster than a single body-motion cycle",
+        "Only during scheduled maintenance intervals",
+        "Once per key-on cycle",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Electronic damping systems react in milliseconds — well within one body oscillation cycle — allowing real-time adaptation to road conditions.",
+    },
+    {
+      id: "eu-q5-2",
+      // Tests sensor inputs
+      question:
+        "Which sensors commonly feed data to an adaptive damping control unit?",
+      options: [
+        "Fuel level sensor and oil pressure sensor only",
+        "Accelerometers, steering angle sensors, and wheel speed sensors",
+        "Exhaust temperature and coolant sensors",
+        "Seat occupancy and door lock sensors",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Accelerometers detect body motion, steering angle indicates driver intent, and wheel speed reveals traction state — all inform damper adjustments.",
+    },
+    {
+      id: "eu-q5-3",
+      // Tests key benefit vs fixed dampers
+      question:
+        "The key advantage of adaptive dampers over fixed-rate dampers is:",
+      options: [
+        "They eliminate the need for springs entirely",
+        "They can be both comfortable on smooth roads and stiff during cornering without a fixed tradeoff",
+        "They reduce total vehicle weight significantly",
+        "They remove the need for wheel alignment",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Fixed dampers force a compromise between comfort and handling. Adaptive systems optimize each independently by adjusting in real time.",
+    },
+  ]),
+
+  makeQuiz("eu-q6", "eu-l6", "Active Aerodynamics Quiz", [
+    {
+      id: "eu-q6-1",
+      // Tests downforce vs drag tradeoff
+      question:
+        "At high speed, deploying active aerodynamic surfaces primarily achieves:",
+      options: [
+        "Reduced tire wear on the inside wheels",
+        "Increased downforce for improved grip and stability",
+        "Lower engine coolant temperature",
+        "Reduced turbo boost pressure",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "At speed, extended spoilers and diffusers generate downforce that presses tires harder into the road, improving cornering grip and straight-line stability.",
+    },
+    {
+      id: "eu-q6-2",
+      // Tests drag reduction at low speed
+      question:
+        "At low speeds, active aero surfaces typically retract or flatten to:",
+      options: [
+        "Improve driver visibility",
+        "Reduce aerodynamic drag and improve fuel efficiency",
+        "Lower the vehicle's center of gravity",
+        "Activate the parking sensors",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "At low speed, downforce provides minimal benefit but drag still hurts fuel economy — retracting surfaces reduces drag.",
+    },
+    {
+      id: "eu-q6-3",
+      // Tests system trigger understanding
+      question:
+        "Active aero adjustments can be triggered by which of the following inputs?",
+      options: [
+        "Vehicle speed, cornering force, or driver-selected mode",
+        "Cabin temperature and seat position",
+        "Fuel grade selection only",
+        "Wiper speed and headlight status",
+      ],
+      correctAnswerIndex: 0,
+      explanation:
+        "Speed, lateral g-force, and driver mode selection all signal when to deploy or retract aerodynamic surfaces.",
+    },
+  ]),
+
+  // ── Korean Quizzes ────────────────────────────────────────────────────────
+
+  makeQuiz("ko-q1", "ko-l1", "Smartstream GDI and Turbo Quiz", [
+    {
+      id: "ko-q1-1",
+      // Tests injector positioning benefit
+      question:
+        "What advantage does a centrally mounted GDI injector provide over a side-mounted design?",
+      options: [
+        "It allows fuel to bypass the catalytic converter",
+        "It improves spray targeting and reduces carbon buildup on intake valves",
+        "It increases injector size for more fuel volume",
+        "It eliminates the high-pressure pump requirement",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "A central injector position directs spray symmetrically into the combustion chamber, reducing fuel impingement on cylinder walls and minimizing carbon deposits.",
+    },
+    {
+      id: "ko-q1-2",
+      // Tests twin-scroll turbo principle
+      question: "A twin-scroll turbocharger reduces lag by:",
+      options: [
+        "Using two separate turbines on different exhaust manifolds",
+        "Separating exhaust pulses from paired cylinders to maintain consistent turbine energy",
+        "Adding a second compressor wheel to double airflow",
+        "Reducing oil pressure to the turbo bearings",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Twin-scroll designs keep exhaust pulses from cylinders that fire close together separated, ensuring the turbine receives more consistent energy and responds faster.",
+    },
+    {
+      id: "ko-q1-3",
+      // Tests overall architecture benefit
+      question:
+        "In Hyundai-Kia's Smartstream 1.6T, central GDI plus twin-scroll turbo primarily delivers:",
+      options: [
+        "Maximum horsepower at the expense of efficiency",
+        "Strong mid-range torque with improved thermal efficiency",
+        "A fully mechanical (non-electronic) injection system",
+        "Natural aspiration with variable displacement",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "The combined design targets usable torque in the everyday driving RPM range alongside competitive fuel economy through better combustion efficiency.",
+    },
+  ]),
+
+  makeQuiz("ko-q2", "ko-l2", "Theta II Engine and Oil Management Quiz", [
+    {
+      id: "ko-q2-1",
+      // Tests root cause understanding
+      question:
+        "The Theta II GDI engine failures were primarily linked to:",
+      options: [
+        "Overuse of synthetic oil",
+        "Metal debris contamination and oil supply starvation at connecting rod bearings",
+        "Incorrect spark plug gap settings",
+        "Excessive valve spring tension",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Metal machining debris in new engines and oil starvation under aggressive driving starved connecting rod bearings, leading to premature wear and seizure.",
+    },
+    {
+      id: "ko-q2-2",
+      // Tests knock sensor protection response
+      question:
+        "Hyundai and Kia's response to Theta II failures included adding:",
+      options: [
+        "A second oil filter in the return line",
+        "Knock sensor-based engine protection to warn drivers before catastrophic failure",
+        "A higher-capacity fuel pump",
+        "An auxiliary coolant reservoir",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Knock sensor detection software was updated to identify the abnormal combustion signatures preceding bearing failure and alert the driver to stop driving.",
+    },
+    {
+      id: "ko-q2-3",
+      // Tests core engineering lesson
+      question:
+        "The primary engineering lesson from the Theta II case is that engine reliability depends on:",
+      options: [
+        "Maximizing compression ratio above all else",
+        "Manufacturing cleanliness and oil delivery system design as much as component materials",
+        "Using premium unleaded fuel exclusively",
+        "Reducing engine displacement to lower stress",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "No matter how well-designed the combustion system, debris contamination or inadequate oil supply at bearings will cause failure — lubrication system integrity is fundamental.",
+    },
+  ]),
+
+  makeQuiz("ko-q3", "ko-l3", "HTRAC AWD System Quiz", [
+    {
+      id: "ko-q3-1",
+      // Tests normal operating behavior
+      question:
+        "In normal driving conditions, HTRAC primarily operates as:",
+      options: [
+        "A 50/50 locked AWD system",
+        "A front-wheel-drive system for efficiency, with rear torque available on demand",
+        "A rear-wheel-drive system with optional front engagement",
+        "A permanent four-wheel-drive system with no variation",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "HTRAC stays front-biased under normal conditions to maximize fuel efficiency, only engaging rear torque when traction or dynamics require it.",
+    },
+    {
+      id: "ko-q3-2",
+      // Tests clutch pack mechanism
+      question:
+        "HTRAC transfers torque between axles using:",
+      options: [
+        "A viscous coupling fluid clutch",
+        "A multi-plate wet clutch pack controlled by an electronic module",
+        "A mechanical locking differential",
+        "A hydraulic pump linked to steering input",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "The electronically controlled multi-plate wet clutch pack allows precise, continuously variable torque transfer between front and rear axles.",
+    },
+    {
+      id: "ko-q3-3",
+      // Tests trigger conditions
+      question: "HTRAC will shift torque rearward in response to:",
+      options: [
+        "Low ambient temperature only",
+        "Front wheel slip, aggressive handling inputs, or driver-selected Sport mode",
+        "Increasing cabin temperature",
+        "Gear selection by the transmission",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "The system monitors wheel slip signals, steering angle, yaw rate, and driver mode to decide when rear torque improves dynamics or recovers traction.",
+    },
+  ]),
+
+  makeQuiz("ko-q4", "ko-l4", "Hyundai N Performance Quiz", [
+    {
+      id: "ko-q4-1",
+      // Tests N suspension philosophy
+      question:
+        "Hyundai N models use a multi-link rear suspension tuned specifically for:",
+      options: [
+        "Maximum cargo capacity",
+        "Corner entry stability and controlled rotation on corner exit",
+        "Lowest possible ride height only",
+        "Isolation of road noise above all else",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "N-tuned multi-link geometry is optimized for predictable corner entry and controlled rear rotation — handling traits valued in track-capable sport compact cars.",
+    },
+    {
+      id: "ko-q4-2",
+      // Tests e-LSD function
+      question: "The electronic LSD on N models primarily helps by:",
+      options: [
+        "Locking the rear axle fully on corner entry",
+        "Reducing understeer and allowing more controlled rotation on corner exit",
+        "Increasing engine braking on downshifts",
+        "Balancing front-to-rear brake bias",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "The e-LSD sends torque to the outside rear wheel during cornering, reducing the natural tendency for the car to push wide (understeer) and allowing rotation through the corner.",
+    },
+    {
+      id: "ko-q4-3",
+      // Tests N philosophy conclusion
+      question:
+        "The key takeaway of Hyundai N's engineering approach is that performance handling is primarily determined by:",
+      options: [
+        "Engine displacement and peak horsepower",
+        "Precise geometry tuning and software calibration, not hardware cost",
+        "Vehicle weight alone",
+        "The number of driven wheels",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "N models achieve competitive lap times using precise alignment geometry, spring rates, and electronic software on relatively affordable components — engineering insight over expensive hardware.",
+    },
+  ]),
+
+  // ── EV & Hybrid Quizzes ───────────────────────────────────────────────────
+
+  makeQuiz("ev-q1", "ev-l1", "Battery Cell Chemistry Quiz", [
+    {
+      id: "ev-q1-1",
+      // Tests chemistry tradeoff knowledge
+      question:
+        "Compared to NMC cells, LFP (lithium iron phosphate) cells primarily offer:",
+      options: [
+        "Higher energy density for more range",
+        "Better thermal stability and longer cycle life at the cost of some energy density",
+        "Faster charge rates in all conditions",
+        "Lower manufacturing cost with no other tradeoffs",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "LFP chemistry is thermally more stable and tolerates more charge cycles before degradation, making it suited for high-mileage use — but it offers lower energy density than NMC.",
+    },
+    {
+      id: "ev-q1-2",
+      // Tests pack architecture awareness
+      question: "Battery pack design must balance which competing factors?",
+      options: [
+        "Color selection and interior trim level",
+        "Energy density, thermal behavior, cycle life, and structural integration",
+        "Gear ratio and final drive ratio",
+        "Only energy density and cost",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "All four factors interact: maximizing energy density may compromise thermal stability; improving longevity may reduce density — pack design is always a multi-variable tradeoff.",
+    },
+    {
+      id: "ev-q1-3",
+      // Tests cell format awareness
+      question:
+        "The physical format of a battery cell (cylindrical, prismatic, or pouch) primarily affects:",
+      options: [
+        "The type of lithium chemistry that can be used",
+        "Packaging efficiency, thermal management complexity, and crash structure integration",
+        "Only the cell's nominal voltage",
+        "Whether the BMS is required",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Cell format shapes how modules are assembled, how cooling channels are routed, and how the pack integrates with the vehicle's structural crash zones.",
+    },
+  ]),
+
+  makeQuiz("ev-q2", "ev-l2", "BMS Operation Quiz", [
+    {
+      id: "ev-q2-1",
+      // Tests BMS primary monitoring role
+      question: "The BMS monitors individual cell parameters to prevent:",
+      options: [
+        "Excessive wiper speed",
+        "Overcharge, over-discharge, and thermal runaway",
+        "Road noise entering the cabin",
+        "Tire pressure loss",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Overcharge causes lithium plating and fire risk; over-discharge damages cell chemistry; thermal runaway can cause catastrophic pack failure — BMS prevents all three.",
+    },
+    {
+      id: "ev-q2-2",
+      // Tests balancing method distinction
+      question:
+        "Passive cell balancing differs from active cell balancing in that passive balancing:",
+      options: [
+        "Transfers excess charge from high-SOC cells to low-SOC cells",
+        "Burns off excess energy as heat to equalize cell states",
+        "Uses no electrical components",
+        "Charges all cells simultaneously at maximum rate",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Passive balancing dissipates excess charge from high-SOC cells as heat via resistors — simple but wasteful. Active balancing moves that energy to lower-SOC cells instead.",
+    },
+    {
+      id: "ev-q2-3",
+      // Tests BMS charging interaction
+      question:
+        "When the BMS restricts fast charging rate at a DC fast charger, it is primarily protecting against:",
+      options: [
+        "Charger hardware damage",
+        "Heat-induced cell degradation from excessive current at the pack's thermal limit",
+        "Driver inconvenience",
+        "Navigation system interference",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Fast charging generates heat inside cells. The BMS's thermal model limits current when cell temperature would rise to levels that accelerate degradation.",
+    },
+  ]),
+
+  makeQuiz("ev-q3", "ev-l3", "Motor Types and Inverter Control Quiz", [
+    {
+      id: "ev-q3-1",
+      // Tests PMSM vs induction motor tradeoff
+      question:
+        "A key reason most EVs prefer permanent magnet synchronous motors (PMSM) over induction motors is:",
+      options: [
+        "PMSM motors require no power electronics to operate",
+        "PMSM motors offer higher efficiency and power density",
+        "PMSM motors do not generate heat during operation",
+        "PMSM motors cost less than induction motors",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Permanent magnet designs are more efficient (less rotor losses) and more power-dense for a given motor size — important in vehicles where range and weight matter.",
+    },
+    {
+      id: "ev-q3-2",
+      // Tests inverter function
+      question: "The inverter in an EV drivetrain converts:",
+      options: [
+        "AC from the motor back to DC for the battery",
+        "DC battery voltage to variable-frequency AC to control motor speed and torque",
+        "Mechanical energy to hydraulic pressure",
+        "High voltage to 12V for accessories only",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "The inverter's core job is DC-to-AC conversion with variable frequency — changing the frequency changes motor speed, and controlling current magnitude changes torque.",
+    },
+    {
+      id: "ev-q3-3",
+      // Tests response advantage
+      question:
+        "Electric motors respond to throttle inputs faster than combustion engines primarily because:",
+      options: [
+        "Electric motors have more cylinders",
+        "Current is controlled electronically — no fuel, spark, or combustion event delays",
+        "Electric motors use lighter pistons",
+        "Electric motors run on higher octane fuel",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Combustion requires a sequence of events (injection, ignition, expansion) with inherent delays. Electric current responds in microseconds, enabling nearly instant torque delivery.",
+    },
+  ]),
+
+  makeQuiz("ev-q4", "ev-l4", "Regenerative Braking and Thermal Management Quiz", [
+    {
+      id: "ev-q4-1",
+      // Tests regen principle
+      question:
+        "During regenerative braking, the traction motor functions as:",
+      options: [
+        "A heat exchanger",
+        "A generator that converts kinetic energy back to electrical energy",
+        "A hydraulic pump",
+        "A friction pad backup system",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "When the motor is spun by vehicle momentum during deceleration, it acts as a generator — the electrical energy produced is returned to the battery.",
+    },
+    {
+      id: "ev-q4-2",
+      // Tests thermal management temperature window
+      question:
+        "EV battery thermal management aims to keep cells within what general temperature range for optimal performance and longevity?",
+      options: [
+        "0–10°C",
+        "20–40°C",
+        "60–80°C",
+        "Above 100°C",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Below 20°C, lithium-ion cells lose charge acceptance and range; above 40°C sustained, degradation accelerates. The 20–40°C window balances performance and longevity.",
+    },
+    {
+      id: "ev-q4-3",
+      // Tests cold weather pre-conditioning
+      question:
+        "Battery pre-conditioning in cold weather is important because it:",
+      options: [
+        "Warms the cabin faster",
+        "Restores charge acceptance rate so the vehicle can accept regeneration and fast charging normally",
+        "Increases engine idle speed",
+        "Activates all-wheel drive",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Cold lithium-ion cells have high internal resistance, which limits how fast they can accept current. Pre-heating restores charge acceptance before driving begins.",
+    },
+  ]),
+
+  // ── Diesel & Heavy-Duty Quizzes ───────────────────────────────────────────
+
+  makeQuiz("dh-q1", "dh-l1", "Common-Rail Direct Injection Quiz", [
+    {
+      id: "dh-q1-1",
+      // Tests rail pressure range knowledge
+      question:
+        "Modern common-rail diesel systems typically operate at fuel rail pressures of:",
+      options: [
+        "100–200 bar (comparable to port injection)",
+        "1,600–2,500+ bar",
+        "50–80 bar",
+        "300–500 bar",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Common-rail systems require extreme pressure — 1,600 to over 2,500 bar — to atomize diesel fuel finely enough for efficient, clean combustion.",
+    },
+    {
+      id: "dh-q1-2",
+      // Tests pilot injection benefit
+      question: "The purpose of a pilot injection event before the main injection is to:",
+      options: [
+        "Test injector electrical resistance",
+        "Reduce combustion noise by initiating a small pre-ignition before the main charge arrives",
+        "Prime the rail pressure sensor",
+        "Flush carbon from the injector tip",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "A small pilot injection starts combustion gently before the large main injection, reducing the abrupt pressure rise ('diesel knock') that causes noise.",
+    },
+    {
+      id: "dh-q1-3",
+      // Tests multi-event injection benefit
+      question: "The ability to fire multiple injection events per combustion cycle primarily enables:",
+      options: [
+        "Simplified injector design",
+        "Simultaneous optimization of combustion noise, power, and emissions",
+        "Elimination of the common rail",
+        "Reduced fuel pump speed",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Each injection event serves a different purpose — noise reduction, power, or aftertreatment assistance — allowing the ECU to balance all three objectives simultaneously.",
+    },
+  ]),
+
+  makeQuiz("dh-q2", "dh-l2", "VGT Turbocharger Quiz", [
+    {
+      id: "dh-q2-1",
+      // Tests VGT mechanism
+      question:
+        "A variable geometry turbocharger (VGT) eliminates the need for a wastegate by:",
+      options: [
+        "Using a second compressor to bypass excess air",
+        "Adjusting turbine vane angles to control exhaust energy flow to the turbine",
+        "Running at a fixed shaft speed regardless of engine RPM",
+        "Using a hydraulic coupling between turbine and compressor",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "VGT vanes change angle to control how much exhaust energy reaches the turbine — closing vanes accelerates the turbine at low RPM; opening vanes limits boost at high RPM.",
+    },
+    {
+      id: "dh-q2-2",
+      // Tests exhaust brake function
+      question:
+        "When a VGT acts as an exhaust brake, it slows the vehicle by:",
+      options: [
+        "Applying friction to the turbine shaft",
+        "Closing vanes to restrict exhaust flow and create backpressure against the pistons",
+        "Reversing the compressor airflow direction",
+        "Injecting water into the exhaust",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Closing VGT vanes restricts exhaust exit — the engine must work against this backpressure on each exhaust stroke, slowing the vehicle without friction brakes.",
+    },
+    {
+      id: "dh-q2-3",
+      // Tests compound turbo benefit
+      question:
+        "A compound (series-sequential) turbocharger system uses two turbos in series primarily to:",
+      options: [
+        "Double the maximum boost pressure beyond safe limits",
+        "Achieve both low-RPM response (small high-pressure turbo) and high-RPM airflow capacity (large low-pressure turbo)",
+        "Eliminate VGT vane control",
+        "Allow the engine to run without an intercooler",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "The small turbo spools quickly for low-RPM response; the large turbo flows enough air for high-load operation — together they cover the full RPM and load range better than either alone.",
+    },
+  ]),
+
+  makeQuiz("dh-q3", "dh-l3", "DEF/SCR Aftertreatment Quiz", [
+    {
+      id: "dh-q3-1",
+      // Tests DEF chemistry
+      question: "Diesel exhaust fluid (DEF) is a solution of:",
+      options: [
+        "Diesel fuel and water",
+        "Urea and deionized water",
+        "Ammonia and hydrochloric acid",
+        "Ethanol and mineral oil",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "DEF is a 32.5% urea / 67.5% deionized water solution — when injected into hot exhaust, urea decomposes to ammonia, which is the active NOx reductant.",
+    },
+    {
+      id: "dh-q3-2",
+      // Tests SCR reaction
+      question: "The SCR catalyst converts NOx into:",
+      options: [
+        "Carbon dioxide and hydrogen",
+        "Nitrogen gas and water vapor",
+        "Sulfur dioxide and oxygen",
+        "Carbon monoxide and steam",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Ammonia from DEF reacts with NOx in the SCR catalyst to produce harmless nitrogen (N₂) and water vapor (H₂O).",
+    },
+    {
+      id: "dh-q3-3",
+      // Tests DPF regeneration process
+      question: "A diesel particulate filter (DPF) regenerates by:",
+      options: [
+        "Chemically dissolving soot with DEF",
+        "Burning accumulated soot off the filter at high exhaust temperatures",
+        "Mechanically vibrating to shake soot loose",
+        "Rinsing with engine coolant",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "During regeneration, exhaust temperature is raised (via late injection or external heating) to oxidize accumulated soot particles, clearing the filter.",
+    },
+  ]),
+
+  makeQuiz("dh-q4", "dh-l4", "Air Brakes and AMT Quiz", [
+    {
+      id: "dh-q4-1",
+      // Tests air brake fail-safe principle
+      question:
+        "A critical safety advantage of air brake systems is that they fail in which direction?",
+      options: [
+        "Fail open — brakes release when air pressure is lost",
+        "Fail applied — spring-applied brakes engage when air pressure is lost",
+        "Fail neutral — brakes hold current position",
+        "Fail to reduced pressure — partial braking maintained",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "Spring-applied parking brakes engage automatically when air pressure drops — the system fails to the safe (stopped) state, preventing a runaway heavy vehicle.",
+    },
+    {
+      id: "dh-q4-2",
+      // Tests why air over hydraulic
+      question:
+        "Why is compressed air preferred over hydraulic fluid in heavy commercial vehicle braking?",
+      options: [
+        "Hydraulic fluid is flammable and cannot be used on trucks",
+        "Air is continuously replenished by the compressor and lines can safely flex or disconnect",
+        "Air brakes weigh less than hydraulic systems",
+        "Hydraulic brakes overheat faster at low speeds",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "The compressor continuously replenishes air supply, flex hoses allow trailer attachment/detachment safely, and line disconnection does not cause complete brake failure.",
+    },
+    {
+      id: "dh-q4-3",
+      // Tests AMT benefit
+      question:
+        "Automated manual transmissions (AMT) in heavy trucks improve fuel economy by:",
+      options: [
+        "Adding more gears than a driver could manually operate",
+        "Optimizing shift points based on load and grade rather than driver judgment",
+        "Reducing engine displacement",
+        "Allowing the engine to run at a fixed RPM only",
+      ],
+      correctAnswerIndex: 1,
+      explanation:
+        "AMT control units select optimal gear ratios based on vehicle load, grade, and target speed — consistently making better fuel economy decisions than a fatigued human driver.",
+    },
+  ]),
 ];
 
 export const quizzesById = Object.fromEntries(

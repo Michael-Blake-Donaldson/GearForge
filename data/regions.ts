@@ -43,7 +43,7 @@ export const regions: Region[] = [
       "Modern compact engineering and fast adoption of electrified systems.",
     focusAreas: ["Turbo small engines", "GDI systems", "Hybrid growth"],
     accentColor: "#5ce1ff",
-    unitIds: [],
+    unitIds: ["ko-1", "ko-2"],
   },
   {
     id: "ev-hybrid",
@@ -52,7 +52,7 @@ export const regions: Region[] = [
       "EV and HEV fundamentals from energy storage to propulsion control.",
     focusAreas: ["Battery systems", "Inverters", "Thermal management"],
     accentColor: "#72f8d4",
-    unitIds: [],
+    unitIds: ["ev-1", "ev-2"],
   },
   {
     id: "diesel-heavy",
@@ -61,7 +61,7 @@ export const regions: Region[] = [
       "Compression ignition systems, heavy drivetrains, and fleet durability principles.",
     focusAreas: ["Turbo diesel", "DEF systems", "Heavy-duty transmissions"],
     accentColor: "#84b8ff",
-    unitIds: [],
+    unitIds: ["dh-1", "dh-2"],
   },
 ];
 
