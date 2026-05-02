@@ -11,6 +11,7 @@ import {
 
 import Badge from "@/components/Badge";
 import { theme } from "@/constants/theme";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useProgressStore, validateUsername } from "@/store/useProgressStore";
 import {
     cancelAllNotifications,
@@ -49,6 +50,12 @@ export default function ProfileScreen() {
   // Validation error message shown below the input field
   const [nameError, setNameError] = useState<string | null>(null);
   const [nameSaved, setNameSaved] = useState(false);
+
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isGuest = useAuthStore((s) => s.isGuest);
+  const syncNow = useAuthStore((s) => s.syncNow);
+  const logout = useAuthStore((s) => s.logout);
+  const deleteAccount = useAuthStore((s) => s.deleteAccount);
 
   const handleSave = () => {
     const error = validateUsername(draftName);
@@ -305,6 +312,86 @@ export default function ProfileScreen() {
               : "Enable Reminders"}
           </Text>
         </Pressable>
+      </View>
+
+      {/* --- Account and Cloud Sync ---------------------------------------- */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>☁️ Account & Sync</Text>
+        <Text style={styles.freezeBody}>
+          {isGuest
+            ? "You are in guest mode. Create an account to back up and sync progress across devices."
+            : isAuthenticated
+              ? "Your account can sync progress to cloud storage."
+              : "Sign in to enable cloud sync."}
+        </Text>
+
+        {isGuest && (
+          <Pressable
+            style={styles.notifButton}
+            onPress={() => router.push("/auth/signup" as never)}
+          >
+            <Text style={styles.notifButtonText}>Create Account</Text>
+          </Pressable>
+        )}
+
+        {isAuthenticated && (
+          <>
+            <Pressable
+              style={styles.notifButton}
+              onPress={async () => {
+                const ok = await syncNow();
+                Alert.alert(
+                  ok ? "Synced" : "Sync failed",
+                  ok
+                    ? "Progress synced to cloud successfully."
+                    : "Could not sync right now. Please try again.",
+                );
+              }}
+            >
+              <Text style={styles.notifButtonText}>Sync Now</Text>
+            </Pressable>
+
+            <Pressable
+              style={[styles.notifButton, styles.notifButtonOff]}
+              onPress={() => {
+                Alert.alert("Sign Out", "Do you want to sign out of this account?", [
+                  { text: "Cancel", style: "cancel" },
+                  { text: "Sign Out", style: "destructive", onPress: () => logout() },
+                ]);
+              }}
+            >
+              <Text style={styles.notifButtonText}>Sign Out</Text>
+            </Pressable>
+
+            <Pressable
+              style={[styles.notifButton, styles.deleteButton]}
+              onPress={() => {
+                Alert.alert(
+                  "Delete Account",
+                  "This permanently removes your account and cloud data. This action cannot be undone.",
+                  [
+                    { text: "Cancel", style: "cancel" },
+                    {
+                      text: "Delete",
+                      style: "destructive",
+                      onPress: async () => {
+                        const ok = await deleteAccount();
+                        if (!ok) {
+                          Alert.alert(
+                            "Unable to delete account",
+                            "Please sign in again and retry.",
+                          );
+                        }
+                      },
+                    },
+                  ],
+                );
+              }}
+            >
+              <Text style={styles.notifButtonText}>Delete Account</Text>
+            </Pressable>
+          </>
+        )}
       </View>
 
       {/* --- Feedback Settings --------------------------------------------- */}
@@ -641,6 +728,10 @@ const styles = StyleSheet.create({
     color: theme.colors.textPrimary,
     fontSize: 12,
     fontWeight: "800",
+  },
+  deleteButton: {
+    backgroundColor: theme.colors.danger,
+    borderColor: theme.colors.danger,
   },
   appVersion: {
     color: theme.colors.textSecondary,

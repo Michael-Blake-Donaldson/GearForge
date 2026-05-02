@@ -1,6 +1,7 @@
 import { User, onAuthStateChanged, signOut } from "firebase/auth";
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
@@ -10,7 +11,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { auth } from "@/lib/firebase";
 import { AuthUser } from "@/types/Auth";
+import { syncAfterAuthenticatedLogin, upgradeGuestProgressToAccount } from "@/utils/authSync";
 import { mapAuthError } from "@/utils/authErrors";
+import { deleteAllCloudUserData } from "@/utils/progressSync";
 import { clearTokens, storeTokens } from "@/utils/secureTokens";
 
 type AuthState = {
@@ -24,6 +27,8 @@ type AuthState = {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<boolean>;
+  deleteAccount: () => Promise<boolean>;
+  syncNow: () => Promise<boolean>;
   continueAsGuest: () => void;
   clearError: () => void;
   initializeAuthListener: () => () => void;
@@ -61,6 +66,8 @@ export const useAuthStore = create<AuthState>()(
           await storeTokens(accessToken, refreshToken);
         }
 
+        const wasGuest = get().isGuest;
+
         set({
           user: toAuthUser(firebaseUser),
           isAuthenticated: true,
@@ -68,6 +75,13 @@ export const useAuthStore = create<AuthState>()(
           loading: false,
           error: null,
         });
+
+        if (wasGuest) {
+          await upgradeGuestProgressToAccount(firebaseUser.uid);
+          set({ isGuest: false });
+        }
+
+        await syncAfterAuthenticatedLogin(firebaseUser.uid);
       },
 
       signup: async (email: string, password: string) => {
@@ -121,6 +135,46 @@ export const useAuthStore = create<AuthState>()(
         set({ loading: true, error: null });
         try {
           await sendPasswordResetEmail(auth, email.trim());
+          set({ loading: false });
+          return true;
+        } catch (error) {
+          set({ loading: false, error: mapAuthError(error) });
+          return false;
+        }
+      },
+
+      deleteAccount: async () => {
+        const current = auth.currentUser;
+        if (!current) {
+          set({ error: "You are not signed in." });
+          return false;
+        }
+
+        set({ loading: true, error: null });
+        try {
+          await deleteAllCloudUserData(current.uid);
+          await deleteUser(current);
+          await clearTokens();
+          set({
+            user: null,
+            isAuthenticated: false,
+            isGuest: false,
+            loading: false,
+          });
+          return true;
+        } catch (error) {
+          set({ loading: false, error: mapAuthError(error) });
+          return false;
+        }
+      },
+
+      syncNow: async () => {
+        const current = auth.currentUser;
+        if (!current) return false;
+
+        set({ loading: true, error: null });
+        try {
+          await syncAfterAuthenticatedLogin(current.uid);
           set({ loading: false });
           return true;
         } catch (error) {
