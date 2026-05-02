@@ -338,41 +338,63 @@ const initialState: UserProgress = {
   audioCuesEnabled: true,
 };
 
+const progressMemoryStorage = new Map<string, string>();
+
+const safeAsyncStorageCall = async <T>(
+  operation: () => Promise<T>,
+  onError: (error: unknown) => T,
+): Promise<T> => {
+  try {
+    return await operation();
+  } catch (error) {
+    return onError(error);
+  }
+};
+
 // ---------------------------------------------------------------------------
 // Error-safe AsyncStorage wrapper
 //   Prevents uncaught storage exceptions from crashing the app.
 // ---------------------------------------------------------------------------
 const safeStorage = {
   getItem: async (name: string): Promise<string | null> => {
-    try {
-      return await AsyncStorage.getItem(name);
-    } catch (e) {
+    return safeAsyncStorageCall(
+      () => AsyncStorage.getItem(name),
+      (e) => {
+        const fallback = progressMemoryStorage.get(name) ?? null;
       safeWarn("Storage read error", {
         storageKey: name,
         errorCode: (e as { code?: string })?.code ?? "unknown",
+          fallbackMode: true,
       });
-      return null;
-    }
+        return fallback;
+      },
+    );
   },
   setItem: async (name: string, value: string): Promise<void> => {
-    try {
-      await AsyncStorage.setItem(name, value);
-    } catch (e) {
+    return safeAsyncStorageCall(
+      () => AsyncStorage.setItem(name, value),
+      (e) => {
+        progressMemoryStorage.set(name, value);
       safeWarn("Storage write error", {
         storageKey: name,
         errorCode: (e as { code?: string })?.code ?? "unknown",
+          fallbackMode: true,
       });
-    }
+      },
+    );
   },
   removeItem: async (name: string): Promise<void> => {
-    try {
-      await AsyncStorage.removeItem(name);
-    } catch (e) {
+    return safeAsyncStorageCall(
+      () => AsyncStorage.removeItem(name),
+      (e) => {
+        progressMemoryStorage.delete(name);
       safeWarn("Storage remove error", {
         storageKey: name,
         errorCode: (e as { code?: string })?.code ?? "unknown",
+          fallbackMode: true,
       });
-    }
+      },
+    );
   },
 };
 

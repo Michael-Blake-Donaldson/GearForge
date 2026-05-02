@@ -75,13 +75,69 @@ const isValidEmail = (email: string) =>
 
 const isValidPassword = (password: string) => password.length >= 6;
 
+const authMemoryStorage = new Map<string, string>();
+
+const safeAsyncStorageCall = async <T>(
+  operation: () => Promise<T>,
+  onError: (error: unknown) => T,
+): Promise<T> => {
+  try {
+    return await operation();
+  } catch (error) {
+    return onError(error);
+  }
+};
+
+const safeAuthStorage = {
+  getItem: async (name: string): Promise<string | null> => {
+    return safeAsyncStorageCall(
+      () => AsyncStorage.getItem(name),
+      (error) => {
+        const fallback = authMemoryStorage.get(name) ?? null;
+      safeWarn("Auth storage read error", {
+        storageKey: name,
+        errorCode: (error as { code?: string })?.code ?? "unknown",
+          fallbackMode: true,
+      });
+        return fallback;
+      },
+    );
+  },
+  setItem: async (name: string, value: string): Promise<void> => {
+    return safeAsyncStorageCall(
+      () => AsyncStorage.setItem(name, value),
+      (error) => {
+        authMemoryStorage.set(name, value);
+      safeWarn("Auth storage write error", {
+        storageKey: name,
+        errorCode: (error as { code?: string })?.code ?? "unknown",
+          fallbackMode: true,
+      });
+      },
+    );
+  },
+  removeItem: async (name: string): Promise<void> => {
+    return safeAsyncStorageCall(
+      () => AsyncStorage.removeItem(name),
+      (error) => {
+        authMemoryStorage.delete(name);
+      safeWarn("Auth storage remove error", {
+        storageKey: name,
+        errorCode: (error as { code?: string })?.code ?? "unknown",
+          fallbackMode: true,
+      });
+      },
+    );
+  },
+};
+
 async function clearUserLocalState() {
   try {
     await clearTokens();
     await Promise.all([
-      AsyncStorage.removeItem("gearforge-analytics-events"),
-      AsyncStorage.removeItem("gearforge-progress-v2"),
-      AsyncStorage.removeItem("gearforge-auth-v1"),
+      safeAuthStorage.removeItem("gearforge-analytics-events"),
+      safeAuthStorage.removeItem("gearforge-progress-v2"),
+      safeAuthStorage.removeItem("gearforge-auth-v1"),
     ]);
     useProgressStore.getState().resetProgress();
     await useProgressStore.persist.clearStorage();
@@ -399,7 +455,7 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "gearforge-auth-v1",
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => safeAuthStorage),
       partialize: (state) => ({ isGuest: state.isGuest }),
     },
   ),
