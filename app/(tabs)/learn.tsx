@@ -11,7 +11,7 @@ import { unitExamsByUnitId } from "@/data/quizzes";
 import { regions, starterRegionIds } from "@/data/regions";
 import { units } from "@/data/units";
 import { useProgressStore } from "@/store/useProgressStore";
-import { DailyQuest } from "@/types/UserProgress";
+import { DailyQuest, WeeklyQuest } from "@/types/UserProgress";
 
 type RoadmapNode = {
   id: string;
@@ -44,6 +44,7 @@ export default function LearnScreen() {
   const quizHistory = useProgressStore((state) => state.quizHistory);
   // Daily quest — may be null until first lesson is completed (store populates it)
   const dailyQuest = useProgressStore((state) => state.dailyQuest);
+  const weeklyQuest = useProgressStore((state) => state.weeklyQuest);
 
   const selectedRegion =
     regions.find((region) => region.id === selectedRegionId) ?? regions[0];
@@ -64,6 +65,7 @@ export default function LearnScreen() {
 
       {/* Daily Quest card — only shown when a quest exists for today */}
       {dailyQuest && <DailyQuestCard quest={dailyQuest} />}
+      {weeklyQuest && <WeeklyQuestCard quest={weeklyQuest} />}
 
       <View style={styles.placementCard}>
         <Text style={styles.placementLabel}>Mechanic Placement</Text>
@@ -228,6 +230,15 @@ export default function LearnScreen() {
           </View>
         );
       })}
+
+      <View style={styles.disclaimerCard}>
+        <Text style={styles.disclaimerTitle}>Safety Notice</Text>
+        <Text style={styles.disclaimerBody}>
+          GearForge is for educational purposes only and does not replace
+          professional repair guidance, safety procedures, or certified
+          inspections.
+        </Text>
+      </View>
     </ScrollView>
   );
 }
@@ -254,6 +265,34 @@ function DailyQuestCard({ quest }: { quest: DailyQuest }) {
       {/* Progress bar */}
       <View style={questStyles.barTrack}>
         <View style={[questStyles.barFill, { width: `${progressPercent}%` }]} />
+      </View>
+      <Text style={questStyles.progressLabel}>
+        {quest.progressCount} / {quest.targetCount}
+      </Text>
+    </View>
+  );
+}
+
+function WeeklyQuestCard({ quest }: { quest: WeeklyQuest }) {
+  const progress = Math.min(quest.progressCount / quest.targetCount, 1);
+  const progressPercent = Math.round(progress * 100);
+
+  return (
+    <View style={questStyles.cardWeekly}>
+      <View style={questStyles.topRow}>
+        <Text style={questStyles.labelWeekly}>🗓️ Weekly Quest</Text>
+        {quest.completed && (
+          <View style={questStyles.doneBadgeWeekly}>
+            <Text style={questStyles.doneTextWeekly}>Complete</Text>
+          </View>
+        )}
+      </View>
+      <Text style={questStyles.description}>{quest.description}</Text>
+
+      <View style={questStyles.barTrack}>
+        <View
+          style={[questStyles.barFillWeekly, { width: `${progressPercent}%` }]}
+        />
       </View>
       <Text style={questStyles.progressLabel}>
         {quest.progressCount} / {quest.targetCount}
@@ -315,6 +354,36 @@ const questStyles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontSize: 11,
     textAlign: "right",
+  },
+  cardWeekly: {
+    borderRadius: theme.radii.md,
+    borderWidth: 1,
+    borderColor: theme.colors.warning + "55",
+    backgroundColor: theme.colors.surface,
+    padding: 14,
+    marginBottom: 16,
+  },
+  labelWeekly: {
+    color: theme.colors.warning,
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 0.5,
+  },
+  doneBadgeWeekly: {
+    borderRadius: 10,
+    backgroundColor: theme.colors.warning + "22",
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+  },
+  doneTextWeekly: {
+    color: theme.colors.warning,
+    fontSize: 11,
+    fontWeight: "700",
+  },
+  barFillWeekly: {
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: theme.colors.warning,
   },
 });
 
@@ -493,5 +562,26 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "700",
     marginTop: 2,
+  },
+  disclaimerCard: {
+    borderRadius: theme.radii.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.warning + "66",
+    backgroundColor: theme.colors.surface,
+    padding: 14,
+    marginTop: 4,
+  },
+  disclaimerTitle: {
+    color: theme.colors.warning,
+    fontSize: 12,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+    marginBottom: 6,
+  },
+  disclaimerBody: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    lineHeight: 18,
   },
 });

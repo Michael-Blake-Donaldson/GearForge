@@ -1,4 +1,3 @@
-import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -8,6 +7,7 @@ import { theme } from "@/constants/theme";
 import { lessons } from "@/data/lessons";
 import { quizzesById } from "@/data/quizzes";
 import { useProgressStore } from "@/store/useProgressStore";
+import { feedback } from "@/utils/feedback";
 
 export default function QuizScreen() {
   const router = useRouter();
@@ -50,12 +50,10 @@ export default function QuizScreen() {
     const isCorrect = selectedIndex === question.correctAnswerIndex;
     if (isCorrect) {
       setCorrectCount((prev) => prev + 1);
-      // Light haptic tap for correct answer
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      feedback.correct();
     } else {
       setIncorrectQuestionIds((prev) => [...prev, question.id]);
-      // Error haptic for wrong answer
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      feedback.incorrect();
     }
     setShowFeedback(true);
   };
@@ -133,8 +131,7 @@ export default function QuizScreen() {
                 revealState={revealState}
                 onPress={() => {
                   if (!showFeedback) {
-                    // Light selection tap — only before answer is revealed
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    feedback.selection();
                   }
                   setSelectedIndex(index);
                 }}

@@ -5,7 +5,8 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { lessons } from "@/data/lessons";
 import { regions } from "@/data/regions";
 import { units } from "@/data/units";
-import { DailyQuest, Rank, UserProgress } from "@/types/UserProgress";
+import { DailyQuest, Rank, UserProgress, WeeklyQuest } from "@/types/UserProgress";
+import { trackEvent } from "@/utils/analytics";
 
 // ---------------------------------------------------------------------------
 // Username validation
@@ -59,6 +60,17 @@ const todayKey = (): string => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
 
+/** Returns current week key as YYYY-Www (ISO-like). */
+const currentWeekKey = (): string => {
+  const d = new Date();
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((date.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+  return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
+};
+
 // ---------------------------------------------------------------------------
 // Daily quest generation
 //   Deterministic: every user gets the same quest on the same calendar day.
@@ -96,10 +108,35 @@ const QUEST_POOL = [
   },
 ];
 
+const WEEKLY_QUEST_POOL = [
+  {
+    id: "wq-lessons-8",
+    description: "Complete 8 lessons this week",
+    targetCount: 8,
+  },
+  {
+    id: "wq-quiz-12",
+    description: "Answer 12 quizzes this week",
+    targetCount: 12,
+  },
+  {
+    id: "wq-xp-600",
+    description: "Earn 600 XP this week",
+    targetCount: 600,
+  },
+];
+
 const generateDailyQuest = (dateKey: string): DailyQuest => {
   const dayIndex = parseInt(dateKey.replace(/-/g, ""), 10) % QUEST_POOL.length;
   const template = QUEST_POOL[dayIndex];
   return { ...template, progressCount: 0, dateKey, completed: false };
+};
+
+const generateWeeklyQuest = (weekKey: string): WeeklyQuest => {
+  const weekIndex =
+    parseInt(weekKey.replace(/\D/g, ""), 10) % WEEKLY_QUEST_POOL.length;
+  const template = WEEKLY_QUEST_POOL[weekIndex];
+  return { ...template, progressCount: 0, weekKey, completed: false };
 };
 
 // ---------------------------------------------------------------------------
@@ -244,10 +281,13 @@ type ProgressState = UserProgress & {
   setUsername: (username: string) => void;
   completeOnboarding: (username: string, preferredRegionId: string) => void;
   advanceDailyQuestProgress: (amount?: number) => void;
+  advanceWeeklyQuestProgress: (amount?: number) => void;
   setNotificationPermission: (
     status: "undecided" | "granted" | "denied",
   ) => void;
   setNotificationHour: (hour: number) => void;
+  setHapticsEnabled: (enabled: boolean) => void;
+  setAudioCuesEnabled: (enabled: boolean) => void;
   incrementLaunchCount: () => void;
   completeMechanicTest: (scorePercent: number) => void;
   useStreakFreeze: () => boolean;
@@ -279,12 +319,15 @@ const initialState: UserProgress = {
   badges: [],
   hasOnboarded: false,
   dailyQuest: null,
+  weeklyQuest: null,
   preferredRegionId: null,
   notificationPermission: "undecided",
   notificationHour: 20, // default 8 PM reminder
   launchCount: 0,
   hasTakenMechanicTest: false,
   mechanicPlacementTier: null,
+  hapticsEnabled: true,
+  audioCuesEnabled: true,
 };
 
 // ---------------------------------------------------------------------------
@@ -374,6 +417,10 @@ export const useProgressStore = create<ProgressState>()(
           preferredRegionId,
           hasOnboarded: true,
           dailyQuest: generateDailyQuest(todayKey()),
+          weeklyQuest: generateWeeklyQuest(currentWeekKey()),
+        });
+        trackEvent("onboarding_completed", {
+          preferredRegionId,
         });
       },
 
@@ -400,10 +447,37 @@ export const useProgressStore = create<ProgressState>()(
         });
       },
 
+      /** Advance this week's quest, regenerating when week rolls over. */
+      advanceWeeklyQuestProgress: (amount = 1) => {
+        const { weeklyQuest } = get();
+        const week = currentWeekKey();
+
+        const active =
+          !weeklyQuest || weeklyQuest.weekKey !== week
+            ? generateWeeklyQuest(week)
+            : weeklyQuest;
+
+        if (active.completed) return;
+
+        const newCount = active.progressCount + amount;
+        set({
+          weeklyQuest: {
+            ...active,
+            progressCount: Math.min(newCount, active.targetCount),
+            completed: newCount >= active.targetCount,
+          },
+        });
+      },
+
       setNotificationPermission: (status) =>
         set({ notificationPermission: status }),
 
       setNotificationHour: (hour: number) => set({ notificationHour: hour }),
+
+      setHapticsEnabled: (enabled: boolean) => set({ hapticsEnabled: enabled }),
+
+      setAudioCuesEnabled: (enabled: boolean) =>
+        set({ audioCuesEnabled: enabled }),
 
       /**
        * Increment the app launch counter by 1.
@@ -453,6 +527,11 @@ export const useProgressStore = create<ProgressState>()(
           hasTakenMechanicTest: true,
           mechanicPlacementTier: placementTier,
           unlockedUnitIds,
+        });
+
+        trackEvent("placement_completed", {
+          scorePercent,
+          placementTier,
         });
       },
 
@@ -564,6 +643,14 @@ export const useProgressStore = create<ProgressState>()(
           badges: maybeUnlockBadges(withUnits),
           dailyQuest: updatedQuest,
         });
+
+        get().advanceWeeklyQuestProgress(1);
+        trackEvent("lesson_completed", {
+          lessonId,
+          quizScorePercent,
+          gainedXp,
+          streak: nextStreak,
+        });
       },
 
       submitQuizResult: ({
@@ -597,6 +684,14 @@ export const useProgressStore = create<ProgressState>()(
           incorrectQuestionIds: cleaned,
         });
 
+        trackEvent("quiz_submitted", {
+          quizId,
+          lessonId,
+          correct,
+          total,
+          scorePercent,
+        });
+
         // Advance perfect-score quest if applicable
         if (correct === total && total > 0) {
           get().advanceDailyQuestProgress(1);
@@ -610,7 +705,7 @@ export const useProgressStore = create<ProgressState>()(
     {
       name: "gearforge-progress-v2",
       storage: createJSONStorage(() => safeStorage),
-      version: 3,
+      version: 4,
       // Migrate from older versions to current schema
       migrate: (persisted, version) => {
         if (version < 2) {
@@ -626,6 +721,9 @@ export const useProgressStore = create<ProgressState>()(
             launchCount: 0,
             hasTakenMechanicTest: false,
             mechanicPlacementTier: null,
+            weeklyQuest: null,
+            hapticsEnabled: true,
+            audioCuesEnabled: true,
           };
         }
         // Patch any persisted state missing fields added in later phases
@@ -635,6 +733,9 @@ export const useProgressStore = create<ProgressState>()(
           launchCount: p.launchCount ?? 0,
           hasTakenMechanicTest: p.hasTakenMechanicTest ?? false,
           mechanicPlacementTier: p.mechanicPlacementTier ?? null,
+          weeklyQuest: p.weeklyQuest ?? null,
+          hapticsEnabled: p.hapticsEnabled ?? true,
+          audioCuesEnabled: p.audioCuesEnabled ?? true,
         } as UserProgress;
       },
     },

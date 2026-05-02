@@ -171,6 +171,14 @@ function RootLayoutNav() {
             headerTintColor: theme.colors.textPrimary,
           }}
         />
+        <Stack.Screen
+          name="terms"
+          options={{
+            headerTitle: "Terms of Use",
+            headerStyle: { backgroundColor: theme.colors.surface },
+            headerTintColor: theme.colors.textPrimary,
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );

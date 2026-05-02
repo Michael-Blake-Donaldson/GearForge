@@ -27,6 +27,15 @@ export type DailyQuest = {
   completed: boolean;
 };
 
+export type WeeklyQuest = {
+  id: string;
+  description: string;
+  targetCount: number;
+  progressCount: number;
+  weekKey: string;
+  completed: boolean;
+};
+
 export type UserProgress = {
   /** Display name, validated 2-20 chars, alphanumeric + underscore. */
   username: string;
@@ -46,6 +55,8 @@ export type UserProgress = {
   hasOnboarded: boolean;
   /** The active daily quest (regenerated each calendar day). */
   dailyQuest: DailyQuest | null;
+  /** The active weekly quest (regenerated each calendar week). */
+  weeklyQuest: WeeklyQuest | null;
   /** Preferred region set during onboarding – pre-expands on Learn tab. */
   preferredRegionId: string | null;
   /** Notification permission status: 'undecided' | 'granted' | 'denied'. */
@@ -65,4 +76,8 @@ export type UserProgress = {
    * Used to personalize copy and initial unlock pacing.
    */
   mechanicPlacementTier: "rookie" | "builder" | "pro" | null;
+  /** User preference for haptic interactions during learning/quiz flows. */
+  hapticsEnabled: boolean;
+  /** User preference for spoken/audio cues during key feedback events. */
+  audioCuesEnabled: boolean;
 };

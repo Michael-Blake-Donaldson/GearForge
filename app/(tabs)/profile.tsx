@@ -40,6 +40,10 @@ export default function ProfileScreen() {
     (s) => s.setNotificationPermission,
   );
   const setNotificationHour = useProgressStore((s) => s.setNotificationHour);
+  const hapticsEnabled = useProgressStore((s) => s.hapticsEnabled);
+  const audioCuesEnabled = useProgressStore((s) => s.audioCuesEnabled);
+  const setHapticsEnabled = useProgressStore((s) => s.setHapticsEnabled);
+  const setAudioCuesEnabled = useProgressStore((s) => s.setAudioCuesEnabled);
 
   const [draftName, setDraftName] = useState(username);
   // Validation error message shown below the input field
@@ -303,6 +307,37 @@ export default function ProfileScreen() {
         </Pressable>
       </View>
 
+      {/* --- Feedback Settings --------------------------------------------- */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>🎛️ Feedback Settings</Text>
+        <Text style={styles.freezeBody}>
+          Configure tactile and audio response during quizzes and completion
+          events.
+        </Text>
+
+        <View style={styles.settingRow}>
+          <Text style={styles.settingLabel}>Haptic feedback</Text>
+          <Pressable
+            style={[styles.toggleChip, hapticsEnabled && styles.toggleChipOn]}
+            onPress={() => setHapticsEnabled(!hapticsEnabled)}
+          >
+            <Text style={styles.toggleText}>{hapticsEnabled ? "On" : "Off"}</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.settingRow}>
+          <Text style={styles.settingLabel}>Audio cues</Text>
+          <Pressable
+            style={[styles.toggleChip, audioCuesEnabled && styles.toggleChipOn]}
+            onPress={() => setAudioCuesEnabled(!audioCuesEnabled)}
+          >
+            <Text style={styles.toggleText}>
+              {audioCuesEnabled ? "On" : "Off"}
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+
       {/* --- Achievement badges --------------------------------------------- */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Achievements ({badges.length})</Text>{" "}
@@ -327,6 +362,14 @@ export default function ProfileScreen() {
           accessibilityLabel="View Privacy Policy"
         >
           <Text style={styles.privacyLink}>Privacy Policy</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => router.push("/terms" as never)}
+          accessible
+          accessibilityRole="link"
+          accessibilityLabel="View Terms of Use"
+        >
+          <Text style={styles.privacyLink}>Terms of Use</Text>
         </Pressable>
       </View>
     </ScrollView>
@@ -564,6 +607,40 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 8,
     gap: 6,
+  },
+  settingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+    paddingTop: 10,
+    marginTop: 10,
+  },
+  settingLabel: {
+    color: theme.colors.textPrimary,
+    fontSize: 13,
+    fontWeight: "700",
+  },
+  toggleChip: {
+    minWidth: 58,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceAlt,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  toggleChipOn: {
+    borderColor: theme.colors.neon,
+    backgroundColor: theme.colors.neon + "22",
+  },
+  toggleText: {
+    color: theme.colors.textPrimary,
+    fontSize: 12,
+    fontWeight: "800",
   },
   appVersion: {
     color: theme.colors.textSecondary,

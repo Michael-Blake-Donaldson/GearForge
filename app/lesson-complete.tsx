@@ -11,6 +11,7 @@ import {
 
 import { theme } from "@/constants/theme";
 import { lessons } from "@/data/lessons";
+import { feedback } from "@/utils/feedback";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -88,6 +89,9 @@ export default function LessonCompleteScreen() {
         useNativeDriver: true,
       }),
     ]).start();
+
+    // Completion cue supports both haptics and spoken audio (user-toggleable).
+    feedback.levelUp();
   }, []);
 
   return (
