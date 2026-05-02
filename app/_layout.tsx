@@ -133,16 +133,18 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={navTheme}>
-      {!hasAccess &&
-        !pathname.startsWith("/auth") &&
-        <Redirect href={"/auth" as never} />}
+      {!hasAccess && !pathname.startsWith("/auth") && (
+        <Redirect href={"/auth" as never} />
+      )}
 
       {/* Redirect to onboarding on first launch */}
       {hasAccess && !hasOnboarded && <Redirect href="/onboarding" />}
       {hasOnboarded &&
         !hasTakenMechanicTest &&
         pathname !== "/mechanic-test" && <Redirect href="/mechanic-test" />}
-      {hasAccess && pathname.startsWith("/auth") && <Redirect href="/(tabs)/learn" />}
+      {hasAccess && pathname.startsWith("/auth") && (
+        <Redirect href="/(tabs)/learn" />
+      )}
 
       <Stack>
         <Stack.Screen

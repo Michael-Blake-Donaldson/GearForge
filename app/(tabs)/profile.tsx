@@ -354,10 +354,18 @@ export default function ProfileScreen() {
             <Pressable
               style={[styles.notifButton, styles.notifButtonOff]}
               onPress={() => {
-                Alert.alert("Sign Out", "Do you want to sign out of this account?", [
-                  { text: "Cancel", style: "cancel" },
-                  { text: "Sign Out", style: "destructive", onPress: () => logout() },
-                ]);
+                Alert.alert(
+                  "Sign Out",
+                  "Do you want to sign out of this account?",
+                  [
+                    { text: "Cancel", style: "cancel" },
+                    {
+                      text: "Sign Out",
+                      style: "destructive",
+                      onPress: () => logout(),
+                    },
+                  ],
+                );
               }}
             >
               <Text style={styles.notifButtonText}>Sign Out</Text>
@@ -408,7 +416,9 @@ export default function ProfileScreen() {
             style={[styles.toggleChip, hapticsEnabled && styles.toggleChipOn]}
             onPress={() => setHapticsEnabled(!hapticsEnabled)}
           >
-            <Text style={styles.toggleText}>{hapticsEnabled ? "On" : "Off"}</Text>
+            <Text style={styles.toggleText}>
+              {hapticsEnabled ? "On" : "Off"}
+            </Text>
           </Pressable>
         </View>
 

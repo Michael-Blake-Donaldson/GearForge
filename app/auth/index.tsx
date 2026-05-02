@@ -1,17 +1,17 @@
-import { Link, useRouter } from "expo-router";
 import * as AppleAuthentication from "expo-apple-authentication";
-import Constants from "expo-constants";
 import * as Google from "expo-auth-session/providers/google";
+import Constants from "expo-constants";
+import { Link, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
 import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 
 import { theme } from "@/constants/theme";
@@ -31,15 +31,17 @@ export default function AuthLoginScreen() {
   const loading = useAuthStore((s) => s.loading);
 
   const oauth =
-    (Constants.expoConfig?.extra as
-      | {
-          oauth?: {
-            googleWebClientId?: string;
-            googleIosClientId?: string;
-            googleAndroidClientId?: string;
-          };
-        }
-      | undefined)?.oauth ?? {};
+    (
+      Constants.expoConfig?.extra as
+        | {
+            oauth?: {
+              googleWebClientId?: string;
+              googleIosClientId?: string;
+              googleAndroidClientId?: string;
+            };
+          }
+        | undefined
+    )?.oauth ?? {};
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     webClientId: oauth.googleWebClientId,

@@ -1,9 +1,9 @@
 import {
-  deleteDoc,
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
+    deleteDoc,
+    doc,
+    getDoc,
+    serverTimestamp,
+    setDoc,
 } from "firebase/firestore";
 
 import { firestore } from "@/lib/firebase";
@@ -41,12 +41,18 @@ export function mergeProgress(
       local.streakFreezeTokens,
       cloud.streakFreezeTokens ?? 0,
     ),
-    lastLessonDate: latestDate(local.lastLessonDate, cloud.lastLessonDate ?? null),
+    lastLessonDate: latestDate(
+      local.lastLessonDate,
+      cloud.lastLessonDate ?? null,
+    ),
     completedLessons: unique([
       ...local.completedLessons,
       ...(cloud.completedLessons ?? []),
     ]),
-    completedUnits: unique([...local.completedUnits, ...(cloud.completedUnits ?? [])]),
+    completedUnits: unique([
+      ...local.completedUnits,
+      ...(cloud.completedUnits ?? []),
+    ]),
     unlockedUnitIds: unique([
       ...local.unlockedUnitIds,
       ...(cloud.unlockedUnitIds ?? []),
@@ -153,16 +159,24 @@ export async function uploadProgressToCloud(uid: string): Promise<void> {
   ]);
 }
 
-export async function fetchCloudProgress(uid: string): Promise<CloudProgressShape | null> {
-  const [usersSnap, progressSnap, lessonsSnap, quizSnap, badgesSnap, settingsSnap] =
-    await Promise.all([
-      getDoc(doc(firestore, "users", uid)),
-      getDoc(doc(firestore, "progress", uid)),
-      getDoc(doc(firestore, "lessons", uid)),
-      getDoc(doc(firestore, "quizHistory", uid)),
-      getDoc(doc(firestore, "badges", uid)),
-      getDoc(doc(firestore, "settings", uid)),
-    ]);
+export async function fetchCloudProgress(
+  uid: string,
+): Promise<CloudProgressShape | null> {
+  const [
+    usersSnap,
+    progressSnap,
+    lessonsSnap,
+    quizSnap,
+    badgesSnap,
+    settingsSnap,
+  ] = await Promise.all([
+    getDoc(doc(firestore, "users", uid)),
+    getDoc(doc(firestore, "progress", uid)),
+    getDoc(doc(firestore, "lessons", uid)),
+    getDoc(doc(firestore, "quizHistory", uid)),
+    getDoc(doc(firestore, "badges", uid)),
+    getDoc(doc(firestore, "settings", uid)),
+  ]);
 
   if (
     !usersSnap.exists() &&

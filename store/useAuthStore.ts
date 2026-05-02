@@ -1,21 +1,22 @@
-import { User, onAuthStateChanged, signOut } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  createUserWithEmailAndPassword,
-  deleteUser,
-  GoogleAuthProvider,
-  OAuthProvider,
-  sendPasswordResetEmail,
-  signInWithCredential,
-  signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    deleteUser,
+    GoogleAuthProvider,
+    OAuthProvider, onAuthStateChanged, sendPasswordResetEmail,
+    signInWithCredential,
+    signInWithEmailAndPassword, signOut, User
 } from "firebase/auth";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { auth } from "@/lib/firebase";
 import { AuthUser } from "@/types/Auth";
-import { syncAfterAuthenticatedLogin, upgradeGuestProgressToAccount } from "@/utils/authSync";
 import { mapAuthError } from "@/utils/authErrors";
+import {
+    syncAfterAuthenticatedLogin,
+    upgradeGuestProgressToAccount,
+} from "@/utils/authSync";
 import { deleteAllCloudUserData } from "@/utils/progressSync";
 import { clearTokens, storeTokens } from "@/utils/secureTokens";
 
@@ -64,8 +65,11 @@ export const useAuthStore = create<AuthState>()(
 
         const accessToken = await firebaseUser.getIdToken();
         const refreshToken =
-          (firebaseUser as unknown as { stsTokenManager?: { refreshToken?: string } })
-            .stsTokenManager?.refreshToken ?? "";
+          (
+            firebaseUser as unknown as {
+              stsTokenManager?: { refreshToken?: string };
+            }
+          ).stsTokenManager?.refreshToken ?? "";
 
         if (refreshToken) {
           await storeTokens(accessToken, refreshToken);

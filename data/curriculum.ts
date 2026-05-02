@@ -4,7 +4,13 @@ type UnitBlueprint = {
 };
 
 type RegionBlueprint = {
-  id: "american" | "japanese" | "european" | "korean" | "ev-hybrid" | "diesel-heavy";
+  id:
+    | "american"
+    | "japanese"
+    | "european"
+    | "korean"
+    | "ev-hybrid"
+    | "diesel-heavy";
   code: "am" | "jp" | "eu" | "ko" | "ev" | "dh";
   displayName: string;
   appName: string;
@@ -27,23 +33,28 @@ export const curriculumRegions: RegionBlueprint[] = [
     units: [
       {
         title: "Powertrain Foundations",
-        description: "Core U.S. engine, valvetrain, and driveline fundamentals.",
+        description:
+          "Core U.S. engine, valvetrain, and driveline fundamentals.",
       },
       {
         title: "Chassis and Utility Systems",
-        description: "Suspension, braking, and towing behavior under real loads.",
+        description:
+          "Suspension, braking, and towing behavior under real loads.",
       },
       {
         title: "Performance and Emissions",
-        description: "Boost strategies, OBD diagnostics, and compliance readiness.",
+        description:
+          "Boost strategies, OBD diagnostics, and compliance readiness.",
       },
       {
         title: "Electronics and Driveability",
-        description: "Sensors, control loops, and fault tracing in modern platforms.",
+        description:
+          "Sensors, control loops, and fault tracing in modern platforms.",
       },
       {
         title: "Field Diagnostics Mastery",
-        description: "System-level diagnosis and service workflow decision making.",
+        description:
+          "System-level diagnosis and service workflow decision making.",
       },
     ],
   },
@@ -54,12 +65,17 @@ export const curriculumRegions: RegionBlueprint[] = [
     appName: "Japanese",
     description:
       "Reliability-first engineering with efficient packaging and precision controls.",
-    focusAreas: ["Inline-4 engines", "VTEC/VVT systems", "CVT and hybrid architecture"],
+    focusAreas: [
+      "Inline-4 engines",
+      "VTEC/VVT systems",
+      "CVT and hybrid architecture",
+    ],
     accentColor: "#39a0ff",
     units: [
       {
         title: "Efficiency Architecture",
-        description: "Packaging decisions that maximize reliability and economy.",
+        description:
+          "Packaging decisions that maximize reliability and economy.",
       },
       {
         title: "Drivability Systems",
@@ -67,15 +83,18 @@ export const curriculumRegions: RegionBlueprint[] = [
       },
       {
         title: "AWD and Safety Systems",
-        description: "Traction logic, torque vectoring, and active safety behavior.",
+        description:
+          "Traction logic, torque vectoring, and active safety behavior.",
       },
       {
         title: "Diagnostics and Calibration",
-        description: "ECU strategy, adaptation logic, and repeatable troubleshooting.",
+        description:
+          "ECU strategy, adaptation logic, and repeatable troubleshooting.",
       },
       {
         title: "Advanced Platform Integration",
-        description: "How efficiency, safety, and control networks operate as one.",
+        description:
+          "How efficiency, safety, and control networks operate as one.",
       },
     ],
   },
@@ -86,7 +105,11 @@ export const curriculumRegions: RegionBlueprint[] = [
     appName: "European",
     description:
       "Performance-oriented systems, advanced electronics, and precision handling.",
-    focusAreas: ["Turbo/direct injection", "DSG and DCT", "CAN bus electronics"],
+    focusAreas: [
+      "Turbo/direct injection",
+      "DSG and DCT",
+      "CAN bus electronics",
+    ],
     accentColor: "#61f2c2",
     units: [
       {
@@ -95,7 +118,8 @@ export const curriculumRegions: RegionBlueprint[] = [
       },
       {
         title: "Electronic Networks",
-        description: "Control-module communication and coordinated drivetrain logic.",
+        description:
+          "Control-module communication and coordinated drivetrain logic.",
       },
       {
         title: "Chassis Dynamics",
@@ -103,11 +127,13 @@ export const curriculumRegions: RegionBlueprint[] = [
       },
       {
         title: "Service Strategy and Faults",
-        description: "Diagnosing high-complexity faults with systematic processes.",
+        description:
+          "Diagnosing high-complexity faults with systematic processes.",
       },
       {
         title: "Performance Systems Mastery",
-        description: "Integrating drivetrain, brake, and stability calibration choices.",
+        description:
+          "Integrating drivetrain, brake, and stability calibration choices.",
       },
     ],
   },
@@ -127,11 +153,13 @@ export const curriculumRegions: RegionBlueprint[] = [
       },
       {
         title: "Platform Dynamics",
-        description: "AWD response, suspension tuning, and stability strategies.",
+        description:
+          "AWD response, suspension tuning, and stability strategies.",
       },
       {
         title: "Electrification Integration",
-        description: "Mild hybrid and hybrid integration in modern Korean platforms.",
+        description:
+          "Mild hybrid and hybrid integration in modern Korean platforms.",
       },
       {
         title: "Diagnostics Workflow",
@@ -139,7 +167,8 @@ export const curriculumRegions: RegionBlueprint[] = [
       },
       {
         title: "Performance and Reliability",
-        description: "Balancing spirited tuning with long-term service reliability.",
+        description:
+          "Balancing spirited tuning with long-term service reliability.",
       },
     ],
   },
@@ -155,7 +184,8 @@ export const curriculumRegions: RegionBlueprint[] = [
     units: [
       {
         title: "High Voltage Foundations",
-        description: "Battery chemistry, pack architecture, and HV safety discipline.",
+        description:
+          "Battery chemistry, pack architecture, and HV safety discipline.",
       },
       {
         title: "Propulsion and Regeneration",
@@ -163,15 +193,18 @@ export const curriculumRegions: RegionBlueprint[] = [
       },
       {
         title: "Thermal and Power Electronics",
-        description: "Heat control, charging behavior, and component protection.",
+        description:
+          "Heat control, charging behavior, and component protection.",
       },
       {
         title: "Diagnostics and Service Safety",
-        description: "Isolation testing, fault tracing, and safe service sequencing.",
+        description:
+          "Isolation testing, fault tracing, and safe service sequencing.",
       },
       {
         title: "Advanced EV Systems",
-        description: "System integration and range/performance optimization tradeoffs.",
+        description:
+          "System integration and range/performance optimization tradeoffs.",
       },
     ],
   },
@@ -187,15 +220,18 @@ export const curriculumRegions: RegionBlueprint[] = [
     units: [
       {
         title: "Diesel Combustion Science",
-        description: "Injection timing, compression ignition, and torque behavior.",
+        description:
+          "Injection timing, compression ignition, and torque behavior.",
       },
       {
         title: "Aftertreatment and Emissions",
-        description: "DPF, SCR/DEF systems, and emissions compliance readiness.",
+        description:
+          "DPF, SCR/DEF systems, and emissions compliance readiness.",
       },
       {
         title: "Heavy Drivetrain Systems",
-        description: "AMT behavior, driveline durability, and load-based control.",
+        description:
+          "AMT behavior, driveline durability, and load-based control.",
       },
       {
         title: "Fleet Diagnostics",

@@ -1,4 +1,7 @@
-import { pullMergeAndPushProgress, uploadProgressToCloud } from "@/utils/progressSync";
+import {
+    pullMergeAndPushProgress,
+    uploadProgressToCloud,
+} from "@/utils/progressSync";
 
 export async function syncAfterAuthenticatedLogin(uid: string) {
   await pullMergeAndPushProgress(uid);

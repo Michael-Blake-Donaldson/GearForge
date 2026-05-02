@@ -18,7 +18,11 @@ const makeQuestion = (
   explanation,
 });
 
-const makeLessonQuiz = (lessonId: string, quizId: string, title: string): Quiz => {
+const makeLessonQuiz = (
+  lessonId: string,
+  quizId: string,
+  title: string,
+): Quiz => {
   const questionSet: QuizQuestion[] = [
     makeQuestion(
       `${quizId}-1`,

@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+    Alert,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
 
 import { theme } from "@/constants/theme";
 import { useAuthStore } from "@/store/useAuthStore";
