@@ -65,10 +65,15 @@ export default function QuizScreen() {
 
     if (isLast) {
       if (!quizSubmitted) {
+        const lessonIdForProgress =
+          quiz.lessonId ?? quiz.referenceLessonId ?? lessons[0]?.id;
+
+        if (!lessonIdForProgress) return;
+
         // Submit once to avoid duplicate XP when component rerenders.
         submitQuizResult({
           quizId: quiz.id,
-          lessonId: quiz.lessonId,
+          lessonId: lessonIdForProgress,
           correct: correctCount,
           total: quiz.questions.length,
           incorrectQuestionIds,
@@ -76,12 +81,14 @@ export default function QuizScreen() {
         setQuizSubmitted(true);
       }
       // Look up lesson xpReward to pass to the celebration screen.
-      const lesson = lessons.find((l) => l.id === quiz.lessonId);
+      const lesson = lessons.find(
+        (l) => l.id === (quiz.lessonId ?? quiz.referenceLessonId),
+      );
       const xp = lesson?.xpReward ?? 0;
 
       // Route to lesson-complete celebration screen with result params.
       router.replace(
-        `/lesson-complete?lessonId=${quiz.lessonId}&xp=${xp}&correct=${correctCount}&total=${quiz.questions.length}`,
+        `/lesson-complete?lessonId=${lesson?.id ?? "am-l1"}&xp=${xp}&correct=${correctCount}&total=${quiz.questions.length}`,
       );
       return;
     }
@@ -96,6 +103,10 @@ export default function QuizScreen() {
       <Text style={styles.title}>{quiz.title}</Text>
       <Text style={styles.progress}>
         Question {currentIndex + 1}/{quiz.questions.length} · {progressPercent}%
+      </Text>
+
+      <Text style={styles.questionTypeLabel}>
+        {question.questionType.replace("-", " ").toUpperCase()}
       </Text>
 
       <View style={styles.card}>
@@ -190,6 +201,13 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 8,
     marginBottom: 12,
+  },
+  questionTypeLabel: {
+    color: theme.colors.warning,
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 0.5,
+    marginBottom: 8,
   },
   card: {
     borderRadius: theme.radii.lg,

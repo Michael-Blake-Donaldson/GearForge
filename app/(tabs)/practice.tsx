@@ -125,7 +125,9 @@ export default function PracticeScreen() {
     const lessonIds = lessons
       .filter((lesson) => lesson.regionId === regionId)
       .map((lesson) => lesson.id);
-    return quizzes.filter((quiz) => lessonIds.includes(quiz.lessonId));
+    return quizzes.filter(
+      (quiz) => quiz.lessonId && lessonIds.includes(quiz.lessonId),
+    );
   }, [regionId]);
 
   const runRandomQuiz = () => {

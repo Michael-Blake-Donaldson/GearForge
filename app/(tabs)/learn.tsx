@@ -7,6 +7,7 @@ import StreakCounter from "@/components/StreakCounter";
 import XPDisplay from "@/components/XPDisplay";
 import { theme } from "@/constants/theme";
 import { lessons } from "@/data/lessons";
+import { unitExamsByUnitId } from "@/data/quizzes";
 import { regions, starterRegionIds } from "@/data/regions";
 import { units } from "@/data/units";
 import { useProgressStore } from "@/store/useProgressStore";
@@ -40,6 +41,7 @@ export default function LearnScreen() {
   const xp = useProgressStore((state) => state.xp);
   const level = useProgressStore((state) => state.level);
   const streak = useProgressStore((state) => state.streak);
+  const quizHistory = useProgressStore((state) => state.quizHistory);
   // Daily quest — may be null until first lesson is completed (store populates it)
   const dailyQuest = useProgressStore((state) => state.dailyQuest);
 
@@ -139,15 +141,18 @@ export default function LearnScreen() {
           ];
         });
 
-        const finalLesson = unitLessons[unitLessons.length - 1];
-        if (finalLesson) {
+        const unitExam = unitExamsByUnitId[unit.id];
+        if (unitExam) {
+          const unitExamCompleted = quizHistory.some(
+            (record) => record.quizId === unitExam.id,
+          );
           roadmapNodes.push({
             id: `${unit.id}-final`,
             label: "Unit Final Quiz",
             type: "final" as const,
             unlocked: allLessonsDone,
-            completed: allLessonsDone,
-            onPress: () => router.push(`/quiz/${finalLesson.quizId}`),
+            completed: unitExamCompleted,
+            onPress: () => router.push(`/quiz/${unitExam.id}`),
           });
         }
 

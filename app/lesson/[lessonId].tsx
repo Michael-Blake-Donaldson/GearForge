@@ -64,6 +64,7 @@ export default function LessonScreen() {
       {step === 0 && (
         <View style={styles.block}>
           <Text style={styles.blockTitle}>Mini Lesson 1 · Quick Briefing</Text>
+          {lesson.hook && <Text style={styles.body}>{lesson.hook}</Text>}
           <Text style={styles.body}>{lesson.shortExplanation}</Text>
           <Text style={styles.body}>{lesson.keyTakeaway}</Text>
         </View>
@@ -80,6 +81,20 @@ export default function LessonScreen() {
             <Text style={styles.blockTitle}>Garage Context</Text>
             <Text style={styles.body}>{lesson.realWorldContext}</Text>
           </View>
+
+          {lesson.visualConcept && (
+            <View style={styles.block}>
+              <Text style={styles.blockTitle}>Visual Concept</Text>
+              <Text style={styles.body}>{lesson.visualConcept}</Text>
+            </View>
+          )}
+
+          {lesson.symptoms && (
+            <View style={styles.block}>
+              <Text style={styles.blockTitle}>Symptoms</Text>
+              <Text style={styles.body}>{lesson.symptoms}</Text>
+            </View>
+          )}
         </>
       )}
 
