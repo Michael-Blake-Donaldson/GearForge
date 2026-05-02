@@ -2,7 +2,10 @@ import { User, onAuthStateChanged, signOut } from "firebase/auth";
 import {
   createUserWithEmailAndPassword,
   deleteUser,
+  GoogleAuthProvider,
+  OAuthProvider,
   sendPasswordResetEmail,
+  signInWithCredential,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { create } from "zustand";
@@ -27,6 +30,8 @@ type AuthState = {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<boolean>;
+  loginWithGoogleIdToken: (idToken: string) => Promise<boolean>;
+  loginWithAppleIdentityToken: (identityToken: string) => Promise<boolean>;
   deleteAccount: () => Promise<boolean>;
   syncNow: () => Promise<boolean>;
   continueAsGuest: () => void;
@@ -136,6 +141,33 @@ export const useAuthStore = create<AuthState>()(
         try {
           await sendPasswordResetEmail(auth, email.trim());
           set({ loading: false });
+          return true;
+        } catch (error) {
+          set({ loading: false, error: mapAuthError(error) });
+          return false;
+        }
+      },
+
+      loginWithGoogleIdToken: async (idToken: string) => {
+        set({ loading: true, error: null });
+        try {
+          const credential = GoogleAuthProvider.credential(idToken);
+          const result = await signInWithCredential(auth, credential);
+          await get().setUser(result.user);
+          return true;
+        } catch (error) {
+          set({ loading: false, error: mapAuthError(error) });
+          return false;
+        }
+      },
+
+      loginWithAppleIdentityToken: async (identityToken: string) => {
+        set({ loading: true, error: null });
+        try {
+          const provider = new OAuthProvider("apple.com");
+          const credential = provider.credential({ idToken: identityToken });
+          const result = await signInWithCredential(auth, credential);
+          await get().setUser(result.user);
           return true;
         } catch (error) {
           set({ loading: false, error: mapAuthError(error) });

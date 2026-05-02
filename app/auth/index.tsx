@@ -1,5 +1,9 @@
 import { Link, useRouter } from "expo-router";
-import { useState } from "react";
+import * as AppleAuthentication from "expo-apple-authentication";
+import Constants from "expo-constants";
+import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
+import { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -13,12 +17,35 @@ import {
 import { theme } from "@/constants/theme";
 import { useAuthStore } from "@/store/useAuthStore";
 
+WebBrowser.maybeCompleteAuthSession();
+
 export default function AuthLoginScreen() {
   const router = useRouter();
   const login = useAuthStore((s) => s.login);
   const continueAsGuest = useAuthStore((s) => s.continueAsGuest);
+  const loginWithGoogleIdToken = useAuthStore((s) => s.loginWithGoogleIdToken);
+  const loginWithAppleIdentityToken = useAuthStore(
+    (s) => s.loginWithAppleIdentityToken,
+  );
   const error = useAuthStore((s) => s.error);
   const loading = useAuthStore((s) => s.loading);
+
+  const oauth =
+    (Constants.expoConfig?.extra as
+      | {
+          oauth?: {
+            googleWebClientId?: string;
+            googleIosClientId?: string;
+            googleAndroidClientId?: string;
+          };
+        }
+      | undefined)?.oauth ?? {};
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    webClientId: oauth.googleWebClientId,
+    iosClientId: oauth.googleIosClientId,
+    androidClientId: oauth.googleAndroidClientId,
+  });
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,6 +53,38 @@ export default function AuthLoginScreen() {
   const onLogin = async () => {
     const ok = await login(email, password);
     if (ok) router.replace("/onboarding");
+  };
+
+  useEffect(() => {
+    const maybeHandleGoogle = async () => {
+      if (response?.type !== "success") return;
+
+      const idToken =
+        response.authentication?.idToken ?? response.params?.id_token;
+      if (!idToken) return;
+
+      const ok = await loginWithGoogleIdToken(idToken);
+      if (ok) router.replace("/onboarding");
+    };
+
+    maybeHandleGoogle();
+  }, [response]);
+
+  const onAppleLogin = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      if (!credential.identityToken) return;
+      const ok = await loginWithAppleIdentityToken(credential.identityToken);
+      if (ok) router.replace("/onboarding");
+    } catch {
+      // user canceled or provider failed; auth store displays actionable errors.
+    }
   };
 
   return (
@@ -75,6 +134,22 @@ export default function AuthLoginScreen() {
           onPress={() => continueAsGuest()}
         >
           <Text style={styles.secondaryText}>Continue as Guest</Text>
+        </Pressable>
+
+        <Pressable
+          style={[styles.oauthButton, (!request || loading) && styles.disabled]}
+          disabled={!request || loading}
+          onPress={() => promptAsync()}
+        >
+          <Text style={styles.oauthText}>Continue with Google</Text>
+        </Pressable>
+
+        <Pressable
+          style={[styles.oauthButton, loading && styles.disabled]}
+          disabled={loading}
+          onPress={onAppleLogin}
+        >
+          <Text style={styles.oauthText}>Continue with Apple</Text>
         </Pressable>
 
         <View style={styles.linksRow}>
@@ -160,6 +235,20 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   secondaryText: {
+    color: theme.colors.textPrimary,
+    fontSize: 13,
+    fontWeight: "700",
+  },
+  oauthButton: {
+    borderRadius: theme.radii.md,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surfaceAlt,
+    alignItems: "center",
+    paddingVertical: 11,
+    marginBottom: 10,
+  },
+  oauthText: {
     color: theme.colors.textPrimary,
     fontSize: 13,
     fontWeight: "700",
