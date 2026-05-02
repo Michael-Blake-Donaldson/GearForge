@@ -4,16 +4,18 @@ export function mapAuthError(error: unknown): string {
       ? String((error as { code?: string }).code)
       : "";
 
-  if (code.includes("invalid-credential")) return "Invalid email or password.";
-  if (code.includes("wrong-password")) return "Invalid email or password.";
+  if (code.includes("invalid-credential"))
+    return "The email or password does not match.";
+  if (code.includes("wrong-password"))
+    return "The email or password does not match.";
   if (code.includes("user-not-found"))
-    return "No account found for this email.";
+    return "The email or password does not match.";
   if (code.includes("email-already-in-use"))
     return "An account with this email already exists.";
   if (code.includes("weak-password"))
     return "Password is too weak. Use at least 6 characters.";
   if (code.includes("network-request-failed"))
-    return "Network issue. Check your internet and try again.";
+    return "Connection issue. Check your internet and try again.";
   if (code.includes("too-many-requests"))
     return "Too many attempts. Please wait and try again.";
   if (code.includes("requires-recent-login"))

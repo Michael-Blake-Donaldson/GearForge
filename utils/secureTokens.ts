@@ -1,26 +1,31 @@
-import * as SecureStore from "expo-secure-store";
+import {
+  deleteSecureValue,
+  getSecureValue,
+  saveSecureValue,
+} from "@/utils/secureStorage";
 
 const ACCESS_KEY = "gearforge_access_token";
 const REFRESH_KEY = "gearforge_refresh_token";
 
 export async function storeTokens(accessToken: string, refreshToken: string) {
+  if (!accessToken || !refreshToken) return;
   await Promise.all([
-    SecureStore.setItemAsync(ACCESS_KEY, accessToken),
-    SecureStore.setItemAsync(REFRESH_KEY, refreshToken),
+    saveSecureValue(ACCESS_KEY, accessToken),
+    saveSecureValue(REFRESH_KEY, refreshToken),
   ]);
 }
 
 export async function clearTokens() {
   await Promise.all([
-    SecureStore.deleteItemAsync(ACCESS_KEY),
-    SecureStore.deleteItemAsync(REFRESH_KEY),
+    deleteSecureValue(ACCESS_KEY),
+    deleteSecureValue(REFRESH_KEY),
   ]);
 }
 
 export async function getStoredTokens() {
   const [accessToken, refreshToken] = await Promise.all([
-    SecureStore.getItemAsync(ACCESS_KEY),
-    SecureStore.getItemAsync(REFRESH_KEY),
+    getSecureValue(ACCESS_KEY),
+    getSecureValue(REFRESH_KEY),
   ]);
   return { accessToken, refreshToken };
 }

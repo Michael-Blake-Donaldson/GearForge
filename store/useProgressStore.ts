@@ -12,6 +12,7 @@ import {
     WeeklyQuest,
 } from "@/types/UserProgress";
 import { trackEvent } from "@/utils/analytics";
+import { safeWarn } from "@/utils/safeLogger";
 
 // ---------------------------------------------------------------------------
 // Username validation
@@ -346,7 +347,10 @@ const safeStorage = {
     try {
       return await AsyncStorage.getItem(name);
     } catch (e) {
-      console.warn("[GearForge] Storage read error:", e);
+      safeWarn("Storage read error", {
+        storageKey: name,
+        errorCode: (e as { code?: string })?.code ?? "unknown",
+      });
       return null;
     }
   },
@@ -354,14 +358,20 @@ const safeStorage = {
     try {
       await AsyncStorage.setItem(name, value);
     } catch (e) {
-      console.warn("[GearForge] Storage write error:", e);
+      safeWarn("Storage write error", {
+        storageKey: name,
+        errorCode: (e as { code?: string })?.code ?? "unknown",
+      });
     }
   },
   removeItem: async (name: string): Promise<void> => {
     try {
       await AsyncStorage.removeItem(name);
     } catch (e) {
-      console.warn("[GearForge] Storage remove error:", e);
+      safeWarn("Storage remove error", {
+        storageKey: name,
+        errorCode: (e as { code?: string })?.code ?? "unknown",
+      });
     }
   },
 };

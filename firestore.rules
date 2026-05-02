@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function noProtectedFields() {
+      return !request.resource.data.keys().hasAny([
+        'role',
+        'isAdmin',
+        'subscriptionStatus',
+        'lifetimePremium'
+      ]);
+    }
+
+    function validProgressWrite() {
+      return request.resource.data.keys().hasOnly([
+        'xp',
+        'level',
+        'streak',
+        'streakFreezeTokens',
+        'lastLessonDate',
+        'hasTakenMechanicTest',
+        'mechanicPlacementTier',
+        'updatedAt'
+      ])
+      && request.resource.data.xp is int
+      && request.resource.data.level is int
+      && request.resource.data.streak is int
+      && request.resource.data.streakFreezeTokens is int;
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid) && noProtectedFields();
+      allow update: if isOwner(uid) && noProtectedFields();
+      allow delete: if false;
+    }
+
+    match /progress/{uid} {
+      allow read: if isOwner(uid);
+      allow write: if isOwner(uid) && validProgressWrite();
+      allow delete: if false;
+    }
+
+    match /lessons/{uid} {
+      allow read, write: if isOwner(uid);
+      allow delete: if false;
+    }
+
+    match /quizHistory/{uid} {
+      allow read, create, update: if isOwner(uid);
+      allow delete: if false;
+    }
+
+    match /badges/{uid} {
+      allow read: if isOwner(uid);
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /settings/{uid} {
+      allow read, write: if isOwner(uid);
+      allow delete: if false;
+    }
+
+    match /publicContent/{contentId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
