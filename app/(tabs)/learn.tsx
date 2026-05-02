@@ -7,7 +7,7 @@ import StreakCounter from "@/components/StreakCounter";
 import XPDisplay from "@/components/XPDisplay";
 import { theme } from "@/constants/theme";
 import { lessons } from "@/data/lessons";
-import { unitExamsByUnitId } from "@/data/quizzes";
+import { regionExamsByRegionId, unitExamsByUnitId } from "@/data/quizzes";
 import { regions, starterRegionIds } from "@/data/regions";
 import { units } from "@/data/units";
 import { useProgressStore } from "@/store/useProgressStore";
@@ -230,6 +230,45 @@ export default function LearnScreen() {
           </View>
         );
       })}
+
+      {(() => {
+        const regionExam = regionExamsByRegionId[selectedRegion.id];
+        if (!regionExam) return null;
+
+        const regionUnitIds = regionUnits.map((unit) => unit.id);
+        const allRegionUnitsCompleted = regionUnitIds.every((unitId) => {
+          const exam = unitExamsByUnitId[unitId];
+          if (!exam) return false;
+          return quizHistory.some((record) => record.quizId === exam.id);
+        });
+
+        const regionExamCompleted = quizHistory.some(
+          (record) => record.quizId === regionExam.id,
+        );
+
+        return (
+          <Pressable
+            onPress={() => {
+              if (!allRegionUnitsCompleted) return;
+              router.push(`/quiz/${regionExam.id}`);
+            }}
+            style={[
+              styles.regionFinalCard,
+              !allRegionUnitsCompleted && styles.regionFinalCardLocked,
+              regionExamCompleted && styles.regionFinalCardComplete,
+            ]}
+          >
+            <Text style={styles.regionFinalTitle}>🏆 Final Region Exam</Text>
+            <Text style={styles.regionFinalBody}>
+              {regionExamCompleted
+                ? "Completed. Retake any time to reinforce mastery."
+                : allRegionUnitsCompleted
+                  ? "All unit exams complete. Tap to take the region final."
+                  : "Finish all unit exams in this region to unlock the final exam."}
+            </Text>
+          </Pressable>
+        );
+      })()}
 
       <View style={styles.disclaimerCard}>
         <Text style={styles.disclaimerTitle}>Safety Notice</Text>
@@ -562,6 +601,32 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "700",
     marginTop: 2,
+  },
+  regionFinalCard: {
+    borderRadius: theme.radii.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.neon + "66",
+    backgroundColor: theme.colors.surface,
+    padding: 14,
+    marginBottom: 12,
+  },
+  regionFinalCardLocked: {
+    opacity: 0.55,
+  },
+  regionFinalCardComplete: {
+    borderColor: theme.colors.success + "88",
+    backgroundColor: "rgba(45,225,165,0.14)",
+  },
+  regionFinalTitle: {
+    color: theme.colors.textPrimary,
+    fontSize: 15,
+    fontWeight: "900",
+    marginBottom: 5,
+  },
+  regionFinalBody: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    lineHeight: 18,
   },
   disclaimerCard: {
     borderRadius: theme.radii.lg,
