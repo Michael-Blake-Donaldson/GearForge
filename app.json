@@ -30,7 +30,9 @@
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           }
         ],
         "NSPrivacyCollectedDataTypes": [],
@@ -68,13 +70,27 @@
           "defaultChannel": "default",
           "sounds": []
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
-      "privacyPolicyUrl": "https://gearforge.app/privacy"
+      "privacyPolicyUrl": "https://gearforge.app/privacy",
+      "firebase": {
+        "apiKey": "YOUR_FIREBASE_API_KEY",
+        "authDomain": "YOUR_PROJECT.firebaseapp.com",
+        "projectId": "YOUR_FIREBASE_PROJECT_ID",
+        "storageBucket": "YOUR_PROJECT.appspot.com",
+        "messagingSenderId": "YOUR_MESSAGING_SENDER_ID",
+        "appId": "YOUR_FIREBASE_APP_ID"
+      },
+      "oauth": {
+        "googleWebClientId": "YOUR_GOOGLE_WEB_CLIENT_ID",
+        "googleIosClientId": "YOUR_GOOGLE_IOS_CLIENT_ID",
+        "googleAndroidClientId": "YOUR_GOOGLE_ANDROID_CLIENT_ID"
+      }
     }
   }
 }

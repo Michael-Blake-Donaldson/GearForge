@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { theme } from "@/constants/theme";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useProgressStore } from "@/store/useProgressStore";
 import {
     cancelAllNotifications,
@@ -71,6 +72,16 @@ function RootLayoutNav() {
   // showing the main tab navigator.
   const hasOnboarded = useProgressStore((s) => s.hasOnboarded);
   const hasTakenMechanicTest = useProgressStore((s) => s.hasTakenMechanicTest);
+  const authLoading = useAuthStore((s) => s.loading);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isGuest = useAuthStore((s) => s.isGuest);
+  const initializeAuthListener = useAuthStore((s) => s.initializeAuthListener);
+  const hasAccess = isAuthenticated || isGuest;
+
+  useEffect(() => {
+    const unsubscribe = initializeAuthListener();
+    return () => unsubscribe();
+  }, []);
 
   // Notification-related store fields and actions
   const notificationPermission = useProgressStore(
@@ -92,7 +103,7 @@ function RootLayoutNav() {
   useEffect(() => {
     // Only run after the initial incrementLaunchCount has resolved (launchCount >= 1)
     // and only if onboarding is complete.
-    if (!hasOnboarded || launchCount < 1) return;
+    if (!hasOnboarded || launchCount < 1 || !hasAccess) return;
 
     (async () => {
       if (notificationPermission === "undecided" && launchCount >= 2) {
@@ -116,15 +127,36 @@ function RootLayoutNav() {
     })();
   }, [hasOnboarded, launchCount, notificationPermission]);
 
+  if (authLoading) {
+    return null;
+  }
+
   return (
     <ThemeProvider value={navTheme}>
+      {!hasAccess &&
+        !pathname.startsWith("/auth") &&
+        <Redirect href={"/auth" as never} />}
+
       {/* Redirect to onboarding on first launch */}
-      {!hasOnboarded && <Redirect href="/onboarding" />}
+      {hasAccess && !hasOnboarded && <Redirect href="/onboarding" />}
       {hasOnboarded &&
         !hasTakenMechanicTest &&
         pathname !== "/mechanic-test" && <Redirect href="/mechanic-test" />}
+      {hasAccess && pathname.startsWith("/auth") && <Redirect href="/(tabs)/learn" />}
 
       <Stack>
+        <Stack.Screen
+          name="auth/index"
+          options={{ headerTitle: "Sign In", headerShown: true }}
+        />
+        <Stack.Screen
+          name="auth/signup"
+          options={{ headerTitle: "Create Account", headerShown: true }}
+        />
+        <Stack.Screen
+          name="auth/forgot"
+          options={{ headerTitle: "Reset Password", headerShown: true }}
+        />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="onboarding"
