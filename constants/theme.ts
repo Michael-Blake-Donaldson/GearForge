@@ -21,16 +21,19 @@ export const theme = {
   },
   typography: {
     h1: {
+      fontFamily: "System",
       fontSize: 28,
       fontWeight: "800" as const,
       lineHeight: 34,
     },
     h2: {
+      fontFamily: "System",
       fontSize: 22,
       fontWeight: "800" as const,
       lineHeight: 28,
     },
     body: {
+      fontFamily: "System",
       fontSize: 16,
       fontWeight: "500" as const,
       lineHeight: 24,

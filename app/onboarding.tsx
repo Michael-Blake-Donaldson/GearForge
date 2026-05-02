@@ -11,6 +11,7 @@ import {
     View,
 } from "react-native";
 
+import ForgeCore from "@/components/ForgeCore";
 import { theme } from "@/constants/theme";
 import { regions } from "@/data/regions";
 import { useProgressStore, validateUsername } from "@/store/useProgressStore";
@@ -139,7 +140,7 @@ export default function OnboardingScreen() {
           activeOpacity={0.7}
         >
           <Text style={styles.nextButtonText}>
-            {isLastSlide ? "Start Learning" : "Next"}
+            {isLastSlide ? "Enter Command Center" : "Next"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -152,17 +153,17 @@ export default function OnboardingScreen() {
 function WelcomeSlide() {
   return (
     <View style={[styles.slide, styles.slideCenter]}>
-      <Text style={styles.emoji}>🔧</Text>
+      <ForgeCore state="idle" size={64} />
       <Text style={styles.slideTitle}>Welcome to GearForge</Text>
       <Text style={styles.slideBody}>
         Learn automotive engineering the way you would learn a language — one
-        concept at a time, with quizzes and streaks to keep you sharp.
+        concept at a time, with diagnostics and streaks to keep you sharp.
       </Text>
       <View style={styles.featureList}>
         {[
           "🏁  6 learning regions",
           "📚  30 structured lessons",
-          "🎯  Quizzes and XP rewards",
+          "🎯  Diagnostics and Energy rewards",
           "🔥  Daily streaks and badges",
         ].map((f) => (
           <Text key={f} style={styles.featureItem}>
@@ -188,7 +189,7 @@ function RegionSlide({
       <Text style={styles.slideTitle}>Choose Your Starting Region</Text>
       <Text style={styles.slideBody}>
         Pick the automotive world you want to explore first. You can always
-        switch regions later.
+        switch command regions later.
       </Text>
       {/* Scrollable region list inside the slide */}
       <ScrollView
@@ -252,7 +253,7 @@ function UsernameSlide({
       <Text style={styles.emoji}>👤</Text>
       <Text style={styles.slideTitle}>What Should We Call You?</Text>
       <Text style={styles.slideBody}>
-        Choose a username for your GearForge profile. 3–20 characters, letters,
+        Choose a username for your operator profile. 3–20 characters, letters,
         numbers, underscores, and hyphens only.
       </Text>
 
@@ -294,9 +295,10 @@ const styles = StyleSheet.create({
   },
   emoji: {
     fontSize: 56,
-    marginBottom: 20,
+    marginBottom: 14,
   },
   slideTitle: {
+    fontFamily: theme.typography.h1.fontFamily,
     color: theme.colors.textPrimary,
     fontSize: 26,
     fontWeight: "800",
@@ -304,6 +306,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   slideBody: {
+    fontFamily: theme.typography.body.fontFamily,
     color: theme.colors.textSecondary,
     fontSize: 15,
     lineHeight: 22,
@@ -315,6 +318,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   featureItem: {
+    fontFamily: theme.typography.body.fontFamily,
     color: theme.colors.textPrimary,
     fontSize: 15,
     backgroundColor: theme.colors.surface,
@@ -322,6 +326,11 @@ const styles = StyleSheet.create({
     padding: 12,
     borderWidth: 1,
     borderColor: theme.colors.border,
+    shadowColor: theme.colors.neonAlt,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.24,
+    shadowRadius: 8,
+    elevation: 3,
   },
   regionList: {
     flex: 1,
@@ -334,6 +343,11 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     padding: 14,
     marginBottom: 10,
+    shadowColor: theme.colors.neon,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 3,
   },
   regionCardRow: {
     flexDirection: "row",

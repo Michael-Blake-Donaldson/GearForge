@@ -18,7 +18,7 @@ export default function TermsScreen() {
       />
       <Section
         title="3. Account and Progress Data"
-        body="Progress, quiz history, and settings are stored locally on-device unless cloud sync is introduced in future releases. Deleting app data can permanently remove this progress."
+        body="Progress, diagnostics history, and settings are stored locally on-device unless cloud sync is introduced in future releases. Deleting app data can permanently remove this progress."
       />
       <Section
         title="4. No Warranty"
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   title: {
+    fontFamily: theme.typography.h1.fontFamily,
     color: theme.colors.textPrimary,
     fontSize: 26,
     fontWeight: "900",
@@ -72,6 +73,11 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     padding: 14,
     marginBottom: 10,
+    shadowColor: theme.colors.neon,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.14,
+    shadowRadius: 8,
+    elevation: 2,
   },
   sectionTitle: {
     color: theme.colors.textPrimary,
@@ -80,6 +86,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   body: {
+    fontFamily: theme.typography.body.fontFamily,
     color: theme.colors.textSecondary,
     fontSize: 12,
     lineHeight: 18,

@@ -167,9 +167,10 @@ function RootLayoutNav() {
         <Stack.Screen
           name="mechanic-test"
           options={{
-            headerTitle: "Mechanic Placement Test",
+            headerTitle: "Operator Placement Diagnostics",
             headerStyle: { backgroundColor: theme.colors.surface },
             headerTintColor: theme.colors.textPrimary,
+            headerTitleStyle: { fontWeight: "800" },
             gestureEnabled: false,
           }}
         />
@@ -184,17 +185,19 @@ function RootLayoutNav() {
         <Stack.Screen
           name="lesson/[lessonId]"
           options={{
-            headerTitle: "Lesson",
+            headerTitle: "Calibration",
             headerStyle: { backgroundColor: theme.colors.surface },
             headerTintColor: theme.colors.textPrimary,
+            headerTitleStyle: { fontWeight: "800" },
           }}
         />
         <Stack.Screen
           name="quiz/[quizId]"
           options={{
-            headerTitle: "Quiz",
+            headerTitle: "Diagnostics",
             headerStyle: { backgroundColor: theme.colors.surface },
             headerTintColor: theme.colors.textPrimary,
+            headerTitleStyle: { fontWeight: "800" },
           }}
         />
         <Stack.Screen

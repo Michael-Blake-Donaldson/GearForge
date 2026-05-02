@@ -7,13 +7,14 @@ import { useEffect, useState } from "react";
 import {
     KeyboardAvoidingView,
     Platform,
-    Pressable,
     StyleSheet,
     Text,
     TextInput,
     View,
 } from "react-native";
 
+import Button from "@/components/Button";
+import ForgeCore from "@/components/ForgeCore";
 import { theme } from "@/constants/theme";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -95,11 +96,15 @@ export default function AuthLoginScreen() {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.card}>
-        <Text style={styles.kicker}>GearForge Auth</Text>
-        <Text style={styles.title}>Sign in to sync your progress</Text>
+        <View style={styles.headRow}>
+          <ForgeCore state="idle" size={44} />
+          <View style={styles.headTextWrap}>
+            <Text style={styles.kicker}>GearForge Auth</Text>
+            <Text style={styles.title}>Sign in to sync your progress</Text>
+          </View>
+        </View>
         <Text style={styles.body}>
-          Email authentication is live. Google and Apple sign-in are included in
-          the next iteration.
+          Email, Google, and Apple sign-in are available for secure cloud sync.
         </Text>
 
         <TextInput
@@ -122,37 +127,31 @@ export default function AuthLoginScreen() {
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
-        <Pressable
-          style={[styles.primaryButton, loading && styles.disabled]}
-          disabled={loading}
-          onPress={onLogin}
-        >
-          <Text style={styles.primaryText}>Sign In</Text>
-        </Pressable>
+        <Button label="Sign In" onPress={onLogin} disabled={loading} />
 
-        <Pressable
-          style={[styles.secondaryButton, loading && styles.disabled]}
+        <Button
+          label="Continue as Guest"
+          variant="secondary"
           disabled={loading}
           onPress={() => continueAsGuest()}
-        >
-          <Text style={styles.secondaryText}>Continue as Guest</Text>
-        </Pressable>
+          style={styles.buttonGap}
+        />
 
-        <Pressable
-          style={[styles.oauthButton, (!request || loading) && styles.disabled]}
+        <Button
+          label="Continue with Google"
+          variant="secondary"
           disabled={!request || loading}
           onPress={() => promptAsync()}
-        >
-          <Text style={styles.oauthText}>Continue with Google</Text>
-        </Pressable>
+          style={styles.buttonGap}
+        />
 
-        <Pressable
-          style={[styles.oauthButton, loading && styles.disabled]}
+        <Button
+          label="Continue with Apple"
+          variant="secondary"
           disabled={loading}
           onPress={onAppleLogin}
-        >
-          <Text style={styles.oauthText}>Continue with Apple</Text>
-        </Pressable>
+          style={styles.buttonGap}
+        />
 
         <View style={styles.linksRow}>
           <Link href={"/auth/signup" as never} style={styles.link}>
@@ -180,6 +179,19 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
     backgroundColor: theme.colors.surface,
     padding: 16,
+    shadowColor: theme.colors.neonAlt,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.22,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  headRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  headTextWrap: {
+    flex: 1,
   },
   kicker: {
     color: theme.colors.neon,
@@ -189,12 +201,14 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
   },
   title: {
+    fontFamily: theme.typography.h2.fontFamily,
     color: theme.colors.textPrimary,
     fontSize: 24,
     fontWeight: "900",
     marginTop: 6,
   },
   body: {
+    fontFamily: theme.typography.body.fontFamily,
     color: theme.colors.textSecondary,
     fontSize: 13,
     lineHeight: 19,
@@ -216,44 +230,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 10,
   },
-  primaryButton: {
-    borderRadius: theme.radii.md,
-    backgroundColor: theme.colors.neon,
-    alignItems: "center",
-    paddingVertical: 12,
-    marginBottom: 10,
-  },
-  primaryText: {
-    color: "#031312",
-    fontSize: 14,
-    fontWeight: "800",
-  },
-  secondaryButton: {
-    borderRadius: theme.radii.md,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    alignItems: "center",
-    paddingVertical: 12,
-    marginBottom: 12,
-  },
-  secondaryText: {
-    color: theme.colors.textPrimary,
-    fontSize: 13,
-    fontWeight: "700",
-  },
-  oauthButton: {
-    borderRadius: theme.radii.md,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    backgroundColor: theme.colors.surfaceAlt,
-    alignItems: "center",
-    paddingVertical: 11,
-    marginBottom: 10,
-  },
-  oauthText: {
-    color: theme.colors.textPrimary,
-    fontSize: 13,
-    fontWeight: "700",
+  buttonGap: {
+    marginTop: 10,
   },
   disabled: {
     opacity: 0.6,

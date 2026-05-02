@@ -1,7 +1,9 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
+import Button from "@/components/Button";
+import ForgeCore from "@/components/ForgeCore";
 import { theme } from "@/constants/theme";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -21,7 +23,10 @@ export default function AuthSignupScreen() {
 
   return (
     <View style={styles.screen}>
-      <Text style={styles.title}>Create your account</Text>
+      <View style={styles.headRow}>
+        <ForgeCore state="idle" size={44} />
+        <Text style={styles.title}>Create your account</Text>
+      </View>
       <Text style={styles.body}>
         Start syncing progress to cloud and protect your learning history.
       </Text>
@@ -46,13 +51,7 @@ export default function AuthSignupScreen() {
 
       {error ? <Text style={styles.error}>{error}</Text> : null}
 
-      <Pressable
-        style={[styles.button, loading && styles.disabled]}
-        disabled={loading}
-        onPress={onSignup}
-      >
-        <Text style={styles.buttonText}>Create Account</Text>
-      </Pressable>
+      <Button label="Create Account" disabled={loading} onPress={onSignup} />
     </View>
   );
 }
@@ -63,13 +62,20 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.bg,
     padding: 16,
   },
+  headRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
   title: {
+    fontFamily: theme.typography.h2.fontFamily,
     color: theme.colors.textPrimary,
     fontSize: 24,
     fontWeight: "900",
     marginTop: 6,
   },
   body: {
+    fontFamily: theme.typography.body.fontFamily,
     color: theme.colors.textSecondary,
     fontSize: 13,
     lineHeight: 19,
@@ -90,20 +96,5 @@ const styles = StyleSheet.create({
     color: theme.colors.danger,
     fontSize: 12,
     marginBottom: 10,
-  },
-  button: {
-    borderRadius: theme.radii.md,
-    backgroundColor: theme.colors.neon,
-    alignItems: "center",
-    paddingVertical: 12,
-    marginTop: 4,
-  },
-  buttonText: {
-    color: "#031312",
-    fontSize: 14,
-    fontWeight: "800",
-  },
-  disabled: {
-    opacity: 0.6,
   },
 });

@@ -1,5 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
+import Card from "@/components/Card";
+import ForgeCore from "@/components/ForgeCore";
 import ProgressBar from "@/components/ProgressBar";
 import { theme } from "@/constants/theme";
 import { regions } from "@/data/regions";
@@ -17,32 +19,40 @@ export default function ProgressScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Progress Dashboard</Text>
-
-      <View style={styles.metricsRow}>
-        <View style={styles.metricCard}>
-          <Text style={styles.metricLabel}>Total XP</Text>
-          <Text style={styles.metricValue}>{xp}</Text>
-        </View>
-        <View style={styles.metricCard}>
-          <Text style={styles.metricLabel}>Streak</Text>
-          <Text style={styles.metricValue}>{streak} days</Text>
+      <View style={styles.headerRow}>
+        <ForgeCore state="idle" size={46} />
+        <View style={styles.headerTextWrap}>
+          <Text style={styles.title}>Operator Telemetry</Text>
+          <Text style={styles.subtitle}>
+            Live performance overview from recent calibrations.
+          </Text>
         </View>
       </View>
 
       <View style={styles.metricsRow}>
-        <View style={styles.metricCard}>
-          <Text style={styles.metricLabel}>Lessons Completed</Text>
+        <Card style={styles.metricCard} glowColor={theme.colors.neon}>
+          <Text style={styles.metricLabel}>Total Energy</Text>
+          <Text style={styles.metricValue}>{xp}</Text>
+        </Card>
+        <Card style={styles.metricCard} glowColor={theme.colors.warning}>
+          <Text style={styles.metricLabel}>Streak</Text>
+          <Text style={styles.metricValue}>{streak} days</Text>
+        </Card>
+      </View>
+
+      <View style={styles.metricsRow}>
+        <Card style={styles.metricCard} glowColor={theme.colors.neonAlt}>
+          <Text style={styles.metricLabel}>Calibrations Completed</Text>
           <Text style={styles.metricValue}>{completedLessons.length}</Text>
-        </View>
-        <View style={styles.metricCard}>
-          <Text style={styles.metricLabel}>Quiz Accuracy</Text>
+        </Card>
+        <Card style={styles.metricCard} glowColor={theme.colors.success}>
+          <Text style={styles.metricLabel}>Diagnostics Accuracy</Text>
           <Text style={styles.metricValue}>{accuracy}%</Text>
-        </View>
+        </Card>
       </View>
 
       <View style={styles.rankCard}>
-        <Text style={styles.rankLabel}>Current Rank</Text>
+        <Text style={styles.rankLabel}>Current Operator Rank</Text>
         <Text style={styles.rankValue}>{getRank()}</Text>
       </View>
 
@@ -74,13 +84,28 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
+    gap: 8,
     paddingBottom: 120,
   },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  headerTextWrap: {
+    flex: 1,
+  },
   title: {
+    fontFamily: theme.typography.h2.fontFamily,
     color: theme.colors.textPrimary,
-    fontSize: 22,
-    fontWeight: "800",
-    marginBottom: 12,
+    fontSize: theme.typography.h2.fontSize,
+    fontWeight: theme.typography.h2.fontWeight,
+  },
+  subtitle: {
+    fontFamily: theme.typography.body.fontFamily,
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    marginTop: 2,
   },
   metricsRow: {
     flexDirection: "row",
@@ -89,10 +114,6 @@ const styles = StyleSheet.create({
   },
   metricCard: {
     flex: 1,
-    borderRadius: theme.radii.lg,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    backgroundColor: theme.colors.surface,
     padding: 12,
   },
   metricLabel: {

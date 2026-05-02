@@ -1,7 +1,10 @@
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
+import Button from "@/components/Button";
+import ForgeCore from "@/components/ForgeCore";
+import ProgressBar from "@/components/ProgressBar";
 import QuizOption from "@/components/QuizOption";
 import { theme } from "@/constants/theme";
 import { useProgressStore } from "@/store/useProgressStore";
@@ -119,14 +122,24 @@ export default function MechanicTestScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.kicker}>One-Time Placement</Text>
-      <Text style={styles.title}>Mechanic Test</Text>
+      <View style={styles.topRow}>
+        <ForgeCore state={showFeedback ? "speaking" : "idle"} size={48} />
+        <View style={styles.topTextWrap}>
+          <Text style={styles.kicker}>One-Time Placement</Text>
+          <Text style={styles.title}>Operator Diagnostics</Text>
+        </View>
+      </View>
+      <ProgressBar
+        value={percent}
+        max={100}
+        accessibilityLabel="Placement progress"
+      />
       <Text style={styles.subtitle}>
         Quick calibration so GearForge can place you on the right roadmap.
       </Text>
 
       <Text style={styles.progress}>
-        Question {index + 1}/{QUESTIONS.length} · {percent}%
+        Diagnostic {index + 1}/{QUESTIONS.length} · {percent}%
       </Text>
 
       <View style={styles.card}>
@@ -164,22 +177,16 @@ export default function MechanicTestScreen() {
       </View>
 
       {!showFeedback ? (
-        <Pressable
+        <Button
+          label="Check"
           onPress={onCheck}
           disabled={selectedIndex === null}
-          style={[
-            styles.button,
-            selectedIndex === null && styles.buttonDisabled,
-          ]}
-        >
-          <Text style={styles.buttonText}>Check</Text>
-        </Pressable>
+        />
       ) : (
-        <Pressable onPress={onNext} style={styles.button}>
-          <Text style={styles.buttonText}>
-            {index === QUESTIONS.length - 1 ? "See My Placement" : "Next"}
-          </Text>
-        </Pressable>
+        <Button
+          label={index === QUESTIONS.length - 1 ? "See My Placement" : "Next"}
+          onPress={onNext}
+        />
       )}
 
       <View style={styles.previewRow}>
@@ -197,7 +204,16 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
+    gap: 8,
     paddingBottom: 120,
+  },
+  topRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  topTextWrap: {
+    flex: 1,
   },
   kicker: {
     color: theme.colors.warning,
@@ -208,12 +224,14 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 6,
+    fontFamily: theme.typography.h1.fontFamily,
     color: theme.colors.textPrimary,
-    fontSize: 28,
+    fontSize: theme.typography.h1.fontSize,
     fontWeight: "900",
   },
   subtitle: {
     marginTop: 8,
+    fontFamily: theme.typography.body.fontFamily,
     color: theme.colors.textSecondary,
     fontSize: 14,
     lineHeight: 20,
@@ -247,21 +265,6 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontSize: 13,
     lineHeight: 19,
-  },
-  button: {
-    marginTop: 14,
-    borderRadius: theme.radii.md,
-    backgroundColor: theme.colors.neon,
-    alignItems: "center",
-    paddingVertical: 12,
-  },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    color: "#041b19",
-    fontSize: 14,
-    fontWeight: "800",
   },
   previewRow: {
     marginTop: 14,

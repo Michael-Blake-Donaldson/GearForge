@@ -31,7 +31,7 @@ export default function PrivacyScreen() {
       accessibilityLabel="Privacy policy"
     >
       <Text style={styles.heading}>Privacy Policy</Text>
-      <Text style={styles.updated}>Last updated: January 2025</Text>
+      <Text style={styles.updated}>Last updated: May 2026</Text>
 
       {/* ── Section 1 ───────────────────────────────────────────────────── */}
       <Section title="1. Overview">
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     paddingBottom: 60,
   },
   heading: {
+    fontFamily: theme.typography.h2.fontFamily,
     color: theme.colors.textPrimary,
     fontSize: 24,
     fontWeight: "800",
@@ -150,7 +151,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   section: {
+    borderRadius: theme.radii.md,
+    borderWidth: 1,
+    borderColor: `${theme.colors.neonAlt}44`,
+    backgroundColor: theme.colors.surface,
+    padding: 12,
     marginBottom: 20,
+    shadowColor: theme.colors.neonAlt,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.16,
+    shadowRadius: 8,
+    elevation: 2,
   },
   sectionTitle: {
     color: theme.colors.neon,
@@ -159,6 +170,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   body: {
+    fontFamily: theme.typography.body.fontFamily,
     color: theme.colors.textSecondary,
     fontSize: 13,
     lineHeight: 21,
