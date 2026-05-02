@@ -159,6 +159,15 @@ function RootLayoutNav() {
           name="auth/forgot"
           options={{ headerTitle: "Reset Password", headerShown: true }}
         />
+        <Stack.Screen
+          name="account/delete"
+          options={{
+            headerTitle: "Delete Account",
+            headerStyle: { backgroundColor: theme.colors.surface },
+            headerTintColor: theme.colors.textPrimary,
+            headerTitleStyle: { fontWeight: "800" },
+          }}
+        />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="onboarding"

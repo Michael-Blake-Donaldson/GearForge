@@ -55,7 +55,6 @@ export default function ProfileScreen() {
   const isGuest = useAuthStore((s) => s.isGuest);
   const syncNow = useAuthStore((s) => s.syncNow);
   const logout = useAuthStore((s) => s.logout);
-  const deleteAccount = useAuthStore((s) => s.deleteAccount);
 
   const handleSave = () => {
     const error = validateUsername(draftName);
@@ -373,28 +372,7 @@ export default function ProfileScreen() {
 
             <Pressable
               style={[styles.notifButton, styles.deleteButton]}
-              onPress={() => {
-                Alert.alert(
-                  "Delete Account",
-                  "This permanently removes your account and cloud data. This action cannot be undone.",
-                  [
-                    { text: "Cancel", style: "cancel" },
-                    {
-                      text: "Delete",
-                      style: "destructive",
-                      onPress: async () => {
-                        const ok = await deleteAccount();
-                        if (!ok) {
-                          Alert.alert(
-                            "Unable to delete account",
-                            "Please sign in again and retry.",
-                          );
-                        }
-                      },
-                    },
-                  ],
-                );
-              }}
+              onPress={() => router.push("/account/delete" as never)}
             >
               <Text style={styles.notifButtonText}>Delete Account</Text>
             </Pressable>
