@@ -115,7 +115,9 @@ export default function LearnScreen() {
         ))}
       </ScrollView>
 
-      <Text style={styles.sectionTitle}>{selectedRegion.name} Command Roadmap</Text>
+      <Text style={styles.sectionTitle}>
+        {selectedRegion.name} Command Roadmap
+      </Text>
       {regionUnits.length === 0 && (
         <View style={styles.comingSoon}>
           <Text style={styles.comingSoonTitle}>Content Coming Soon</Text>
@@ -287,7 +289,7 @@ export default function LearnScreen() {
       })()}
 
       <View style={styles.disclaimerCard}>
-            <Text style={styles.disclaimerTitle}>Safety Notice</Text>
+        <Text style={styles.disclaimerTitle}>Safety Notice</Text>
         <Text style={styles.disclaimerBody}>
           GearForge is for educational purposes only and does not replace
           professional repair guidance, safety procedures, or certified

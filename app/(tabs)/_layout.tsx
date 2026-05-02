@@ -1,12 +1,12 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
 import { View } from "react-native";
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+} from "react-native-reanimated";
 
 import { theme } from "@/constants/theme";
 
@@ -77,7 +77,11 @@ export default function TabLayout() {
         options={{
           title: "Command Center",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name="console-network-outline" color={color} focused={focused} />
+            <TabBarIcon
+              name="console-network-outline"
+              color={color}
+              focused={focused}
+            />
           ),
         }}
       />
@@ -95,7 +99,11 @@ export default function TabLayout() {
         options={{
           title: "Database",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name="database-outline" color={color} focused={focused} />
+            <TabBarIcon
+              name="database-outline"
+              color={color}
+              focused={focused}
+            />
           ),
         }}
       />
@@ -104,7 +112,11 @@ export default function TabLayout() {
         options={{
           title: "Operator",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name="account-cog-outline" color={color} focused={focused} />
+            <TabBarIcon
+              name="account-cog-outline"
+              color={color}
+              focused={focused}
+            />
           ),
         }}
       />

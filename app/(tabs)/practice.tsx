@@ -147,7 +147,8 @@ export default function PracticeScreen() {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.title}>Recalibration Arena</Text>
       <Text style={styles.subtitle}>
-        Reinforce weak systems and sharpen diagnostics speed with targeted drills.
+        Reinforce weak systems and sharpen diagnostics speed with targeted
+        drills.
       </Text>
 
       {/* ── Spaced Repetition Review ────────────────────────────────────── */}

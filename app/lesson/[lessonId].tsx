@@ -83,7 +83,11 @@ export default function LessonScreen() {
         </View>
       </View>
 
-      <ProgressBar value={calibrationProgress} max={100} accessibilityLabel="Calibration progress" />
+      <ProgressBar
+        value={calibrationProgress}
+        max={100}
+        accessibilityLabel="Calibration progress"
+      />
       <Text style={styles.title}>{lesson.title}</Text>
       <Text style={styles.summary}>
         Calibration step {step + 1}/4 · {lesson.shortExplanation}
@@ -181,7 +185,11 @@ export default function LessonScreen() {
       )}
 
       {step < 2 && (
-        <Button label="Continue" disabled={!unlocked} onPress={() => setStep((prev) => prev + 1)} />
+        <Button
+          label="Continue"
+          disabled={!unlocked}
+          onPress={() => setStep((prev) => prev + 1)}
+        />
       )}
 
       {step === 2 && !checkpointChecked && (
@@ -193,12 +201,18 @@ export default function LessonScreen() {
       )}
 
       {step === 2 && checkpointChecked && (
-        <Button label="Proceed to Final Diagnostics" disabled={!unlocked} onPress={() => setStep(3)} />
+        <Button
+          label="Proceed to Final Diagnostics"
+          disabled={!unlocked}
+          onPress={() => setStep(3)}
+        />
       )}
 
       {step === 3 && (
         <Button
-          label={completed ? "Retake Final Diagnostics" : "Start Final Diagnostics"}
+          label={
+            completed ? "Retake Final Diagnostics" : "Start Final Diagnostics"
+          }
           disabled={!unlocked}
           onPress={() => router.push(`/quiz/${lesson.quizId}`)}
         />

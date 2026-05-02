@@ -114,7 +114,9 @@ export default function LessonCompleteScreen() {
 
       <View style={styles.forgeStatusRow}>
         <ForgeCore state="success" size={46} />
-        <Text style={styles.forgeStatusText}>Forge confirms sequence stability.</Text>
+        <Text style={styles.forgeStatusText}>
+          Forge confirms sequence stability.
+        </Text>
       </View>
 
       {/* XP earned badge */}
@@ -122,7 +124,11 @@ export default function LessonCompleteScreen() {
         <Text style={styles.xpText}>+{xp} Energy earned</Text>
       </Animated.View>
 
-      <ProgressBar value={Math.round(accuracy * 100)} max={100} accessibilityLabel="Diagnostics accuracy" />
+      <ProgressBar
+        value={Math.round(accuracy * 100)}
+        max={100}
+        accessibilityLabel="Diagnostics accuracy"
+      />
 
       {/* Quiz result stats */}
       <Animated.View

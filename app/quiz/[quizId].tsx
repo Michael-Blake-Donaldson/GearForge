@@ -101,11 +101,21 @@ export default function QuizScreen() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.topRow}>
-        <ForgeCore state={showFeedback ? (selectedIndex === question.correctAnswerIndex ? "success" : "error") : "speaking"} size={46} />
+        <ForgeCore
+          state={
+            showFeedback
+              ? selectedIndex === question.correctAnswerIndex
+                ? "success"
+                : "error"
+              : "speaking"
+          }
+          size={46}
+        />
         <View style={styles.topTextWrap}>
           <Text style={styles.title}>{quiz.title}</Text>
           <Text style={styles.progress}>
-            Diagnostics {currentIndex + 1}/{quiz.questions.length} · {progressPercent}%
+            Diagnostics {currentIndex + 1}/{quiz.questions.length} ·{" "}
+            {progressPercent}%
           </Text>
         </View>
       </View>

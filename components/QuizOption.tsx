@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
 import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withSequence,
-  withTiming,
+    interpolateColor,
+    useAnimatedStyle,
+    useSharedValue,
+    withSequence,
+    withTiming,
 } from "react-native-reanimated";
 
 import { theme } from "@/constants/theme";
@@ -37,7 +37,10 @@ export default function QuizOption({
 
   useEffect(() => {
     if (revealState === "correct") {
-      anim.value = withSequence(withTiming(1, { duration: 200 }), withTiming(0, { duration: 250 }));
+      anim.value = withSequence(
+        withTiming(1, { duration: 200 }),
+        withTiming(0, { duration: 250 }),
+      );
     }
     if (revealState === "incorrect") {
       anim.value = withSequence(
@@ -54,12 +57,17 @@ export default function QuizOption({
       { translateX: revealState === "incorrect" ? anim.value * 6 : 0 },
       { scale: revealState === "correct" ? 1 + anim.value * 0.03 : 1 },
     ],
-    shadowColor: revealState === "correct" ? theme.colors.success : theme.colors.danger,
+    shadowColor:
+      revealState === "correct" ? theme.colors.success : theme.colors.danger,
     shadowOpacity: revealState ? 0.35 : 0,
     shadowRadius: 8,
     backgroundColor:
       revealState === "correct"
-        ? interpolateColor(anim.value, [0, 1], ["rgba(69,243,176,0.20)", "rgba(69,243,176,0.35)"])
+        ? interpolateColor(
+            anim.value,
+            [0, 1],
+            ["rgba(69,243,176,0.20)", "rgba(69,243,176,0.35)"],
+          )
         : undefined,
   }));
 
