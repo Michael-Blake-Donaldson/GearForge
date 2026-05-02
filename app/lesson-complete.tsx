@@ -9,6 +9,8 @@ import {
     View,
 } from "react-native";
 
+import ForgeCore from "@/components/ForgeCore";
+import ProgressBar from "@/components/ProgressBar";
 import { theme } from "@/constants/theme";
 import { lessons } from "@/data/lessons";
 import { feedback } from "@/utils/feedback";
@@ -110,10 +112,17 @@ export default function LessonCompleteScreen() {
       <Text style={styles.headline}>{getHeadline(accuracy)}</Text>
       <Text style={styles.message}>{getMessage(accuracy)}</Text>
 
+      <View style={styles.forgeStatusRow}>
+        <ForgeCore state="success" size={46} />
+        <Text style={styles.forgeStatusText}>Forge confirms sequence stability.</Text>
+      </View>
+
       {/* XP earned badge */}
       <Animated.View style={[styles.xpPill, { opacity: xpOpacity }]}>
-        <Text style={styles.xpText}>+{xp} XP earned</Text>
+        <Text style={styles.xpText}>+{xp} Energy earned</Text>
       </Animated.View>
+
+      <ProgressBar value={Math.round(accuracy * 100)} max={100} accessibilityLabel="Diagnostics accuracy" />
 
       {/* Quiz result stats */}
       <Animated.View
@@ -135,7 +144,7 @@ export default function LessonCompleteScreen() {
             onPress={() => router.replace(`/lesson/${nextLesson.id}`)}
             activeOpacity={0.7}
           >
-            <Text style={styles.primaryButtonText}>Next Lesson →</Text>
+            <Text style={styles.primaryButtonText}>Next Calibration →</Text>
           </TouchableOpacity>
         )}
 
@@ -144,7 +153,7 @@ export default function LessonCompleteScreen() {
           onPress={() => router.replace("/(tabs)/learn")}
           activeOpacity={0.7}
         >
-          <Text style={styles.secondaryButtonText}>Back to Learn</Text>
+          <Text style={styles.secondaryButtonText}>Back to Command Center</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -213,6 +222,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 8,
     marginBottom: 28,
+  },
+  forgeStatusRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 14,
+  },
+  forgeStatusText: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    fontWeight: "700",
   },
   xpText: {
     color: theme.colors.neon,

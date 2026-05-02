@@ -1,7 +1,9 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
+import Button from "@/components/Button";
+import ForgeCore from "@/components/ForgeCore";
 import QuizOption from "@/components/QuizOption";
 import { theme } from "@/constants/theme";
 import { lessons } from "@/data/lessons";
@@ -98,9 +100,19 @@ export default function QuizScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>{quiz.title}</Text>
+      <View style={styles.topRow}>
+        <ForgeCore state={showFeedback ? (selectedIndex === question.correctAnswerIndex ? "success" : "error") : "speaking"} size={46} />
+        <View style={styles.topTextWrap}>
+          <Text style={styles.title}>{quiz.title}</Text>
+          <Text style={styles.progress}>
+            Diagnostics {currentIndex + 1}/{quiz.questions.length} · {progressPercent}%
+          </Text>
+        </View>
+      </View>
       <Text style={styles.progress}>
-        Question {currentIndex + 1}/{quiz.questions.length} · {progressPercent}%
+        {showFeedback
+          ? "Feedback locked. Review and continue."
+          : "Select one response for evaluation."}
       </Text>
 
       <Text style={styles.questionTypeLabel}>
@@ -146,23 +158,20 @@ export default function QuizScreen() {
       </View>
 
       {!showFeedback ? (
-        <Pressable
-          style={[
-            styles.button,
-            selectedIndex === null && styles.buttonDisabled,
-          ]}
+        <Button
+          label="Check Response"
           onPress={onCheck}
-        >
-          <Text style={styles.buttonText}>Check Answer</Text>
-        </Pressable>
+          disabled={selectedIndex === null}
+        />
       ) : (
-        <Pressable style={styles.button} onPress={onNext}>
-          <Text style={styles.buttonText}>
-            {currentIndex === quiz.questions.length - 1
-              ? "Finish Quiz"
-              : "Next Question"}
-          </Text>
-        </Pressable>
+        <Button
+          label={
+            currentIndex === quiz.questions.length - 1
+              ? "Finish Diagnostics"
+              : "Next Diagnostic"
+          }
+          onPress={onNext}
+        />
       )}
     </ScrollView>
   );
@@ -175,7 +184,16 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
+    gap: 6,
     paddingBottom: 80,
+  },
+  topRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  topTextWrap: {
+    flex: 1,
   },
   centered: {
     flex: 1,
@@ -196,8 +214,7 @@ const styles = StyleSheet.create({
   progress: {
     color: theme.colors.textSecondary,
     fontSize: 13,
-    marginTop: 8,
-    marginBottom: 12,
+    marginBottom: 4,
   },
   questionTypeLabel: {
     color: theme.colors.warning,
@@ -228,20 +245,5 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     marginTop: 12,
-  },
-  button: {
-    marginTop: 14,
-    borderRadius: theme.radii.md,
-    paddingVertical: 12,
-    alignItems: "center",
-    backgroundColor: theme.colors.neon,
-  },
-  buttonDisabled: {
-    opacity: 0.65,
-  },
-  buttonText: {
-    color: "#051a17",
-    fontWeight: "800",
-    fontSize: 14,
   },
 });

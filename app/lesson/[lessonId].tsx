@@ -1,7 +1,10 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
+import Button from "@/components/Button";
+import ForgeCore from "@/components/ForgeCore";
+import ProgressBar from "@/components/ProgressBar";
 import QuizOption from "@/components/QuizOption";
 import { theme } from "@/constants/theme";
 import { lessons } from "@/data/lessons";
@@ -53,17 +56,42 @@ export default function LessonScreen() {
     null,
   );
   const [checkpointChecked, setCheckpointChecked] = useState(false);
+  const calibrationProgress = ((step + 1) / 4) * 100;
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+      <View style={styles.forgeRow}>
+        <ForgeCore
+          state={
+            checkpointChecked
+              ? selectedCheckpoint === checkpointCorrectIndex
+                ? "success"
+                : "error"
+              : "idle"
+          }
+          size={52}
+        />
+        <View style={styles.forgeTextWrap}>
+          <Text style={styles.forgeTitle}>Forge Guidance</Text>
+          <Text style={styles.forgeBody}>
+            {step < 2
+              ? "Scan each calibration block before advancing to diagnostics."
+              : step === 2
+                ? "Confirm the strongest takeaway, then proceed."
+                : "Final diagnostics are unlocked. Run the sequence."}
+          </Text>
+        </View>
+      </View>
+
+      <ProgressBar value={calibrationProgress} max={100} accessibilityLabel="Calibration progress" />
       <Text style={styles.title}>{lesson.title}</Text>
       <Text style={styles.summary}>
-        Step {step + 1}/4 · {lesson.shortExplanation}
+        Calibration step {step + 1}/4 · {lesson.shortExplanation}
       </Text>
 
       {step === 0 && (
         <View style={styles.block}>
-          <Text style={styles.blockTitle}>Mini Lesson 1 · Quick Briefing</Text>
+          <Text style={styles.blockTitle}>Calibration 1 · Quick Briefing</Text>
           {lesson.hook && <Text style={styles.body}>{lesson.hook}</Text>}
           <Text style={styles.body}>{lesson.shortExplanation}</Text>
           <Text style={styles.body}>{lesson.keyTakeaway}</Text>
@@ -73,7 +101,7 @@ export default function LessonScreen() {
       {step === 1 && (
         <>
           <View style={styles.block}>
-            <Text style={styles.blockTitle}>Mini Lesson 2 · Core Concept</Text>
+            <Text style={styles.blockTitle}>Calibration 2 · Core Concept</Text>
             <Text style={styles.body}>{lesson.content}</Text>
           </View>
 
@@ -100,7 +128,7 @@ export default function LessonScreen() {
 
       {step === 2 && (
         <View style={styles.block}>
-          <Text style={styles.blockTitle}>Checkpoint Challenge</Text>
+          <Text style={styles.blockTitle}>Diagnostics Checkpoint</Text>
           <Text style={styles.body}>
             Which statement best matches this lesson's key takeaway?
           </Text>
@@ -144,57 +172,36 @@ export default function LessonScreen() {
 
       {step === 3 && (
         <View style={styles.takeaway}>
-          <Text style={styles.blockTitle}>Final Quiz Ready</Text>
+          <Text style={styles.blockTitle}>Final Diagnostics Ready</Text>
           <Text style={styles.body}>
-            Nice work. You completed the lesson brief and checkpoint challenge.
-            Finish with the quiz to lock in XP and progression.
+            Nice work. You completed the calibration brief and checkpoint.
+            Finish with diagnostics to lock in energy and progression.
           </Text>
         </View>
       )}
 
       {step < 2 && (
-        <Pressable
-          style={[styles.button, !unlocked && styles.disabledButton]}
-          disabled={!unlocked}
-          onPress={() => setStep((prev) => prev + 1)}
-        >
-          <Text style={styles.buttonText}>Continue</Text>
-        </Pressable>
+        <Button label="Continue" disabled={!unlocked} onPress={() => setStep((prev) => prev + 1)} />
       )}
 
       {step === 2 && !checkpointChecked && (
-        <Pressable
-          style={[
-            styles.button,
-            (!unlocked || selectedCheckpoint === null) && styles.disabledButton,
-          ]}
+        <Button
+          label="Check Diagnostics"
           disabled={!unlocked || selectedCheckpoint === null}
           onPress={() => setCheckpointChecked(true)}
-        >
-          <Text style={styles.buttonText}>Check Challenge</Text>
-        </Pressable>
+        />
       )}
 
       {step === 2 && checkpointChecked && (
-        <Pressable
-          style={[styles.button, !unlocked && styles.disabledButton]}
-          disabled={!unlocked}
-          onPress={() => setStep(3)}
-        >
-          <Text style={styles.buttonText}>Proceed to Final Quiz</Text>
-        </Pressable>
+        <Button label="Proceed to Final Diagnostics" disabled={!unlocked} onPress={() => setStep(3)} />
       )}
 
       {step === 3 && (
-        <Pressable
-          style={[styles.button, !unlocked && styles.disabledButton]}
+        <Button
+          label={completed ? "Retake Final Diagnostics" : "Start Final Diagnostics"}
           disabled={!unlocked}
           onPress={() => router.push(`/quiz/${lesson.quizId}`)}
-        >
-          <Text style={styles.buttonText}>
-            {completed ? "Retake Final Quiz" : "Start Final Quiz"}
-          </Text>
-        </Pressable>
+        />
       )}
     </ScrollView>
   );
@@ -207,7 +214,29 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
+    gap: 10,
     paddingBottom: 100,
+  },
+  forgeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  forgeTextWrap: {
+    flex: 1,
+  },
+  forgeTitle: {
+    color: theme.colors.neonAlt,
+    fontSize: 12,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+  },
+  forgeBody: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    lineHeight: 17,
+    marginTop: 2,
   },
   centered: {
     flex: 1,
@@ -229,8 +258,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontSize: 13,
     lineHeight: 20,
-    marginTop: 8,
-    marginBottom: 14,
+    marginBottom: 2,
   },
   block: {
     borderRadius: theme.radii.lg,
@@ -268,19 +296,5 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontSize: 12,
     lineHeight: 18,
-  },
-  button: {
-    borderRadius: theme.radii.md,
-    backgroundColor: theme.colors.neon,
-    alignItems: "center",
-    paddingVertical: 12,
-  },
-  disabledButton: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    color: "#051b1d",
-    fontWeight: "800",
-    fontSize: 14,
   },
 });

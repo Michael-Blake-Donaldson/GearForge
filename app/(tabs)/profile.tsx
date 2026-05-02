@@ -73,7 +73,7 @@ export default function ProfileScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Profile</Text>
+      <Text style={styles.title}>Operator Console</Text>
 
       {/* --- Username editor ------------------------------------------------ */}
       <View style={styles.card}>
@@ -106,11 +106,11 @@ export default function ProfileScreen() {
 
       {/* --- Stats grid ------------------------------------------------------ */}
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Stats</Text>
+        <Text style={styles.sectionTitle}>Operator Stats</Text>
         <View style={styles.statsGrid}>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{xp}</Text>
-            <Text style={styles.statLabel}>XP</Text>
+            <Text style={styles.statLabel}>Energy</Text>
           </View>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{level}</Text>
@@ -133,8 +133,8 @@ export default function ProfileScreen() {
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>🧊 Streak Freeze</Text>
         <Text style={styles.freezeBody}>
-          Streak freeze tokens protect your streak when you miss a day. You earn
-          one token every 7 consecutive days.
+          Freeze tokens protect your streak when you miss a day. Earn one token
+          every 7 consecutive days.
         </Text>
         {/* Token row — shows up to 5 ice-cube icons */}
         <View style={styles.tokenRow}>
