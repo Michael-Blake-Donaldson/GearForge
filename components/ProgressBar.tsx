@@ -8,6 +8,7 @@ type Props = {
   max?: number;
   accentColor?: string;
   height?: number;
+  accessibilityLabel?: string;
 };
 
 export default function ProgressBar({
@@ -15,6 +16,7 @@ export default function ProgressBar({
   max = 100,
   accentColor = theme.colors.neon,
   height = 8,
+  accessibilityLabel,
 }: Props) {
   const percent = Math.max(0, Math.min(100, Math.round((value / max) * 100)));
 
@@ -43,6 +45,7 @@ export default function ProgressBar({
       style={[styles.track, { height }]}
       accessible
       accessibilityRole="progressbar"
+      accessibilityLabel={accessibilityLabel ?? "Progress"}
       accessibilityValue={{ min: 0, max: 100, now: percent }}
     >
       <Animated.View
@@ -63,6 +66,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 1,
     borderColor: theme.colors.border,
+    shadowColor: theme.colors.neon,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 3,
   },
   fill: {
     height: "100%",
