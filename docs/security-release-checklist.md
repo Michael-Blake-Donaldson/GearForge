@@ -1,6 +1,7 @@
 # Security Release Checklist
 
 ## Must Pass Before Production
+
 - [ ] No admin keys/service accounts in repository or mobile bundle.
 - [ ] `.env` files with real values are not committed.
 - [ ] Firebase Auth flows verified: signup, login, reset, guest mode, social login.
@@ -16,6 +17,7 @@
 - [ ] Monitoring and billing alerts are configured.
 
 ## Manual Attack Tests
+
 - [ ] Attempt read/write on another UID path is denied.
 - [ ] Unauthenticated Firestore read/write is denied.
 - [ ] Client attempt to write premium/admin fields is denied.
@@ -24,6 +26,7 @@
 - [ ] Delete account removes auth + cloud + local state.
 
 ## Pre-Submission Privacy Alignment
+
 - [ ] App Store privacy labels match actual collection behavior.
 - [ ] Notification payloads contain no personal/sensitive details.
 - [ ] Contact/support and incident escalation owner is documented.

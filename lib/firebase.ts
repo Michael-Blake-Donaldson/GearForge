@@ -30,12 +30,19 @@ const env = {
 const firebaseConfig = {
   apiKey: env.apiKey ?? extra.firebase?.apiKey ?? "YOUR_FIREBASE_API_KEY",
   authDomain:
-    env.authDomain ?? extra.firebase?.authDomain ?? "YOUR_PROJECT.firebaseapp.com",
-  projectId: env.projectId ?? extra.firebase?.projectId ?? "YOUR_FIREBASE_PROJECT_ID",
+    env.authDomain ??
+    extra.firebase?.authDomain ??
+    "YOUR_PROJECT.firebaseapp.com",
+  projectId:
+    env.projectId ?? extra.firebase?.projectId ?? "YOUR_FIREBASE_PROJECT_ID",
   storageBucket:
-    env.storageBucket ?? extra.firebase?.storageBucket ?? "YOUR_PROJECT.appspot.com",
+    env.storageBucket ??
+    extra.firebase?.storageBucket ??
+    "YOUR_PROJECT.appspot.com",
   messagingSenderId:
-    env.messagingSenderId ?? extra.firebase?.messagingSenderId ?? "YOUR_MESSAGING_SENDER_ID",
+    env.messagingSenderId ??
+    extra.firebase?.messagingSenderId ??
+    "YOUR_MESSAGING_SENDER_ID",
   appId: env.appId ?? extra.firebase?.appId ?? "YOUR_FIREBASE_APP_ID",
 };
 

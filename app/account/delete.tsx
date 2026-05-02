@@ -1,13 +1,13 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 
 import Button from "@/components/Button";
@@ -17,7 +17,9 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 export default function DeleteAccountScreen() {
   const router = useRouter();
-  const deleteAccountWithReauth = useAuthStore((s) => s.deleteAccountWithReauth);
+  const deleteAccountWithReauth = useAuthStore(
+    (s) => s.deleteAccountWithReauth,
+  );
   const loading = useAuthStore((s) => s.loading);
   const error = useAuthStore((s) => s.error);
 
@@ -53,7 +55,9 @@ export default function DeleteAccountScreen() {
           <ForgeCore state="error" size={44} />
           <View style={styles.headerTextWrap}>
             <Text style={styles.title}>Delete Account</Text>
-            <Text style={styles.subtitle}>Permanent action. Cannot be undone.</Text>
+            <Text style={styles.subtitle}>
+              Permanent action. Cannot be undone.
+            </Text>
           </View>
         </View>
 
@@ -87,7 +91,10 @@ export default function DeleteAccountScreen() {
           autoCapitalize="characters"
           placeholder='Type "DELETE" to confirm'
           placeholderTextColor={theme.colors.textSecondary}
-          style={[styles.input, !isConfirmValid && confirmText.length > 0 && styles.inputInvalid]}
+          style={[
+            styles.input,
+            !isConfirmValid && confirmText.length > 0 && styles.inputInvalid,
+          ]}
         />
 
         {error ? <Text style={styles.error}>{error}</Text> : null}

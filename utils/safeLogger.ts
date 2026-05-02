@@ -10,7 +10,9 @@ const SENSITIVE_KEYS = [
   "uid",
 ];
 
-function redact(meta?: Record<string, unknown>): Record<string, unknown> | undefined {
+function redact(
+  meta?: Record<string, unknown>,
+): Record<string, unknown> | undefined {
   if (!meta) return undefined;
 
   return Object.fromEntries(

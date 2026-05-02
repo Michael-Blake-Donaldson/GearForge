@@ -1,6 +1,7 @@
 # GearForge Security Implementation Summary
 
 ## Implemented
+
 - Redacted development logger: `utils/safeLogger.ts`
 - Secure storage wrapper using device-only keychain accessibility: `utils/secureStorage.ts`
 - Token persistence migrated to secure wrapper: `utils/secureTokens.ts`
@@ -26,5 +27,6 @@
   - `docs/app-check-enforcement-plan.md`
 
 ## Validation
+
 - `npm run typecheck` passes.
 - `npm run security:audit` currently reports Expo dependency-tree moderate vulnerabilities requiring a breaking Expo downgrade to auto-fix; risk should be tracked until ecosystem patch is available.

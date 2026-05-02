@@ -2,12 +2,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
     createUserWithEmailAndPassword,
     deleteUser,
-  EmailAuthProvider,
+    EmailAuthProvider,
     GoogleAuthProvider,
-    OAuthProvider, onAuthStateChanged, sendPasswordResetEmail,
-  reauthenticateWithCredential,
+    OAuthProvider,
+    onAuthStateChanged,
+    reauthenticateWithCredential,
+    sendPasswordResetEmail,
     signInWithCredential,
-    signInWithEmailAndPassword, signOut, User
+    signInWithEmailAndPassword,
+    signOut,
+    User,
 } from "firebase/auth";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -42,9 +46,15 @@ type AuthState = {
   resetPassword: (email: string) => Promise<boolean>;
   loginWithGoogleIdToken: (idToken: string) => Promise<boolean>;
   loginWithAppleIdentityToken: (identityToken: string) => Promise<boolean>;
-  reauthenticateForSensitiveAction: (email: string, password: string) => Promise<boolean>;
+  reauthenticateForSensitiveAction: (
+    email: string,
+    password: string,
+  ) => Promise<boolean>;
   deleteAccount: () => Promise<boolean>;
-  deleteAccountWithReauth: (email: string, password: string) => Promise<boolean>;
+  deleteAccountWithReauth: (
+    email: string,
+    password: string,
+  ) => Promise<boolean>;
   syncNow: () => Promise<boolean>;
   continueAsGuest: () => void;
   clearError: () => void;
@@ -140,11 +150,17 @@ export const useAuthStore = create<AuthState>()(
 
       signup: async (email: string, password: string) => {
         if (!isValidEmail(email)) {
-          set({ error: "Enter a valid email address.", authError: "Enter a valid email address." });
+          set({
+            error: "Enter a valid email address.",
+            authError: "Enter a valid email address.",
+          });
           return false;
         }
         if (!isValidPassword(password)) {
-          set({ error: "Password must be at least 6 characters.", authError: "Password must be at least 6 characters." });
+          set({
+            error: "Password must be at least 6 characters.",
+            authError: "Password must be at least 6 characters.",
+          });
           return false;
         }
         set({ loading: true, error: null });
@@ -158,18 +174,29 @@ export const useAuthStore = create<AuthState>()(
           return true;
         } catch (error) {
           const mapped = mapAuthError(error);
-          set({ error: mapped, authError: mapped, loading: false, status: "signedOut" });
+          set({
+            error: mapped,
+            authError: mapped,
+            loading: false,
+            status: "signedOut",
+          });
           return false;
         }
       },
 
       login: async (email: string, password: string) => {
         if (!isValidEmail(email)) {
-          set({ error: "Enter a valid email address.", authError: "Enter a valid email address." });
+          set({
+            error: "Enter a valid email address.",
+            authError: "Enter a valid email address.",
+          });
           return false;
         }
         if (!isValidPassword(password)) {
-          set({ error: "The email or password does not match.", authError: "The email or password does not match." });
+          set({
+            error: "The email or password does not match.",
+            authError: "The email or password does not match.",
+          });
           return false;
         }
         set({ loading: true, error: null });
@@ -183,7 +210,12 @@ export const useAuthStore = create<AuthState>()(
           return true;
         } catch (error) {
           const mapped = mapAuthError(error);
-          set({ error: mapped, authError: mapped, loading: false, status: "signedOut" });
+          set({
+            error: mapped,
+            authError: mapped,
+            loading: false,
+            status: "signedOut",
+          });
           return false;
         }
       },
@@ -208,7 +240,10 @@ export const useAuthStore = create<AuthState>()(
 
       resetPassword: async (email: string) => {
         if (!isValidEmail(email)) {
-          set({ error: "Enter a valid email address.", authError: "Enter a valid email address." });
+          set({
+            error: "Enter a valid email address.",
+            authError: "Enter a valid email address.",
+          });
           return false;
         }
         set({ loading: true, error: null });
@@ -252,15 +287,24 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      reauthenticateForSensitiveAction: async (email: string, password: string) => {
+      reauthenticateForSensitiveAction: async (
+        email: string,
+        password: string,
+      ) => {
         const current = auth.currentUser;
         if (!current) {
-          set({ error: "You are not signed in.", authError: "You are not signed in." });
+          set({
+            error: "You are not signed in.",
+            authError: "You are not signed in.",
+          });
           return false;
         }
 
         try {
-          const credential = EmailAuthProvider.credential(normalizeEmail(email), password);
+          const credential = EmailAuthProvider.credential(
+            normalizeEmail(email),
+            password,
+          );
           await reauthenticateWithCredential(current, credential);
           set({ error: null, authError: null });
           return true;
@@ -300,7 +344,10 @@ export const useAuthStore = create<AuthState>()(
       },
 
       deleteAccountWithReauth: async (email: string, password: string) => {
-        const ok = await get().reauthenticateForSensitiveAction(email, password);
+        const ok = await get().reauthenticateForSensitiveAction(
+          email,
+          password,
+        );
         if (!ok) return false;
         return get().deleteAccount();
       },
