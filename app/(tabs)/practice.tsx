@@ -145,15 +145,15 @@ export default function PracticeScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Practice Arena</Text>
+      <Text style={styles.title}>Recalibration Arena</Text>
       <Text style={styles.subtitle}>
-        Reinforce weak topics and sharpen quiz speed with targeted drills.
+        Reinforce weak systems and sharpen diagnostics speed with targeted drills.
       </Text>
 
       {/* ── Spaced Repetition Review ────────────────────────────────────── */}
       <View style={styles.card}>
         <View style={styles.cardHeader}>
-          <Text style={styles.cardTitle}>📅 Due for Review</Text>
+          <Text style={styles.cardTitle}>📅 Diagnostics Due</Text>
           {dueQuizzes.length > 0 && (
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{dueQuizzes.length}</Text>
@@ -161,7 +161,7 @@ export default function PracticeScreen() {
           )}
         </View>
         <Text style={styles.cardBody}>
-          Spaced-repetition schedule (SM-2). Quizzes become due when your
+          Spaced-repetition schedule (SM-2). Diagnostics become due when your
           forgetting curve says it's time to reinforce.
         </Text>
 
@@ -195,7 +195,7 @@ export default function PracticeScreen() {
 
       {/* ── Weak Topic Retry ────────────────────────────────────────────── */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>🔁 Weak Topic Review</Text>
+        <Text style={styles.cardTitle}>🔁 Weak-System Review</Text>
         <Text style={styles.cardBody}>
           {incorrectQuestionIds.length} weak questions identified so far.
         </Text>
@@ -219,7 +219,7 @@ export default function PracticeScreen() {
 
       {/* ── Randomized Practice ──────────────────────────────────────────── */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>🎲 Randomized Practice</Text>
+        <Text style={styles.cardTitle}>🎲 Randomized Recalibration</Text>
         <Text style={styles.cardBody}>
           Choose a region focus or run all-region random drills.
         </Text>
@@ -253,7 +253,7 @@ export default function PracticeScreen() {
         </View>
 
         <Pressable style={styles.primaryButton} onPress={runRandomQuiz}>
-          <Text style={styles.primaryText}>Start Random Quiz</Text>
+          <Text style={styles.primaryText}>Start Random Diagnostics</Text>
         </Pressable>
       </View>
     </ScrollView>

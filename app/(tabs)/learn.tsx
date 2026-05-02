@@ -2,6 +2,8 @@ import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
+import Card from "@/components/Card";
+import ForgeCore from "@/components/ForgeCore";
 import PathCard from "@/components/PathCard";
 import StreakCounter from "@/components/StreakCounter";
 import XPDisplay from "@/components/XPDisplay";
@@ -63,12 +65,26 @@ export default function LearnScreen() {
         <StreakCounter streak={streak} />
       </View>
 
+      <Card style={styles.commandCard} glowColor={theme.colors.neon}>
+        <View style={styles.commandCardRow}>
+          <ForgeCore state="idle" size={56} />
+          <View style={styles.commandCardTextWrap}>
+            <Text style={styles.commandCardEyebrow}>Neon Core Assistant</Text>
+            <Text style={styles.commandCardTitle}>Forge is online</Text>
+            <Text style={styles.commandCardBody}>
+              Run calibrations in sequence, complete diagnostics, and maintain
+              energy momentum.
+            </Text>
+          </View>
+        </View>
+      </Card>
+
       {/* Daily Quest card — only shown when a quest exists for today */}
       {dailyQuest && <DailyQuestCard quest={dailyQuest} />}
       {weeklyQuest && <WeeklyQuestCard quest={weeklyQuest} />}
 
       <View style={styles.placementCard}>
-        <Text style={styles.placementLabel}>Mechanic Placement</Text>
+        <Text style={styles.placementLabel}>Operator Placement</Text>
         <Text style={styles.placementValue}>
           {mechanicPlacementTier === "pro"
             ? "Pro Track"
@@ -82,7 +98,7 @@ export default function LearnScreen() {
         </Text>
       </View>
 
-      <Text style={styles.sectionTitle}>Learning Paths</Text>
+      <Text style={styles.sectionTitle}>Command Paths</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -99,7 +115,7 @@ export default function LearnScreen() {
         ))}
       </ScrollView>
 
-      <Text style={styles.sectionTitle}>{selectedRegion.name} Roadmap</Text>
+      <Text style={styles.sectionTitle}>{selectedRegion.name} Command Roadmap</Text>
       {regionUnits.length === 0 && (
         <View style={styles.comingSoon}>
           <Text style={styles.comingSoonTitle}>Content Coming Soon</Text>
@@ -125,7 +141,7 @@ export default function LearnScreen() {
           return [
             {
               id: `${lesson.id}-micro-1`,
-              label: `Mini Lesson: ${lesson.title}`,
+              label: `Calibration: ${lesson.title}`,
               type: "lesson" as const,
               unlocked,
               completed,
@@ -133,7 +149,7 @@ export default function LearnScreen() {
             },
             {
               id: `${lesson.id}-challenge`,
-              label: "Checkpoint Challenge",
+              label: "Recalibration Challenge",
               type: "challenge" as const,
               unlocked,
               completed,
@@ -150,7 +166,7 @@ export default function LearnScreen() {
           );
           roadmapNodes.push({
             id: `${unit.id}-final`,
-            label: "Unit Final Quiz",
+            label: "Unit Diagnostics",
             type: "final" as const,
             unlocked: allLessonsDone,
             completed: unitExamCompleted,
@@ -271,7 +287,7 @@ export default function LearnScreen() {
       })()}
 
       <View style={styles.disclaimerCard}>
-        <Text style={styles.disclaimerTitle}>Safety Notice</Text>
+            <Text style={styles.disclaimerTitle}>Safety Notice</Text>
         <Text style={styles.disclaimerBody}>
           GearForge is for educational purposes only and does not replace
           professional repair guidance, safety procedures, or certified
@@ -446,6 +462,36 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "800",
     marginBottom: 10,
+  },
+  commandCard: {
+    marginBottom: 14,
+  },
+  commandCardRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  commandCardTextWrap: {
+    flex: 1,
+  },
+  commandCardEyebrow: {
+    color: theme.colors.neonAlt,
+    fontSize: 11,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+  },
+  commandCardTitle: {
+    color: theme.colors.textPrimary,
+    fontSize: 17,
+    fontWeight: "800",
+    marginTop: 3,
+  },
+  commandCardBody: {
+    color: theme.colors.textSecondary,
+    fontSize: 12,
+    lineHeight: 17,
+    marginTop: 3,
   },
   placementCard: {
     borderRadius: theme.radii.lg,

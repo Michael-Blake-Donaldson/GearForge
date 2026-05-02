@@ -56,7 +56,7 @@ export default function EncyclopediaScreen() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Reference Encyclopedia</Text>
+      <Text style={styles.title}>Systems Database</Text>
       <Text style={styles.subtitle}>
         Educational reference only. No diagnostics, no repair recommendations.
       </Text>
